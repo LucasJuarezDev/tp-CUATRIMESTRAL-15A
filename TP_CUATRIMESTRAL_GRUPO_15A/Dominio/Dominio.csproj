@@ -67,16 +67,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dashboard.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Login.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPageAdmin.Master.cs">
+      <DependentUpon>MasterPageAdmin.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPageAdmin.Master.designer.cs">
+      <DependentUpon>MasterPageAdmin.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPageLogin.Master.cs">
+      <DependentUpon>MasterPageLogin.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MasterPageLogin.Master.designer.cs">
+      <DependentUpon>MasterPageLogin.Master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MasterPageLogin.Master" />
+    <Content Include="MasterPageAdmin.Master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
