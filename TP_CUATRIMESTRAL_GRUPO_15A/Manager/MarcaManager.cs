@@ -1,0 +1,64 @@
+﻿using Clases;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Manager
+{
+    public class MarcaManager
+    {
+        public List<Marca> Listar()
+        {
+            List<Marca> lista = new List<Marca>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta("SELECT ID, NOMBRE, DESCRIPCION FROM MARCA");
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Marca aux = new Marca();
+                    aux.Id = (int)datos.Lector["ID"];
+                    aux.Descripcion = (string)datos.Lector["DESCRIPCION"];
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+
+        }
+
+        public void Agregar(string nombre, string descripcion)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta("INSERT INTO MARCA (NOMBRE, DESCRIPCION) VALUES (@Nombre, @Descripcion)");
+                datos.SetearParametro("@Nombre", nombre);
+                datos.SetearParametro("@Descripcion", descripcion);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+    }
+}
