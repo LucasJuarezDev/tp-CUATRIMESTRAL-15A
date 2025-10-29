@@ -6,21 +6,21 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="container-fluid mt-4">
 
-
-
         <!-- contenedor principal -->
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h6 class="mb-0"><i class="bi bi-bookmark-fill me-2"></i>Lista de Marcas</h6>
+                <h6 class="mb-0">
+                    <i class="bi bi-bookmark-fill me-2"></i>Lista de Marcas
+                </h6>
             </div>
             <div class="card-body">
 
-                <!-- Botón crear nuevo -->
-             <div class="mb-3">
+                <!-- Boton crear nuevo -->
+                <div class="mb-3">
                     <a href="AgregarMarca.aspx" class="btn btn-success">
                         <i class="bi bi-plus-circle me-1"></i> Crear Nuevo
                     </a>
-            </div>
+                </div>
 
                 <!-- Controles superiores -->
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -41,46 +41,33 @@
                     </div>
                 </div>
 
-                <!-- Tabla -->
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width:70%">Descripción</th>
-                                <th style="width:15%">Editar</th>
-                                <th style="width:15%">Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>SONY</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>HP</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>LG</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div>
+                    <asp:GridView ID="DGVmarcas" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-hover align-middle">
+                        <Columns>
+                            <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
+                            <asp:BoundField HeaderText="Descripcion" DataField="Descripcion" />
+
+                            <%-- Columna Modificar --%>
+                            <asp:TemplateField HeaderText="Modificar">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-primary btn-sm" CommandName="Editar" CommandArgument='<%# Eval("ID") %>'>
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </asp:LinkButton>
+                                </ItemTemplate>
+                                <ItemStyle HorizontalAlign="Center" />
+                            </asp:TemplateField>
+
+                            <%-- Columna Eliminar --%>
+                            <asp:TemplateField HeaderText="Eliminar">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-danger btn-sm" CommandName="Eliminar" CommandArgument='<%# Eval("ID") %>'>
+                                        <i class="bi bi-trash-fill"></i>
+                                    </asp:LinkButton>
+                                </ItemTemplate>
+                                <ItemStyle HorizontalAlign="Center" />
+                            </asp:TemplateField>
+                        </Columns>
+                    </asp:GridView>
                 </div>
 
                 <!-- Paginacion -->
@@ -99,4 +86,5 @@
         </div>
     </div>
 </asp:Content>
+
 

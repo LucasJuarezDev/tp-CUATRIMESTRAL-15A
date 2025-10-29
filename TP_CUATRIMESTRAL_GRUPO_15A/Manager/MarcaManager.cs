@@ -22,22 +22,21 @@ namespace Manager
                 while (datos.Lector.Read())
                 {
                     Marca aux = new Marca();
-                    aux.Id = (int)datos.Lector["ID"];
-                    aux.Descripcion = (string)datos.Lector["DESCRIPCION"];
+                    aux.Id = Convert.ToInt64(datos.Lector["ID"]);
+                    aux.Nombre = datos.Lector["NOMBRE"].ToString();
+                    aux.Descripcion = datos.Lector["DESCRIPCION"] == DBNull.Value ? "" : datos.Lector["DESCRIPCION"].ToString();
                     lista.Add(aux);
                 }
                 return lista;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw new Exception("Error al listar marcas: " + ex.Message);
             }
             finally
             {
                 datos.CerrarConeccion();
             }
-
         }
 
         public void Agregar(string nombre, string descripcion)
