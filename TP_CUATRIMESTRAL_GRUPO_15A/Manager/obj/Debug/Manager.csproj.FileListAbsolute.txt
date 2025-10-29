@@ -1,0 +1,9 @@
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\obj\Debug\Manager.csproj.AssemblyReference.cache
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\obj\Debug\Manager.csproj.CoreCompileInputs.cache
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\bin\Debug\Manager.dll
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\bin\Debug\Manager.pdb
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\bin\Debug\Clases.dll
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\bin\Debug\Clases.pdb
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\obj\Debug\Manager.csproj.Up2Date
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\obj\Debug\Manager.dll
+C:\Users\usuario\Desktop\tp-CUATRIMESTRAL-15A\TP_CUATRIMESTRAL_GRUPO_15A\Manager\obj\Debug\Manager.pdb

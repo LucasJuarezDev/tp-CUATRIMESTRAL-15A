@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AgregarMarca.aspx" />
     <Content Include="AgregarUsuario.aspx" />
     <Content Include="Categorias.aspx" />
     <Content Include="Dashboard.aspx" />
@@ -78,6 +79,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgregarMarca.aspx.cs">
+      <DependentUpon>AgregarMarca.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AgregarMarca.aspx.designer.cs">
+      <DependentUpon>AgregarMarca.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AgregarUsuario.aspx.cs">
       <DependentUpon>AgregarUsuario.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -160,6 +168,16 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Clases\Clases.csproj">
+      <Project>{2076aa4d-6d65-4139-9f5b-f12bc0883927}</Project>
+      <Name>Clases</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Manager\Manager.csproj">
+      <Project>{ada9ea77-aa84-42b8-81ac-6ecd9be58636}</Project>
+      <Name>Manager</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

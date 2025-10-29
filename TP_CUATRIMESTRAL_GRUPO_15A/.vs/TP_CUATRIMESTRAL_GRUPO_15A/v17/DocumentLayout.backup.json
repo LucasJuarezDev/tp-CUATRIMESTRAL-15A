@@ -3,36 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{ADA9EA77-AA84-42B8-81AC-6ECD9BE58636}|Manager\\Manager.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\manager\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{ADA9EA77-AA84-42B8-81AC-6ECD9BE58636}|Manager\\Manager.csproj|solutionrelative:manager\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\dominio\\agregarmarca.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\agregarmarca.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2076AA4D-6D65-4139-9F5B-F12BC0883927}|Clases\\Clases.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\clases\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2076AA4D-6D65-4139-9F5B-F12BC0883927}|Clases\\Clases.csproj|solutionrelative:clases\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{ADA9EA77-AA84-42B8-81AC-6ECD9BE58636}|Manager\\Manager.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\manager\\marcamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ADA9EA77-AA84-42B8-81AC-6ECD9BE58636}|Manager\\Manager.csproj|solutionrelative:manager\\marcamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\dominio\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\productos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\dominio\\agregarmarca.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\agregarmarca.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\dominio\\agregarusuario.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\agregarusuario.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{ADA9EA77-AA84-42B8-81AC-6ECD9BE58636}|Manager\\Manager.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\manager\\accesodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ADA9EA77-AA84-42B8-81AC-6ECD9BE58636}|Manager\\Manager.csproj|solutionrelative:manager\\accesodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\dominio\\usuarios.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\usuarios.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|c:\\users\\usuario\\desktop\\tp-cuatrimestral-15a\\tp_cuatrimestral_grupo_15a\\dominio\\marcas.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\marcas.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\dominio\\masterpageadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
-      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\masterpageadmin.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\dominio\\login.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\login.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\dominio\\dashboard.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{C83BCAFE-09F3-42B6-96AE-CF50F30EECDA}|Dominio\\Dominio.csproj|solutionrelative:dominio\\dashboard.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{2076AA4D-6D65-4139-9F5B-F12BC0883927}|Clases\\Clases.csproj|C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\clases\\marca.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2076AA4D-6D65-4139-9F5B-F12BC0883927}|Clases\\Clases.csproj|solutionrelative:clases\\marca.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -47,100 +39,79 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Class1.cs",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Manager\\Class1.cs",
-              "RelativeDocumentMoniker": "Manager\\Class1.cs",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Manager\\Class1.cs",
-              "RelativeToolTip": "Manager\\Class1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Title": "AgregarMarca.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\AgregarMarca.aspx.cs",
+              "RelativeDocumentMoniker": "Dominio\\AgregarMarca.aspx.cs",
+              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\AgregarMarca.aspx.cs",
+              "RelativeToolTip": "Dominio\\AgregarMarca.aspx.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwBQAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T23:15:01.524Z",
+              "WhenOpened": "2025-10-29T19:23:24.2Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Class1.cs",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Clases\\Class1.cs",
-              "RelativeDocumentMoniker": "Clases\\Class1.cs",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Clases\\Class1.cs",
-              "RelativeToolTip": "Clases\\Class1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "MarcaManager.cs",
+              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Manager\\MarcaManager.cs",
+              "RelativeDocumentMoniker": "Manager\\MarcaManager.cs",
+              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Manager\\MarcaManager.cs",
+              "RelativeToolTip": "Manager\\MarcaManager.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAQwC8AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-27T23:14:34.666Z",
+              "WhenOpened": "2025-10-29T19:20:16.027Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Productos.aspx",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Productos.aspx",
-              "RelativeDocumentMoniker": "Dominio\\Productos.aspx",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Productos.aspx",
-              "RelativeToolTip": "Dominio\\Productos.aspx",
+              "Title": "AgregarMarca.aspx",
+              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\AgregarMarca.aspx",
+              "RelativeDocumentMoniker": "Dominio\\AgregarMarca.aspx",
+              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\AgregarMarca.aspx",
+              "RelativeToolTip": "Dominio\\AgregarMarca.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-27T22:55:12.507Z",
+              "WhenOpened": "2025-10-29T19:00:39.936Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Marcas.aspx",
+              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Marcas.aspx",
+              "RelativeDocumentMoniker": "Dominio\\Marcas.aspx",
+              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Marcas.aspx",
+              "RelativeToolTip": "Dominio\\Marcas.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2025-10-29T18:27:35.002Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AgregarUsuario.aspx",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\AgregarUsuario.aspx",
-              "RelativeDocumentMoniker": "Dominio\\AgregarUsuario.aspx",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\AgregarUsuario.aspx",
-              "RelativeToolTip": "Dominio\\AgregarUsuario.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-27T22:37:50.595Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Usuarios.aspx",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Usuarios.aspx",
-              "RelativeDocumentMoniker": "Dominio\\Usuarios.aspx",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Usuarios.aspx",
-              "RelativeToolTip": "Dominio\\Usuarios.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-25T22:36:52.737Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Login.aspx",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Login.aspx",
-              "RelativeDocumentMoniker": "Dominio\\Login.aspx",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Login.aspx",
-              "RelativeToolTip": "Dominio\\Login.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-25T18:50:13.509Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Dashboard.aspx",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Dashboard.aspx",
-              "RelativeDocumentMoniker": "Dominio\\Dashboard.aspx",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\Dashboard.aspx",
-              "RelativeToolTip": "Dominio\\Dashboard.aspx",
-              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-25T18:48:03.782Z"
+              "Title": "AccesoDatos.cs",
+              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Manager\\AccesoDatos.cs",
+              "RelativeDocumentMoniker": "Manager\\AccesoDatos.cs",
+              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Manager\\AccesoDatos.cs",
+              "RelativeToolTip": "Manager\\AccesoDatos.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABwAAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:11:53.886Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "MasterPageAdmin.Master",
-              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\MasterPageAdmin.Master",
-              "RelativeDocumentMoniker": "Dominio\\MasterPageAdmin.Master",
-              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Dominio\\MasterPageAdmin.Master",
-              "RelativeToolTip": "Dominio\\MasterPageAdmin.Master",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2025-10-25T18:47:30.47Z",
+              "Title": "Marca.cs",
+              "DocumentMoniker": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Clases\\Marca.cs",
+              "RelativeDocumentMoniker": "Clases\\Marca.cs",
+              "ToolTip": "C:\\Users\\usuario\\Desktop\\tp-CUATRIMESTRAL-15A\\TP_CUATRIMESTRAL_GRUPO_15A\\Clases\\Marca.cs",
+              "RelativeToolTip": "Clases\\Marca.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T13:13:39.09Z",
               "EditorCaption": ""
             }
           ]

@@ -31,7 +31,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" >Cerrar</button>
-                        <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary"/>
+                        <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" OnClick="btnGuardar_Click"  />
                     </div>
                 </div>
             </div>
@@ -40,4 +40,5 @@
 
 </body>
 </html>
+
 

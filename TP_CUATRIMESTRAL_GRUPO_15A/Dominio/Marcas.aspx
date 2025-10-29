@@ -16,9 +16,11 @@
             <div class="card-body">
 
                 <!-- Botón crear nuevo -->
-                <div class="mb-3">
-                    <a href="#" class="btn btn-success"><i class="bi bi-plus-circle me-1"></i> Crear Nuevo</a>
-                </div>
+             <div class="mb-3">
+                    <a href="AgregarMarca.aspx" class="btn btn-success">
+                        <i class="bi bi-plus-circle me-1"></i> Crear Nuevo
+                    </a>
+            </div>
 
                 <!-- Controles superiores -->
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
