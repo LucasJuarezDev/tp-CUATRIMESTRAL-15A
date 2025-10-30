@@ -25,8 +25,8 @@ namespace Manager
 
         public AccesoDatos()
         {                                         //dejo comentado como hicimos en el trabajo anterior
-            conexion = new SqlConnection("server=.\\SQLEXPRESS02; database=TPIcomercioBD; integrated security=true");
-            //conexion = new SqlConnection("server=.\\SQLEXPRESS; database=TPIcomercioBD; integrated security=true");
+            //conexion = new SqlConnection("server=.\\SQLEXPRESS02; database=TPIcomercioBD; integrated security=true");
+            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=TPIcomercioBD; integrated security=true");
             comando = new SqlCommand();
         }
 
