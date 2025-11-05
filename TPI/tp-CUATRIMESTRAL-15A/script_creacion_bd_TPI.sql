@@ -142,3 +142,42 @@ CREATE TABLE DETALLE_VENTA (
     CONSTRAINT FK_DETALLE_VENTA_PRODUCTO FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID)
 );
 GO
+
+
+-- ===================================================================
+-- ================	FUNCIONES DE SISTEMA	=========================
+-- ===================================================================
+
+-- PROCEDIMIENTO ALMACENADO PARA LA CREACION DE USUARIOS
+CREATE PROCEDURE sp_AgregarUsuario
+    @Nickname NVARCHAR(50),
+    @Contrasena NVARCHAR(255),
+    @Email NVARCHAR(100),
+    @RolId INT,
+    @Activo BIT = 1
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF EXISTS (SELECT 1 FROM USUARIO WHERE NICKNAME = @Nickname)
+            THROW 50001, 'El nickname ya existe', 1;
+        
+        IF EXISTS (SELECT 1 FROM USUARIO WHERE EMAIL = @Email)
+            THROW 50002, 'El email ya está registrado', 1;
+        
+        IF @RolId NOT IN (2, 3)
+            THROW 50003, 'Rol no permitido', 1;
+
+        INSERT INTO USUARIO (NICKNAME, CONTRASENA, EMAIL, ROLE_ID, ACTIVO)
+        VALUES (@Nickname, @Contrasena, @Email, @RolId, @Activo);
+
+        COMMIT TRANSACTION;
+        SELECT SCOPE_IDENTITY() AS NuevoId;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
