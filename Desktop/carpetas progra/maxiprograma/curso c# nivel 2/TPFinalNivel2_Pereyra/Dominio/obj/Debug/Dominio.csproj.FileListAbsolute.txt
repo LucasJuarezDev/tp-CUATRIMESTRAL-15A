@@ -1,6 +1,0 @@
-C:\Users\usuario\Desktop\carpetas progra\maxiprograma\curso c# nivel 2\TPFinalNivel2_Pereyra\Dominio\bin\Debug\Dominio.dll
-C:\Users\usuario\Desktop\carpetas progra\maxiprograma\curso c# nivel 2\TPFinalNivel2_Pereyra\Dominio\bin\Debug\Dominio.pdb
-C:\Users\usuario\Desktop\carpetas progra\maxiprograma\curso c# nivel 2\TPFinalNivel2_Pereyra\Dominio\obj\Debug\Dominio.csproj.AssemblyReference.cache
-C:\Users\usuario\Desktop\carpetas progra\maxiprograma\curso c# nivel 2\TPFinalNivel2_Pereyra\Dominio\obj\Debug\Dominio.csproj.CoreCompileInputs.cache
-C:\Users\usuario\Desktop\carpetas progra\maxiprograma\curso c# nivel 2\TPFinalNivel2_Pereyra\Dominio\obj\Debug\Dominio.dll
-C:\Users\usuario\Desktop\carpetas progra\maxiprograma\curso c# nivel 2\TPFinalNivel2_Pereyra\Dominio\obj\Debug\Dominio.pdb
