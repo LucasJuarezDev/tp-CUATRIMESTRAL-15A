@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -79,14 +80,11 @@ namespace Manager
 
         public object ejecutarEscalar()
         {
+            comando.Connection = conexion; // ← ¡OBLIGATORIO!
             try
             {
-                if (conexion.State != System.Data.ConnectionState.Open)
-                {
-                    conexion.Open();
-                }
-
-                return comando.ExecuteScalar(); // Ejecuta la consulta y devuelve el valor resultante
+                conexion.Open();
+                return comando.ExecuteScalar();
             }
             catch (Exception ex)
             {
@@ -94,10 +92,8 @@ namespace Manager
             }
             finally
             {
-                if (conexion.State == System.Data.ConnectionState.Open)
-                {
+                if (conexion.State == ConnectionState.Open)
                     conexion.Close();
-                }
             }
         }
     }

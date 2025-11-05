@@ -12,6 +12,7 @@ namespace Clases
         public string Nickname { get; set; }
         public string Contrasena { get; set; }
         public string Email { get; set; }
+        public bool Activo { get; set; } = true;
         public Rol Rol { get; set; }
     }
 }

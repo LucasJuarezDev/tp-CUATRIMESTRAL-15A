@@ -80,6 +80,7 @@
     <Content Include="LoginCliente.aspx" />
     <Content Include="Marcas.aspx" />
     <Content Include="Productos.aspx" />
+    <Content Include="RegistrarCliente.aspx" />
     <Content Include="RegistrarUsuario.aspx" />
     <Content Include="Usuarios.aspx" />
     <Content Include="Web.config" />
@@ -194,6 +195,13 @@
       <DependentUpon>Productos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrarCliente.aspx.cs">
+      <DependentUpon>RegistrarCliente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RegistrarCliente.aspx.designer.cs">
+      <DependentUpon>RegistrarCliente.aspx</DependentUpon>
+    </Compile>
     <Compile Include="RegistrarUsuario.aspx.cs">
       <DependentUpon>RegistrarUsuario.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

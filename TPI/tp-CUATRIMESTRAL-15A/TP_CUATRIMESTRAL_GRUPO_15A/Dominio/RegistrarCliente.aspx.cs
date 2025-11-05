@@ -4,18 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Clases;
-using Manager;
 
 namespace Dominio
 {
-    public partial class Usuarios : System.Web.UI.Page
+    public partial class RegistrarUsuario : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            UsuarioManager usuarioNegocio = new UsuarioManager();
-            gvUsuarios.DataSource = usuarioNegocio.Listar();
-            gvUsuarios.DataBind();
+
         }
     }
 }
