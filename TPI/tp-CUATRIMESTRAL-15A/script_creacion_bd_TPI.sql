@@ -148,6 +148,29 @@ GO
 -- ================	FUNCIONES DE SISTEMA	=========================
 -- ===================================================================
 
+--CREACION DE VISTA PARA LISTAR PRODUCTOS ACTIVOS
+CREATE VIEW vw_ProductosActivos AS
+SELECT
+    prod.ID,
+    prod.NOMBRE,
+    prod.PRECIO,
+    prod.DESCRIPCION,
+    prod.STOCK,
+    prod.STOCK_MINIMO,
+    marc.ID AS IdMarca,
+    marc.NOMBRE AS NombreMarca,
+    marc.DESCRIPCION AS DescripcionMarca,
+    cat.ID AS IdCategoria,
+    cat.NOMBRE AS NombreCategoria,
+    cat.DESCRIPCION AS DescripcionCategoria,
+    prod.ACTIVO
+	FROM PRODUCTO prod
+	INNER JOIN MARCA marc ON marc.ID = prod.ID_MARCA
+	INNER JOIN CATEGORIA cat ON cat.ID = prod.ID_CATEGORIA
+	WHERE prod.ACTIVO = 1;
+
+	----------------------------------------------------------
+
 -- PROCEDIMIENTO ALMACENADO PARA LA CREACION DE USUARIOS
 CREATE PROCEDURE sp_AgregarUsuario
     @Nickname NVARCHAR(50),
@@ -181,3 +204,5 @@ BEGIN
         THROW;
     END CATCH
 END
+
+	----------------------------------------------------------
