@@ -14,7 +14,6 @@ namespace Clases
         public string Descripcion { get; set; }
         public int Stock { get; set; }
         public int StockMinimo { get; set; }
-        public decimal PorcentajeGanancia { get; set; }
 
         public Marca Marca { get; set; }
         public Categoria Categoria { get; set; }

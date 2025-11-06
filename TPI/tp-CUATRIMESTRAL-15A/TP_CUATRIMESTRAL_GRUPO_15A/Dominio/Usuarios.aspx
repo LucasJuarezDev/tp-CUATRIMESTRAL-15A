@@ -34,6 +34,7 @@
                     <asp:GridView ID="gvUsuarios" runat="server"
                         AutoGenerateColumns="False"
                         CssClass="table table-bordered table-hover table-striped align-middle"
+                        OnRowCommand="gvUsuarios_RowCommand"
                        >
                         
                         <Columns>

@@ -24,7 +24,6 @@
 
             <div class="card-body">
 
-                <!-- Mostrar registros y búsqueda -->
                 <div class="d-flex justify-content-between mb-3">
                     <div>
                         <label>Mostrar
@@ -41,69 +40,57 @@
                     </div>
                 </div>
 
-                <!-- Tabla -->
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Marca</th>
-                                <th>Categoría</th>
-                                <th>Precio</th>
-                                <th>Stock</th>
-                                <th>Editar</th>
-                                <th>Eliminar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Consola de PS4 Pro 1TB Negro</td>
-                                <td>Tipo: PS4, Procesador: AMD, Entradas USB: 3, HDMI: 1, WiFi</td>
-                                <td>SONYTE</td>
-                                <td>Tecnología</td>
-                                <td>150</td>
-                                <td>49</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>HP Laptop 15-EF1019LA</td>
-                                <td>Procesador: AMD Ryzen 5, Tarjeta gráfica: Radeon, Pantalla: 15.6"</td>
-                                <td>HPTE</td>
-                                <td>Tecnología</td>
-                                <td>1200</td>
-                                <td>27</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Televisor 50" 4K Ultra HD Smart Android</td>
-                                <td>Resolución: 4K Ultra HD, Tecnología: LED, Conexión: Bluetooth</td>
-                                <td>HYUNDAITE</td>
-                                <td>Tecnología</td>
-                                <td>3200</td>
-                                <td>70</td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-primary btn-sm"><i class="bi bi-pencil-fill"></i></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <asp:GridView ID="gvProductos" runat="server"
+                    AutoGenerateColumns="False"
+                    CssClass="table table-bordered table-hover table-striped align-middle"
+                    HeaderStyle-CssClass="table-light"
+                    AllowPaging="True"
+                    PageSize="10"
+                    OnRowCommand="gvProductos_RowCommand"
+                    DataKeyNames="Id">
+    
+                    <Columns>
+                        <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
 
-                <!-- Paginacion -->
+                        <asp:BoundField DataField="Descripcion" HeaderText="Descripción" />
+
+                        <asp:BoundField DataField="Marca.Nombre" HeaderText="Marca" />
+
+                        <asp:BoundField DataField="Categoria.Nombre" HeaderText="Categoría" />
+
+                        <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" />
+
+                        <asp:BoundField DataField="Stock" HeaderText="Stock" />
+
+                        <asp:TemplateField HeaderText="Editar" ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="btnEditar" runat="server"
+                                    CommandName="Editar"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    CssClass="btn btn-primary btn-sm"
+                                    ToolTip="Editar">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+                        <asp:TemplateField HeaderText="Eliminar" ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="btnEliminar" runat="server"
+                                    CommandName="Eliminar"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    CssClass="btn btn-danger btn-sm"
+                                    ToolTip="Eliminar"
+                                    OnClientClick="return confirm('¿Eliminar producto?');">
+                                    <i class="bi bi-trash-fill"></i>
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+
+                    <PagerStyle CssClass="pagination pagination-sm mb-0" />
+                </asp:GridView>
+
                 <div class="d-flex justify-content-between mt-2">
                     <div>Mostrando 1 a 3 de 3 registros</div>
                     <nav>

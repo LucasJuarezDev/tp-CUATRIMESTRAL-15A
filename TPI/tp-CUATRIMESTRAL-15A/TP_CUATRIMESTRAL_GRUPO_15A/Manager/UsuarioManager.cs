@@ -15,7 +15,7 @@ namespace Manager
 
             try
             {
-                datos.SetearConsulta("SELECT us.ID, us.NICKNAME, us.CONTRASENA, us.EMAIL, r.ROL, us.ACTIVO FROM USUARIO us INNER JOIN ROL r ON us.ROLE_ID = r.ID");
+                datos.SetearConsulta("SELECT us.ID, us.NICKNAME, us.CONTRASENA, us.EMAIL, r.ROL, us.ACTIVO FROM USUARIO us INNER JOIN ROL r ON us.ROLE_ID = r.ID WHERE us.ACTIVO = 1");
                 datos.EjecutarLectura();
 
                 while (datos.Lector.Read())
@@ -89,6 +89,24 @@ namespace Manager
             }
         }
 
+        public void Eliminar(long id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("UPDATE USUARIO SET ACTIVO = 0 WHERE ID = @Id");
+                datos.SetearParametro("@Id", id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
     }
 }
 
