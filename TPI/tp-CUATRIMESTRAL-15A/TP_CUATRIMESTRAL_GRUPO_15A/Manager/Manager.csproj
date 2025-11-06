@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="AccesoDatos.cs" />
     <Compile Include="CategoriaManager.cs" />
+    <Compile Include="EmpleadoManager.cs" />
     <Compile Include="MarcaManager.cs" />
     <Compile Include="ProductoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

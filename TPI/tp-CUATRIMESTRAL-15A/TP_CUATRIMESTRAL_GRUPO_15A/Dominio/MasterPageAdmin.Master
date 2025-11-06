@@ -61,6 +61,9 @@
                     <li class="nav-item">         
                         <a class="nav-link" href="Productos.aspx" ><i class="bi bi-box-seam me-2"></i>Productos</a>
                     </li>
+                    <li class="nav-item">         
+                        <a class="nav-link" href="gestionEmpleados.aspx" ><i class="bi bi-people-fill me-2"></i>Empleados</a>
+                    </li>
                 </ul>
             </div>
 

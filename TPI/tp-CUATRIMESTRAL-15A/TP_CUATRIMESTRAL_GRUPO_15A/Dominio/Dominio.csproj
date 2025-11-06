@@ -69,12 +69,15 @@
   <ItemGroup>
     <Content Include="AgregarCategoria.aspx" />
     <Content Include="AgregarMarca.aspx" />
+    <Content Include="AgregarProducto.aspx" />
     <Content Include="AgregarUsuario.aspx" />
     <Content Include="cambiarContrasena.aspx" />
     <Content Include="Carrito.aspx" />
     <Content Include="Catalogo.aspx" />
     <Content Include="Categorias.aspx" />
     <Content Include="Dashboard.aspx" />
+    <Content Include="DetalleCatalogo.aspx" />
+    <Content Include="gestionEmpleados.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="LoginCliente.aspx" />
@@ -99,6 +102,13 @@
     </Compile>
     <Compile Include="AgregarMarca.aspx.designer.cs">
       <DependentUpon>AgregarMarca.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AgregarProducto.aspx.cs">
+      <DependentUpon>AgregarProducto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AgregarProducto.aspx.designer.cs">
+      <DependentUpon>AgregarProducto.aspx</DependentUpon>
     </Compile>
     <Compile Include="AgregarUsuario.aspx.cs">
       <DependentUpon>AgregarUsuario.aspx</DependentUpon>
@@ -141,6 +151,20 @@
     </Compile>
     <Compile Include="Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DetalleCatalogo.aspx.cs">
+      <DependentUpon>DetalleCatalogo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DetalleCatalogo.aspx.designer.cs">
+      <DependentUpon>DetalleCatalogo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="gestionEmpleados.aspx.cs">
+      <DependentUpon>gestionEmpleados.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="gestionEmpleados.aspx.designer.cs">
+      <DependentUpon>gestionEmpleados.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

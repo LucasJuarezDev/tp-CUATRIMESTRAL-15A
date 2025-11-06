@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-box-seam"></i> Lista de Productos</h5>
-                <a href="#" class="btn btn-success">Crear Nuevo</a>
+                <a href="AgregarProducto.aspx" class="btn btn-success">Crear Nuevo</a>
             </div>
 
             <div class="card-body">
@@ -50,17 +50,22 @@
                     DataKeyNames="Id">
     
                     <Columns>
-                        <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+                        <asp:TemplateField HeaderText="Nombre" SortExpression="Nombre">
+                            <ItemTemplate>
+                                <strong><%# Eval("Marca.Nombre") %> <%# Eval("Nombre") %></strong>
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-                        <asp:BoundField DataField="Descripcion" HeaderText="Descripción" />
+                        <asp:BoundField DataField="DescripcionCorta" HeaderText="Descripción" />
 
-                        <asp:BoundField DataField="Marca.Nombre" HeaderText="Marca" />
 
                         <asp:BoundField DataField="Categoria.Nombre" HeaderText="Categoría" />
 
                         <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" />
 
                         <asp:BoundField DataField="Stock" HeaderText="Stock" />
+
+                        <asp:BoundField DataField="StockMinimo" HeaderText="Minimo" />
 
                         <asp:TemplateField HeaderText="Editar" ItemStyle-HorizontalAlign="Center">
                             <ItemTemplate>

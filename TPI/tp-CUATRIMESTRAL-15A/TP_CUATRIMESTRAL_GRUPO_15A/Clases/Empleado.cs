@@ -15,5 +15,6 @@ namespace Clases
         public DateTime FechaIngreso { get; set; }
         public decimal Sueldo { get; set; }
         public Usuario Usuario { get; set; }
+        public bool Estado { get; set; }
     }
 }

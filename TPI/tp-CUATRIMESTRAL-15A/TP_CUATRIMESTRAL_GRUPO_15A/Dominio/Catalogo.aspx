@@ -21,135 +21,55 @@
             </div>
         </div>
 
-        <!-- Grid de Productos: 3 por fila -->
         <div class="row g-4">
-            <!-- Producto 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
-                    <img src="https://via.placeholder.com/400x300.png?text=Refrigerador+LG" class="card-img-top" alt="Refrigerador LG" style="height: 220px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="card-title fw-bold mb-2">Refrigerador LG Inverter 18 pies</h6>
-                        <p class="text-muted small mb-3">No Frost | 500 L | A+++</p>
+            <asp:Repeater ID="rptProductos" runat="server">
+                <ItemTemplate>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
+                            <!-- IMAGEN -->
+                            <img src='<%# string.IsNullOrEmpty(Eval("ImagenUrl")?.ToString()) 
+                                            ? "https://via.placeholder.com/400x300/cccccc/666666?text=" + 
+                                              Server.UrlEncode(Eval("Nombre").ToString().Length > 15 
+                                                ? Eval("Nombre").ToString().Substring(0,15) + "..." 
+                                                : Eval("Nombre").ToString())
+                                            : Eval("ImagenUrl") %>'
+                                 class="card-img-top" 
+                                 alt='<%# Eval("Nombre") %>' 
+                                 style="height: 220px; object-fit: cover;">
 
-                        <div class="mb-3">
-                            <del class="text-muted small">$35.000</del>
-                            <div class="h5 text-success fw-bold mb-1">$28.500</div>
-                            <small class="text-success">Precio s/imp. nac. $23.231</small>
+                            <div class="card-body d-flex flex-column p-4">
+                                <!-- NOMBRE -->
+                                <h6 class="card-title fw-bold mb-2">
+                                    <%# Eval("Nombre") %>
+                                </h6>
+
+                                <!-- DESCRIPCIÓN CORTA -->
+                                <p class="text-muted small mb-3">
+                                    <%# Truncate(Eval("DescripcionCorta"), 60) %>
+                                </p>
+
+                                <!-- PRECIO -->
+                                <div class="mb-3">
+                                    <div class="h5 text-success fw-bold mb-1">
+                                        $<%# Eval("Precio") %>
+                                    </div>
+                                    <small class="text-success">
+                                        Precio s/imp. nac. $<%# Math.Round(Convert.ToDecimal(Eval("Precio")) * 0.82m, 0) %>
+                                    </small>
+                                </div>
+
+                                <!-- BOTÓN COMPRAR -->
+                                <asp:Button ID="btnComprar" runat="server" 
+                                            Text="QUIERO VER MAS"
+                                            CssClass="btn btn-success w-100 mt-auto"
+                                            CommandArgument='<%# Eval("Id") %>'
+                                            OnClick="btnVerDetalle_Click" />
+                            </div>
                         </div>
-
-                        <asp:Button ID="btnComprar1" runat="server" Text="COMPRAR" 
-                                    CssClass="btn btn-success w-100 mt-auto" 
-                                     CommandArgument="1" />
                     </div>
-                </div>
-            </div>
-
-            <!-- Producto 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
-                    <img src="https://via.placeholder.com/400x300.png?text=Lavadora+Samsung" class="card-img-top" alt="Lavadora Samsung" style="height: 220px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="card-title fw-bold mb-2">Lavadora Samsung 10kg Eco Bubble</h6>
-                        <p class="text-muted small mb-3">Carga superior | 12 ciclos</p>
-
-                        <div class="mb-3">
-                            <del class="text-muted small">$22.000</del>
-                            <div class="h5 text-success fw-bold mb-1">$18.900</div>
-                            <small class="text-success">Precio s/imp. nac. $15.496</small>
-                        </div>
-
-                        <asp:Button ID="btnComprar2" runat="server" Text="COMPRAR" 
-                                    CssClass="btn btn-success w-100 mt-auto" 
-                                     CommandArgument="2" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
-                    <img src="https://via.placeholder.com/400x300.png?text=Microondas+Whirlpool" class="card-img-top" alt="Microondas Whirlpool" style="height: 220px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="card-title fw-bold mb-2">Microondas Whirlpool 25L Grill</h6>
-                        <p class="text-muted small mb-3">900W | 10 niveles de potencia</p>
-
-                        <div class="mb-3">
-                            <del class="text-muted small">$8.500</del>
-                            <div class="h5 text-success fw-bold mb-1">$6.990</div>
-                            <small class="text-success">Precio s/imp. nac. $5.732</small>
-                        </div>
-
-                        <asp:Button ID="btnComprar3" runat="server" Text="COMPRAR" 
-                                    CssClass="btn btn-success w-100 mt-auto" 
-                                     CommandArgument="3" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 4 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
-                    <img src="https://via.placeholder.com/400x300.png?text=TV+Smart+55" class="card-img-top" alt="TV Smart 55" style="height: 220px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="card-title fw-bold mb-2">TV Smart LG 55" 4K UHD</h6>
-                        <p class="text-muted small mb-3">WebOS | HDR10 | Magic Remote</p>
-
-                        <div class="mb-3">
-                            <del class="text-muted small">$45.000</del>
-                            <div class="h5 text-success fw-bold mb-1">$39.800</div>
-                            <small class="text-success">Precio s/imp. nac. $32.787</small>
-                        </div>
-
-                        <asp:Button ID="btnComprar4" runat="server" Text="COMPRAR" 
-                                    CssClass="btn btn-success w-100 mt-auto" 
-                                     CommandArgument="4" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 5 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
-                    <img src="https://via.placeholder.com/400x300.png?text=Licuadora+Philips" class="card-img-top" alt="Licuadora Philips" style="height: 220px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="card-title fw-bold mb-2">Licuadora Philips PowerPro 1000W</h6>
-                        <p class="text-muted small mb-3">Vaso 1.5L | 6 cuchillas</p>
-
-                        <div class="mb-3">
-                            <del class="text-muted small">$3.200</del>
-                            <div class="h5 text-success fw-bold mb-1">$2.490</div>
-                            <small class="text-success">Precio s/imp. nac. $2.041</small>
-                        </div>
-
-                        <asp:Button ID="btnComprar5" runat="server" Text="COMPRAR" 
-                                    CssClass="btn btn-success w-100 mt-auto" 
-                                     CommandArgument="5" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Producto 6 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
-                    <img src="https://via.placeholder.com/400x300.png?text=Ventilador+Rowenta" class="card-img-top" alt="Ventilador Rowenta" style="height: 220px; object-fit: cover;">
-                    <div class="card-body d-flex flex-column p-4">
-                        <h6 class="card-title fw-bold mb-2">Ventilador Rowenta Turbo Silence</h6>
-                        <p class="text-muted small mb-3">3 velocidades | 45dB máx.</p>
-
-                        <div class="mb-3">
-                            <del class="text-muted small">$4.800</del>
-                            <div class="h5 text-success fw-bold mb-1">$3.790</div>
-                            <small class="text-success">Precio s/imp. nac. $3.106</small>
-                        </div>
-
-                        <asp:Button ID="btnComprar6" runat="server" Text="COMPRAR" 
-                                    CssClass="btn btn-success w-100 mt-auto" 
-                                     CommandArgument="6" />
-                    </div>
-                </div>
-            </div>
+                </ItemTemplate>
+            </asp:Repeater>
         </div>
-    </div>
 
     <!-- Modal de Filtros -->
     <div class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">

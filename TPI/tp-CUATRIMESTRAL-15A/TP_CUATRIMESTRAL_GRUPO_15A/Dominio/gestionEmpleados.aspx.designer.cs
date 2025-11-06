@@ -11,70 +11,70 @@ namespace Dominio
 {
 
 
-    public partial class Catalogo
+    public partial class gestionEmpleados
     {
 
         /// <summary>
-        /// Control ddlOrdenar.
+        /// Control ddlPageSize.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlOrdenar;
+        protected global::System.Web.UI.WebControls.DropDownList ddlPageSize;
 
         /// <summary>
-        /// Control rptProductos.
+        /// Control txtBuscar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptProductos;
+        protected global::System.Web.UI.WebControls.TextBox txtBuscar;
 
         /// <summary>
-        /// Control ddlCategoria.
+        /// Control btnBuscar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCategoria;
+        protected global::System.Web.UI.WebControls.Button btnBuscar;
 
         /// <summary>
-        /// Control ddlMarca.
+        /// Control gvEmpleados.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlMarca;
+        protected global::System.Web.UI.WebControls.GridView gvEmpleados;
 
         /// <summary>
-        /// Control txtPrecioDesde.
+        /// Control lblInfo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPrecioDesde;
+        protected global::System.Web.UI.WebControls.Label lblInfo;
 
         /// <summary>
-        /// Control txtPrecioHasta.
+        /// Control lblRegistrosMostrados.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPrecioHasta;
+        protected global::System.Web.UI.WebControls.Label lblRegistrosMostrados;
 
         /// <summary>
-        /// Control btnAplicarFiltro.
+        /// Control lblTotalRegistros.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAplicarFiltro;
+        protected global::System.Web.UI.WebControls.Label lblTotalRegistros;
     }
 }
