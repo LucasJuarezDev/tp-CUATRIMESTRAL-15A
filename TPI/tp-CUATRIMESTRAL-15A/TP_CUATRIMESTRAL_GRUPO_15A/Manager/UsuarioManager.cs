@@ -107,6 +107,24 @@ namespace Manager
                 datos.CerrarConeccion();
             }
         }
+
+        public int ContarClientes()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("SELECT COUNT(*) FROM USUARIO WHERE ROLE_ID = 3 AND ACTIVO = 1");
+                return (int)datos.ejecutarEscalar();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al contar clientes: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
     }
 }
 

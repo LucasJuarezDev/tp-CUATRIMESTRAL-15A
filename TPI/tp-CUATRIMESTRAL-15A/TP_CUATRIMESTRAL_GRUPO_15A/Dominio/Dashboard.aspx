@@ -4,14 +4,14 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <!-- Panel de estadísticas -->
+    <!-- Panel de estadisticas -->
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card text-white bg-success mb-3">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="card-title">Cantidad Clientes:</h6>
-                        <h3>0</h3>
+                        <h3><asp:Label ID="lblCantidadClientes" runat="server" Text="0"></asp:Label></h3>
                     </div>
                     <i class="bi bi-people-fill" style="font-size:2rem;"></i>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="card-title">Cantidad Productos:</h6>
-                        <h3>0</h3>
+                        <h3><asp:Label ID="lblCantidadProductos" runat="server" Text="0"></asp:Label></h3>
                     </div>
                     <i class="bi bi-box-seam" style="font-size:2rem;"></i>
                 </div>

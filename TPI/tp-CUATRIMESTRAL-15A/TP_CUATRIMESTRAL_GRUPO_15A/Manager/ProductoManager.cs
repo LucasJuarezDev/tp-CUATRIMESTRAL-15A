@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -159,6 +160,25 @@ namespace Manager
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
+        public int ContarProductosActivos()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("SELECT COUNT(*) FROM PRODUCTO WHERE ACTIVO = 1");
+                object resultado = datos.ejecutarEscalar();
+                return Convert.ToInt32(resultado);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al contar productos activos: " + ex.Message);
             }
             finally
             {

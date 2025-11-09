@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
+using Manager;
 
 namespace Dominio
 {
@@ -11,7 +8,32 @@ namespace Dominio
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                CargarEstadisticas();
+            }
+        }
 
+        private void CargarEstadisticas()
+        {
+            try
+            {
+                // Productos
+                ProductoManager productoManager = new ProductoManager();
+                int cantidadProductos = productoManager.ContarProductosActivos();
+                lblCantidadProductos.Text = cantidadProductos.ToString();
+
+                // Clientes
+                UsuarioManager usuarioManager = new UsuarioManager();
+                int cantidadClientes = usuarioManager.ContarClientes();
+                lblCantidadClientes.Text = cantidadClientes.ToString();
+            }
+            catch (Exception)
+            {
+                lblCantidadProductos.Text = "Error";
+                lblCantidadClientes.Text = "Error";
+            }
         }
     }
 }
+
