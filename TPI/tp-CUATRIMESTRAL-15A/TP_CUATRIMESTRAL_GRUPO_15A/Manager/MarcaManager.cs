@@ -80,5 +80,27 @@ namespace Manager
             }
         }
 
+        public void Modificar(Marca marca)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta("UPDATE MARCA SET NOMBRE = @Nombre, DESCRIPCION = @Descripcion WHERE ID = @Id");
+                datos.SetearParametro("@Nombre", marca.Nombre);
+                datos.SetearParametro("@Descripcion", marca.Descripcion);
+                datos.SetearParametro("@Id", marca.Id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al modificar la marca: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
     }
 }

@@ -87,6 +87,29 @@ namespace Manager
         }
 
 
+        public void Modificar(Categoria categoria)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta("UPDATE CATEGORIA SET NOMBRE = @Nombre, DESCRIPCION = @Descripcion WHERE ID = @Id");
+                datos.SetearParametro("@Nombre", categoria.Nombre);
+                datos.SetearParametro("@Descripcion", categoria.Descripcion);
+                datos.SetearParametro("@Id", categoria.Id);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al modificar categoría: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
+
 
     }
 }

@@ -82,6 +82,8 @@
     <Content Include="Login.aspx" />
     <Content Include="LoginCliente.aspx" />
     <Content Include="Marcas.aspx" />
+    <Content Include="ModificarCategoria.aspx" />
+    <Content Include="ModificarMarca.aspx" />
     <Content Include="Productos.aspx" />
     <Content Include="RegistrarCliente.aspx" />
     <Content Include="RegistrarUsuario.aspx" />
@@ -210,6 +212,20 @@
     </Compile>
     <Compile Include="MasterPageLogin.Master.designer.cs">
       <DependentUpon>MasterPageLogin.Master</DependentUpon>
+    </Compile>
+    <Compile Include="ModificarCategoria.aspx.cs">
+      <DependentUpon>ModificarCategoria.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ModificarCategoria.aspx.designer.cs">
+      <DependentUpon>ModificarCategoria.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModificarMarca.aspx.cs">
+      <DependentUpon>ModificarMarca.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ModificarMarca.aspx.designer.cs">
+      <DependentUpon>ModificarMarca.aspx</DependentUpon>
     </Compile>
     <Compile Include="Productos.aspx.cs">
       <DependentUpon>Productos.aspx</DependentUpon>
