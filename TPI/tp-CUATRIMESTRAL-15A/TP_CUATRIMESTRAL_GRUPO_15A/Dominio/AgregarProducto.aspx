@@ -10,7 +10,9 @@
                 <div class="card shadow">
                     <div class="card-header bg-primary text-white">
                         <h4 class="mb-0">
-                            <i class="bi bi-plus-circle me-2"></i> Agregar Nuevo Producto
+                            <i class="bi bi-plus-circle me-2" id="iconAgregar" runat="server"></i>
+                            <i class="bi bi-pencil-square me-2" id="iconModificar" runat="server" visible="false"></i>
+                            <asp:Label ID="lblTitulo" runat="server" Text="Agregar Nuevo Producto" />
                         </h4>
                     </div>
                     <div class="card-body">
@@ -34,10 +36,17 @@
                                 <label class="form-label fw-semibold">Precio <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <asp:TextBox ID="txtPrecio" runat="server" CssClass="form-control" TextMode="Number" step="0.01" placeholder="6200000" />
+                                    <asp:TextBox ID="txtPrecio" runat="server" 
+                                                 CssClass="form-control" 
+                                                 placeholder="Ej: 6200000,00" />
                                 </div>
-                                <asp:RequiredFieldValidator ID="rfvPrecio" runat="server" 
-                                    ControlToValidate="txtPrecio" ErrorMessage="El precio es obligatorio." 
+                                <asp:RequiredFieldValidator ID="rfvPrecio" runat="server"
+                                    ControlToValidate="txtPrecio" ErrorMessage="El precio es obligatorio."
+                                    CssClass="text-danger small" Display="Dynamic" />
+                                <asp:RegularExpressionValidator ID="revPrecio" runat="server"
+                                    ControlToValidate="txtPrecio"
+                                    ValidationExpression="^\d{1,10}(,\d{1,2})?$"
+                                    ErrorMessage="Use formato: 1234,56"
                                     CssClass="text-danger small" Display="Dynamic" />
                             </div>
 

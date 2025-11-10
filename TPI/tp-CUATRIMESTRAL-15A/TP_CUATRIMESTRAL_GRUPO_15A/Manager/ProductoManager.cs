@@ -167,6 +167,43 @@ namespace Manager
             }
         }
 
+        public void Modificar(Producto obj)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta(@"
+            UPDATE PRODUCTO SET
+                NOMBRE = @Nombre,
+                PRECIO = @Precio,
+                DESCRIPCION_CORTA = @DescCorta,
+                DESCRIPCION_EXTENDIDA = @DescExtendida,
+                IMAGEN_URL = @ImagenUrl,
+                STOCK = @Stock,
+                STOCK_MINIMO = @StockMinimo,
+                ID_MARCA = @IdMarca,
+                ID_CATEGORIA = @IdCategoria
+            WHERE ID = @Id");
+
+                datos.SetearParametro("@Id", obj.Id);
+                datos.SetearParametro("@Nombre", obj.Nombre);
+                datos.SetearParametro("@Precio", obj.Precio);
+                datos.SetearParametro("@DescCorta", obj.DescripcionCorta);
+                datos.SetearParametro("@DescExtendida", obj.DescripcionExtendida);
+                datos.SetearParametro("@ImagenUrl", obj.ImagenUrl ?? (object)DBNull.Value);
+                datos.SetearParametro("@Stock", obj.Stock);
+                datos.SetearParametro("@StockMinimo", obj.StockMinimo);
+                datos.SetearParametro("@IdMarca", obj.Marca.Id);
+                datos.SetearParametro("@IdCategoria", obj.Categoria.Id);
+
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
         public int ContarProductosActivos()
         {
             AccesoDatos datos = new AccesoDatos();

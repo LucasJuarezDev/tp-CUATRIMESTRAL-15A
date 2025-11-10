@@ -10,9 +10,6 @@
                 <h5 class="mb-0">
                     <i class="bi bi-person-badge-fill me-2"></i> Gestión de Empleados
                 </h5>
-                <a href="AgregarEmpleado.aspx" class="btn btn-success btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i> Nuevo Empleado
-                </a>
             </div>
 
             <div class="card-body">

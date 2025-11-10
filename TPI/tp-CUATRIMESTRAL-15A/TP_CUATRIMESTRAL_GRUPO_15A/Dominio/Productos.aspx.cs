@@ -36,22 +36,16 @@ namespace Dominio
 
         protected void gvProductos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "Eliminar")
+            if (e.CommandName == "Editar")
             {
                 long id = Convert.ToInt64(e.CommandArgument);
-                ProductoManager manager = new ProductoManager();
-
-                try
-                {
-                    manager.Eliminar(id);
-                    // Recargar la grilla despues de eliminar
-                    gvProductos.DataSource = manager.Listar();
-                    gvProductos.DataBind();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error al eliminar la categoría: " + ex.Message);
-                }
+                Response.Redirect($"AgregarProducto.aspx?id={id}");
+            }
+            else if (e.CommandName == "Eliminar")
+            {
+                long id = Convert.ToInt64(e.CommandArgument);
+                manager.Eliminar(id);
+                CargarGrilla();
             }
         }
     }
