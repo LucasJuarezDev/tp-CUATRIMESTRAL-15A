@@ -56,9 +56,9 @@ namespace Dominio
                     Precio = decimal.Parse(txtPrecio.Text),
                     DescripcionCorta = txtDescripcionCorta.Text.Trim(),
                     DescripcionExtendida = txtDescripcionExtendida.Text.Trim(),
-                    ImagenUrl = txtImagenUrl.Text.Trim(),
+                    ImagenUrl = string.IsNullOrWhiteSpace(txtImagenUrl.Text) ? null : txtImagenUrl.Text.Trim(),
                     Stock = int.Parse(txtStock.Text),
-                    StockMinimo = string.IsNullOrEmpty(txtStockMinimo.Text) ? 0 : int.Parse(txtStockMinimo.Text),
+                    StockMinimo = int.Parse(txtStockMinimo.Text),
                     Estado = true,
                     Marca = new Marca { Id = long.Parse(ddlMarca.SelectedValue) },
                     Categoria = new Categoria { Id = long.Parse(ddlCategoria.SelectedValue) }
@@ -67,8 +67,9 @@ namespace Dominio
                 var manager = new ProductoManager();
                 manager.nuevoProducto(producto);
 
-                MostrarExito("Producto agregado correctamente.");
-                LimpiarFormulario();
+                // Mostrar popup y redirigir
+                string script = "mostrarExito();";
+                ClientScript.RegisterStartupScript(this.GetType(), "exito", script, true);
             }
             catch (Exception ex)
             {
@@ -76,31 +77,11 @@ namespace Dominio
             }
         }
 
-        private void MostrarExito(string mensaje)
-        {
-            pnlMensaje.CssClass = "alert alert-success";
-            lblMensaje.Text = $"<i class='bi bi-check-circle'></i> {mensaje}";
-            pnlMensaje.Visible = true;
-        }
-
         private void MostrarError(string mensaje)
         {
             pnlMensaje.CssClass = "alert alert-danger";
             lblMensaje.Text = $"<i class='bi bi-exclamation-triangle'></i> {mensaje}";
             pnlMensaje.Visible = true;
-        }
-
-        private void LimpiarFormulario()
-        {
-            txtNombre.Text = "";
-            txtPrecio.Text = "";
-            txtStock.Text = "";
-            txtStockMinimo.Text = "";
-            txtDescripcionCorta.Text = "";
-            txtDescripcionExtendida.Text = "";
-            txtImagenUrl.Text = "";
-            ddlMarca.SelectedIndex = 0;
-            ddlCategoria.SelectedIndex = 0;
         }
     }
 }

@@ -131,12 +131,42 @@
                             <a href="Productos.aspx" class="btn btn-outline-secondary px-4">
                                 <i class="bi bi-x-circle"></i> Cancelar
                             </a>
-                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar Producto" 
-                                        CssClass="btn btn-success px-5" OnClick="btnGuardar_Click" />
+                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar Producto"
+                                        CssClass="btn btn-success px-5" 
+                                        OnClick="btnGuardar_Click"
+                                        OnClientClick="return validarStock();" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<script>
+    function validarStock() {
+        const stock = parseInt(document.getElementById('<%= txtStock.ClientID %>').value) || 0;
+        const stockMinimo = parseInt(document.getElementById('<%= txtStockMinimo.ClientID %>').value) || 0;
+
+        if (stock <= stockMinimo) {
+            alert('El stock inicial debe ser mayor al stock mínimo.');
+            return false;
+        }
+        return true;
+    }
+
+    function mostrarExito() {
+        Swal.fire({
+            title: '¡Éxito!',
+            text: 'El producto se creó correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'Productos.aspx';
+            }
+        });
+    }
+</script>
 </asp:Content>
+

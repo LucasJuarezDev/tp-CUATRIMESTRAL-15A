@@ -31,7 +31,7 @@ namespace Manager
                         DescripcionExtendida = datos.Lector["DESCRIPCION_EXTENDIDA"].ToString(),
                         Stock = Convert.ToInt32(datos.Lector["STOCK"]),
                         StockMinimo = Convert.ToInt32(datos.Lector["STOCK_MINIMO"]),
-                        ImagenUrl = datos.Lector["IMAGEN_URL"]?.ToString(),
+                        ImagenUrl = datos.Lector["IMAGEN_URL"] == DBNull.Value ? string.Empty : datos.Lector["IMAGEN_URL"].ToString(),
 
                         // MARCA
                         Marca = new Marca

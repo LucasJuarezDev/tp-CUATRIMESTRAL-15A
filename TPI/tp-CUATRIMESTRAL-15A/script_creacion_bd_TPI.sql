@@ -15,6 +15,12 @@ CREATE TABLE ROL (
 );
 GO
 
+INSERT INTO ROL (ROL) VALUES 
+('ADMIN'),      
+('EMPLEADO'),  
+('CLIENTE');  
+GO
+
 -- MARCA
 CREATE TABLE MARCA (
     ID BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -39,6 +45,15 @@ CREATE TABLE TIPO_PAGO (
     NOMBRE VARCHAR(100) NOT NULL UNIQUE, -- EFECTIVO , TRANSFERENCIA , TARJETA DE CREDITO, CHEQUE
     DESCRIPCION VARCHAR(250) NULL
 );
+GO
+
+-- INSERCIÓN INMEDIATA DE TIPOS DE PAGO
+INSERT INTO TIPO_PAGO (NOMBRE, DESCRIPCION) VALUES
+('EFECTIVO', 'Pago en efectivo al momento de la entrega'),
+('TRANSFERENCIA', 'Pago mediante transferencia bancaria'),
+('CHEQUE', 'Pago mediante cheque nominativo'),
+('DEBITO', 'Pago con tarjeta de débito'),
+('CREDITO', 'Pago con tarjeta de crédito');
 GO
 
 -- =============================================
@@ -160,6 +175,7 @@ SELECT
     prod.DESCRIPCION_EXTENDIDA,
     prod.STOCK,
     prod.STOCK_MINIMO,
+	prod.IMAGEN_URL,
     marc.ID AS IdMarca,
     marc.NOMBRE AS NombreMarca,
     marc.DESCRIPCION AS DescripcionMarca,
