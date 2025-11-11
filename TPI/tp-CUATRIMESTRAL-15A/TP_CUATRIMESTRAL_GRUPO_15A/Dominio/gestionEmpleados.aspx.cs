@@ -77,15 +77,7 @@ namespace Dominio
             if (e.CommandName == "Editar")
             {
                 long id = Convert.ToInt64(e.CommandArgument);
-                Response.Redirect($"EditarEmpleado.aspx?id={id}");
-            }
-            else if (e.CommandName == "Eliminar")
-            {
-                long id = Convert.ToInt64(e.CommandArgument);
-                // Lógica de eliminación
-                EmpleadoManager empleadoManager = new EmpleadoManager();
-                empleadoManager.Eliminar(id);
-                CargarEmpleados();
+                Response.Redirect($"alterarEmpleado.aspx?id={id}");
             }
         }
     }

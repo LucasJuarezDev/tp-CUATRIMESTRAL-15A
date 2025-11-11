@@ -75,7 +75,7 @@ namespace Manager
                 object resultado = datos.ejecutarEscalar();
                 return resultado != DBNull.Value ? Convert.ToInt64(resultado) : -1;
             }
-            catch (SqlException ex) when (ex.Number >= 50000)
+            catch (SqlException ex) when (ex.Number >= 50001 && ex.Number <= 50002)
             {
                 throw new Exception(ex.Message);
             }
@@ -94,13 +94,77 @@ namespace Manager
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.SetearConsulta("UPDATE USUARIO SET ACTIVO = 0 WHERE ID = @Id");
+                datos.SetearConsulta("sp_bajaUsuario");
+                datos.Comando.CommandType = CommandType.StoredProcedure;
+
                 datos.SetearParametro("@Id", id);
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
+        public void Modificar(Usuario usuario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("sp_ModificarUsuario");
+                datos.Comando.CommandType = CommandType.StoredProcedure;
+
+                datos.SetearParametro("@Id", usuario.Id);
+                datos.SetearParametro("@Nickname", usuario.Nickname);
+                datos.SetearParametro("@Email", usuario.Email);
+                datos.SetearParametro("@RolId", usuario.Rol.Id);
+
+                datos.ejecutarAccion();
+            }
+            catch (SqlException ex) when (ex.Number == 50001 || ex.Number == 50002)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
+        public Usuario buscarPorId(long id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta(@"SELECT u.ID, u.NICKNAME, u.EMAIL, u.ROLE_ID, u.ACTIVO, r.ROL AS NombreRol FROM USUARIO u INNER JOIN ROL r ON r.ID = u.ROLE_ID WHERE u.ID = @Id AND u.ACTIVO = 1");
+                datos.SetearParametro("@Id", id);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return new Usuario
+                    {
+                        Id = (long)datos.Lector["ID"],
+                        Nickname = datos.Lector["NICKNAME"].ToString(),
+                        Email = datos.Lector["EMAIL"].ToString(),
+                        Rol = new Rol
+                        {
+                            Id = (byte)datos.Lector["ROLE_ID"],
+                            Nombre = datos.Lector["NombreRol"].ToString()
+                        },
+                        Activo = (bool)datos.Lector["ACTIVO"]
+                    };
+                }
+
+                return null; 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al buscar usuario por ID: " + ex.Message);
             }
             finally
             {

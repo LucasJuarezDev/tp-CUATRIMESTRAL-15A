@@ -49,56 +49,58 @@
                         PagerStyle-CssClass="pagination pagination-sm mb-0"
                         EmptyDataText="No hay empleados registrados.">
                         
-                        <Columns>
-                            <asp:BoundField DataField="Id" HeaderText="ID" 
-                                            ItemStyle-Width="60" ItemStyle-HorizontalAlign="Center" />
+                    <Columns>
+                        <asp:BoundField DataField="Id" HeaderText="ID"
+                                        ItemStyle-Width="60" ItemStyle-HorizontalAlign="Center" />
 
-                            <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+                        <asp:TemplateField HeaderText="Nombre">
+                            <ItemTemplate>
+                                <%# string.IsNullOrWhiteSpace(Eval("Nombre")?.ToString()) ? "No contiene" : Eval("Nombre") %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-                            <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
+                        <asp:TemplateField HeaderText="Apellido">
+                            <ItemTemplate>
+                                <%# string.IsNullOrWhiteSpace(Eval("Apellido")?.ToString()) ? "No contiene" : Eval("Apellido") %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-                            <asp:BoundField DataField="Telefono" HeaderText="Teléfono" 
-                                            ItemStyle-HorizontalAlign="Center" />
+                        <asp:TemplateField HeaderText="Teléfono" ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>
+                                <%# string.IsNullOrWhiteSpace(Eval("Telefono")?.ToString()) ? "No contiene" : Eval("Telefono") %>
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-                            <asp:BoundField DataField="FechaIngreso" HeaderText="Fecha Ingreso" 
-                                            DataFormatString="{0:dd/MM/yyyy}" 
-                                            ItemStyle-HorizontalAlign="Center" />
+                        <asp:BoundField DataField="FechaIngreso" HeaderText="Fecha Ingreso"
+                                        DataFormatString="{0:dd/MM/yyyy}"
+                                        ItemStyle-HorizontalAlign="Center" />
 
-                            <asp:BoundField DataField="Sueldo" HeaderText="Sueldo" 
-                                            DataFormatString="{0:C0}" 
-                                            ItemStyle-HorizontalAlign="Right" />
+                        <asp:BoundField DataField="Sueldo" HeaderText="Sueldo"
+                                        DataFormatString="{0:C0}"
+                                        ItemStyle-HorizontalAlign="Right" />
 
-                            <asp:TemplateField HeaderText="Estado" ItemStyle-HorizontalAlign="Center">
-                                <ItemTemplate>
-                                    <span class='<%# Convert.ToBoolean(Eval("Estado")) ? "badge bg-success" : "badge bg-secondary" %>'>
-                                        <%# Convert.ToBoolean(Eval("Estado")) ? "Activo" : "Inactivo" %>
-                                    </span>
-                                </ItemTemplate>
-                            </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Estado" ItemStyle-HorizontalAlign="Center">
+                            <ItemTemplate>
+                                <span class='<%# Convert.ToBoolean(Eval("Estado")) ? "badge bg-success" : "badge bg-secondary" %>'>
+                                    <%# Convert.ToBoolean(Eval("Estado")) ? "Activo" : "Inactivo" %>
+                                </span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-                            <asp:TemplateField HeaderText="Acciones" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="120">
-                                <ItemTemplate>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <asp:LinkButton ID="btnEditar" runat="server"
-                                            CommandName="Editar"
-                                            CommandArgument='<%# Eval("Id") %>'
-                                            CssClass="btn btn-outline-primary"
-                                            ToolTip="Editar empleado">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </asp:LinkButton>
-
-                                        <asp:LinkButton ID="btnEliminar" runat="server"
-                                            CommandName="Eliminar"
-                                            CommandArgument='<%# Eval("Id") %>'
-                                            CssClass="btn btn-outline-danger"
-                                            ToolTip="Eliminar empleado"
-                                            OnClientClick="return confirm('¿Estás seguro de eliminar este empleado?');">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </asp:LinkButton>
-                                    </div>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
+                        <asp:TemplateField HeaderText="Acciones" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="120">
+                            <ItemTemplate>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <asp:LinkButton ID="btnEditar" runat="server"
+                                        CommandName="Editar"
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CssClass="btn btn-outline-primary btn-sm"
+                                        ToolTip="Editar">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </asp:LinkButton>
+                                </div>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
 
                         <PagerSettings Mode="NumericFirstLast" 
                                        FirstPageText="Primero" 

@@ -70,7 +70,7 @@
     <Content Include="AgregarCategoria.aspx" />
     <Content Include="AgregarMarca.aspx" />
     <Content Include="AgregarProducto.aspx" />
-    <Content Include="AgregarUsuario.aspx" />
+    <Content Include="alterarEmpleado.aspx" />
     <Content Include="cambiarContrasena.aspx" />
     <Content Include="Carrito.aspx" />
     <Content Include="Catalogo.aspx" />
@@ -112,12 +112,12 @@
     <Compile Include="AgregarProducto.aspx.designer.cs">
       <DependentUpon>AgregarProducto.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AgregarUsuario.aspx.cs">
-      <DependentUpon>AgregarUsuario.aspx</DependentUpon>
+    <Compile Include="alterarEmpleado.aspx.cs">
+      <DependentUpon>alterarEmpleado.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AgregarUsuario.aspx.designer.cs">
-      <DependentUpon>AgregarUsuario.aspx</DependentUpon>
+    <Compile Include="alterarEmpleado.aspx.designer.cs">
+      <DependentUpon>alterarEmpleado.aspx</DependentUpon>
     </Compile>
     <Compile Include="cambiarContrasena.aspx.cs">
       <DependentUpon>cambiarContrasena.aspx</DependentUpon>

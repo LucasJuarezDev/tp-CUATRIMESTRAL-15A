@@ -1,4 +1,4 @@
-USE master;
+﻿USE master;
 GO
 
 CREATE DATABASE TPIcomercioBD
@@ -47,13 +47,13 @@ CREATE TABLE TIPO_PAGO (
 );
 GO
 
--- INSERCI�N INMEDIATA DE TIPOS DE PAGO
+-- INSERCIÓN INMEDIATA DE TIPOS DE PAGO
 INSERT INTO TIPO_PAGO (NOMBRE, DESCRIPCION) VALUES
 ('EFECTIVO', 'Pago en efectivo al momento de la entrega'),
 ('TRANSFERENCIA', 'Pago mediante transferencia bancaria'),
 ('CHEQUE', 'Pago mediante cheque nominativo'),
-('DEBITO', 'Pago con tarjeta de d�bito'),
-('CREDITO', 'Pago con tarjeta de cr�dito');
+('DEBITO', 'Pago con tarjeta de débito'),
+('CREDITO', 'Pago con tarjeta de crédito');
 GO
 
 -- =============================================
@@ -190,7 +190,7 @@ SELECT
 
 	----------------------------------------------------------
 
--- PROCEDIMIENTO ALMACENADO PARA LA CREACION DE USUARIOS
+-- SP PARA LA CREACION DE USUARIOS
 CREATE PROCEDURE sp_AgregarUsuario
     @Nickname NVARCHAR(50),
     @Contrasena NVARCHAR(255),
@@ -200,23 +200,49 @@ CREATE PROCEDURE sp_AgregarUsuario
 AS
 BEGIN
     SET NOCOUNT ON;
+    DECLARE @NuevoUsuarioId BIGINT;
+
     BEGIN TRY
         BEGIN TRANSACTION;
 
+		-- VALIDACIÓN ESPECIAL PARA ADMIN (RolId = 1)
+        IF @RolId = 1
+        BEGIN
+            IF EXISTS (SELECT 1 FROM USUARIO WHERE ROLE_ID = 1 AND ACTIVO = 1)
+                THROW 50004, 'Ya existe un usuario administrador. Solo se permite uno.', 1;
+        END
+
+        -- Validar nickname único
         IF EXISTS (SELECT 1 FROM USUARIO WHERE NICKNAME = @Nickname)
             THROW 50001, 'El nickname ya existe', 1;
-        
+       
+        -- Validar email único
         IF EXISTS (SELECT 1 FROM USUARIO WHERE EMAIL = @Email)
-            THROW 50002, 'El email ya est� registrado', 1;
-        
-        IF @RolId NOT IN (2, 3)
-            THROW 50003, 'Rol no permitido', 1;
+            THROW 50002, 'El email ya está registrado', 1;
 
+        -- Insertar en USUARIO
         INSERT INTO USUARIO (NICKNAME, CONTRASENA, EMAIL, ROLE_ID, ACTIVO)
         VALUES (@Nickname, @Contrasena, @Email, @RolId, @Activo);
 
+        -- Capturar ID del usuario recién creado
+        SET @NuevoUsuarioId = SCOPE_IDENTITY();
+
+        -- Insertar en tabla correspondiente según rol
+        IF @RolId = 2 -- EMPLEADO
+        BEGIN
+            INSERT INTO EMPLEADO (NOMBRE, APELLIDO, TELEFONO, FECHAINGRESO, SUELDO, ID_USUARIO, ACTIVO)
+            VALUES (@Nickname, '', '', GETDATE(), 700, @NuevoUsuarioId, 1);
+        END
+        ELSE IF @RolId = 3 -- CLIENTE
+        BEGIN
+            INSERT INTO CLIENTE (NOMBRE, APELLIDO, TELEFONO, FECHA_REGISTRO, ROLE_ID, ID_USUARIO, RAZON_SOCIAL, ACTIVO)
+            VALUES (@Nickname, '', '', GETDATE(), 3, @NuevoUsuarioId, '', 1);
+        END
+
         COMMIT TRANSACTION;
-        SELECT SCOPE_IDENTITY() AS NuevoId;
+
+        -- Devolver el ID del usuario
+        SELECT @NuevoUsuarioId AS NuevoId;
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
@@ -224,4 +250,117 @@ BEGIN
     END CATCH
 END
 
-	----------------------------------------------------------
+----------------------------------------------------------
+
+-- SP PARA LA MODIFICACION DE USUARIOS
+CREATE PROCEDURE sp_ModificarUsuario
+    @Id BIGINT,
+    @Nickname NVARCHAR(50),
+    @Email NVARCHAR(100),
+    @RolId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @RolActual INT;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Obtener rol actual
+        SELECT @RolActual = ROLE_ID 
+        FROM USUARIO 
+        WHERE ID = @Id;
+
+        -- REGLA 1: Admin NO puede cambiar de rol
+        IF @RolActual = 1 AND @RolId != 1
+            THROW 50006, 'El administrador no puede cambiar de rol.', 1;
+
+        -- Validar nickname único
+        IF EXISTS (SELECT 1 FROM USUARIO WHERE NICKNAME = @Nickname AND ID != @Id)
+            THROW 50001, 'El nickname ya existe', 1;
+
+        -- Validar email único
+        IF EXISTS (SELECT 1 FROM USUARIO WHERE EMAIL = @Email AND ID != @Id)
+            THROW 50002, 'El email ya está registrado', 1;
+
+        IF @RolActual IN (2, 3) AND @RolId IN (2, 3) AND @RolActual != @RolId
+        BEGIN
+            IF @RolActual = 2 AND @RolId = 3
+            BEGIN
+                -- EMPLEADO → CLIENTE
+                INSERT INTO CLIENTE (NOMBRE, APELLIDO, TELEFONO, FECHA_REGISTRO, ROLE_ID, ID_USUARIO, RAZON_SOCIAL, ACTIVO)
+                SELECT NOMBRE, APELLIDO, TELEFONO, GETDATE(), 3, ID_USUARIO, '', 1
+                FROM EMPLEADO 
+                WHERE ID_USUARIO = @Id;
+
+                DELETE FROM EMPLEADO WHERE ID_USUARIO = @Id;
+            END
+            ELSE IF @RolActual = 3 AND @RolId = 2
+            BEGIN
+                -- CLIENTE → EMPLEADO
+                INSERT INTO EMPLEADO (NOMBRE, APELLIDO, TELEFONO, FECHAINGRESO, SUELDO, ID_USUARIO, ACTIVO)
+                SELECT NOMBRE, APELLIDO, TELEFONO, GETDATE(), 700, ID_USUARIO, 1
+                FROM CLIENTE 
+                WHERE ID_USUARIO = @Id;
+
+                DELETE FROM CLIENTE WHERE ID_USUARIO = @Id;
+            END
+        END
+
+        -- Actualizar USUARIO
+        UPDATE USUARIO SET
+            NICKNAME = @Nickname,
+            EMAIL = @Email,
+            ROLE_ID = @RolId
+        WHERE ID = @Id;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+
+--------------------------------------------------------------
+-- SP PARA LA BAJA DE USUARIOS
+CREATE PROCEDURE sp_bajaUsuario
+    @Id BIGINT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @RolId INT;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Obtener rol del usuario
+        SELECT @RolId = ROLE_ID 
+        FROM USUARIO 
+        WHERE ID = @Id AND ACTIVO = 1;
+
+        -- REGLA: No se puede eliminar al Admin
+        IF @RolId = 1
+            THROW 50008, 'No se puede eliminar al administrador.', 1;
+
+        -- Soft-delete en USUARIO
+        UPDATE USUARIO SET ACTIVO = 0 WHERE ID = @Id;
+
+        -- Soft-delete en tabla correspondiente
+        IF @RolId = 2
+        BEGIN
+            UPDATE EMPLEADO SET ACTIVO = 0 WHERE ID_USUARIO = @Id;
+        END
+        ELSE IF @RolId = 3
+        BEGIN
+            UPDATE CLIENTE SET ACTIVO = 0 WHERE ID_USUARIO = @Id;
+        END
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+

@@ -19,6 +19,17 @@ namespace Dominio
             {
                 CargarGrilla();
             }
+            else
+            {
+                string eventTarget = Request["__EVENTTARGET"];
+                string eventArgument = Request["__EVENTARGUMENT"];
+
+                if (eventTarget == "EliminarUsuario")
+                {
+                    long id = Convert.ToInt64(eventArgument);
+                    EliminarUsuario(id);
+                }
+            }
         }
 
         private void CargarGrilla()
@@ -36,22 +47,44 @@ namespace Dominio
 
         protected void gvUsuarios_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "Eliminar")
+            if (e.CommandName == "Editar")
             {
                 long id = Convert.ToInt64(e.CommandArgument);
-                UsuarioManager manager = new UsuarioManager();
+                Response.Redirect($"RegistrarUsuario.aspx?id={id}");
+            }
+        }
 
-                try
-                {
-                    manager.Eliminar(id);
-                    // Recargar la grilla despues de eliminar
-                    gvUsuarios.DataSource = manager.Listar();
-                    gvUsuarios.DataBind();
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error al eliminar la categoría: " + ex.Message);
-                }
+        private void EliminarUsuario(long id)
+        {
+            try
+            {
+                manager.Eliminar(id);
+                CargarGrilla();
+
+                // SCRIPT CORRECTO: con @ + saltos de línea + ;
+                string script = @"
+                Swal.fire({
+                    title: '¡Eliminado!',
+                    text: 'El usuario ha sido eliminado.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });";
+
+                ClientScript.RegisterStartupScript(this.GetType(), "eliminarExito", script, true);
+            }
+            catch (Exception ex)
+            {
+                string mensajeError = ex.Message.Replace("'", @"\'");
+
+                string script = $@"
+                Swal.fire({{
+                    title: 'Error',
+                    text: 'No se pudo eliminar: {mensajeError}',
+                    icon: 'error'
+                }});";
+
+                ClientScript.RegisterStartupScript(this.GetType(), "eliminarError", script, true);
             }
         }
     }

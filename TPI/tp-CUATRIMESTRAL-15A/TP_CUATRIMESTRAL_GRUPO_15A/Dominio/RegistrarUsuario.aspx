@@ -7,7 +7,7 @@
             <div class="col-lg-6 col-md-8">
                 <div class="card border-0 shadow-sm rounded-3" style="background-color: #495057;">
                     <div class="card-body p-5 text-white">
-                        <h2 class="text-center fw-bold mb-4">Crear cuenta</h2>
+                        <h2 class="text-center fw-bold mb-4" id="lblTitulo" runat="server">Crear cuenta</h2>
 
                         <!-- Mensaje de éxito/error -->
                         <asp:Label ID="lblMensaje" runat="server" CssClass="alert d-block text-center" Visible="false"></asp:Label>
@@ -44,28 +44,33 @@
                                     ErrorMessage="Selecciona un rol" CssClass="text-danger small" Display="Dynamic" />
                             </div>
 
-                            <!-- Contraseña -->
+                        <% if (!UsuarioId.HasValue) { %>
+                            <!-- CAMPOS DE CONTRASEÑA (solo crear) -->
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Contraseña</label>
+                                <label class="form-label fw-semibold">Contraseña <span class="text-danger">*</span></label>
                                 <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" />
-                                <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ControlToValidate="txtPassword"
-                                    ErrorMessage="Contraseña requerida" CssClass="text-danger small" Display="Dynamic" />
-                            </div>
-
-                            <!-- Repetir contraseña -->
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Repetir contraseña</label>
-                                <asp:TextBox ID="txtRepetirPassword" runat="server" TextMode="Password" CssClass="form-control" />
-                                <asp:RequiredFieldValidator ID="rfvRepetir" runat="server" ControlToValidate="txtRepetirPassword"
-                                    ErrorMessage="Repite la contraseña" CssClass="text-danger small" Display="Dynamic" />
-                                <asp:CompareValidator ID="cvPassword" runat="server" ControlToValidate="txtRepetirPassword"
-                                    ControlToCompare="txtPassword" ErrorMessage="Las contraseñas no coinciden"
+                                <asp:RequiredFieldValidator ID="rfvPassword" runat="server" 
+                                    ControlToValidate="txtPassword" ErrorMessage="Contraseña requerida" 
                                     CssClass="text-danger small" Display="Dynamic" />
                             </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Repetir contraseña <span class="text-danger">*</span></label>
+                                <asp:TextBox ID="txtRepetirPassword" runat="server" TextMode="Password" CssClass="form-control" />
+                                <asp:RequiredFieldValidator ID="rfvRepetir" runat="server" 
+                                    ControlToValidate="txtRepetirPassword" ErrorMessage="Repite la contraseña" 
+                                    CssClass="text-danger small" Display="Dynamic" />
+                                <asp:CompareValidator ID="cvPassword" runat="server" 
+                                    ControlToValidate="txtRepetirPassword" ControlToCompare="txtPassword"
+                                    ErrorMessage="Las contraseñas no coinciden" CssClass="text-danger small" Display="Dynamic" />
+                            </div>
+                        <% } %>
 
                             <!-- Botón -->
                             <div class="col-12 mt-4">
-                                <asp:Button ID="btnRegistrarse" runat="server" Text="CREAR USUARIO" CssClass="btn btn-success w-100 fw-bold py-2" OnClick="btnRegistrarse_Click" />
+                                <asp:Button ID="btnRegistrarse" runat="server" 
+                                Text="CREAR USUARIO" 
+                                CssClass="btn btn-success w-100 fw-bold py-2" 
+                                OnClick="btnRegistrarse_Click" />
                             </div>
 
                             <div class="col-12 text-center mt-3">

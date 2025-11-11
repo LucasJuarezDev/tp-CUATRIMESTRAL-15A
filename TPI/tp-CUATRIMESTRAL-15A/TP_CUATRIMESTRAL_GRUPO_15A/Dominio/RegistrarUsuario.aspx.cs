@@ -1,92 +1,135 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Clases;
+using Manager;
+using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Clases;
-using Manager;
 
 namespace Dominio
 {
     public partial class RegistrarUsuario1 : System.Web.UI.Page
     {
         private UsuarioManager usuarioManager = new UsuarioManager();
+        public long? UsuarioId => long.TryParse(Request.QueryString["id"], out long id) ? id : (long?)null;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                CargarRoles();  // Tu método para ddlRol
-            }
-            else
-            {
-                // Detecta parámetro de éxito (solo en postback)
-                if (Request.QueryString["exito"] == "true")
+                CargarRoles();
+
+                if (UsuarioId.HasValue)
                 {
-                    // Muestra SweetAlert con JavaScript
-                    string script = @"<script type='text/javascript'>
-                                        mostrarAlertaExito();
-                                      </script>";
-                    ClientScript.RegisterStartupScript(this.GetType(), "AlertaExito", script, false);
+                    ModoEdicion();
+                    CargarUsuario(UsuarioId.Value);
+                }
+                else
+                {
+                    ModoCrear();
                 }
             }
+
+            if (Session["Exito"] != null)
+            {
+                string mensaje = Session["Exito"].ToString();
+                Session.Remove("Exito");
+                MostrarExitoJS(mensaje);
+            }
+        }
+
+        private void ModoCrear()
+        {
+            lblTitulo.InnerText = "Crear cuenta";
+            btnRegistrarse.Text = "CREAR USUARIO";
+        }
+
+        private void ModoEdicion()
+        {
+            lblTitulo.InnerText = "Modificar Usuario";
+            btnRegistrarse.Text = "MODIFICAR USUARIO";
+            btnRegistrarse.CssClass = "btn btn-warning w-100 fw-bold py-2"; 
         }
 
         private void CargarRoles()
         {
             ddlRol.Items.Clear();
-            ddlRol.Items.Add(new System.Web.UI.WebControls.ListItem("-- Seleccionar rol --", ""));
-            ddlRol.Items.Add(new System.Web.UI.WebControls.ListItem("Empleado", "2"));
-            ddlRol.Items.Add(new System.Web.UI.WebControls.ListItem("Cliente", "3"));
+            ddlRol.Items.Add(new ListItem("-- Seleccionar rol --", ""));
+            ddlRol.Items.Add(new ListItem("Empleado", "2"));
+            ddlRol.Items.Add(new ListItem("Cliente", "3"));
+        }
+
+        private void CargarUsuario(long id)
+        {
+            try
+            {
+                var usuario = usuarioManager.buscarPorId(id);
+                if (usuario == null)
+                {
+                    MostrarMensaje("Usuario no encontrado.", "alert-danger");
+                    Response.Redirect("Usuarios.aspx");
+                    return;
+                }
+
+                txtNickname.Text = usuario.Nickname;
+                txtEmail.Text = usuario.Email;
+                ddlRol.SelectedValue = usuario.Rol.Id.ToString();
+
+                //txtPassword.Text = usuario.Contrasena;
+                //txtRepetirPassword.Text = usuario.Contrasena;
+                //txtPassword.Text = "";
+                //txtRepetirPassword.Text = "";
+                //txtPassword.Attributes.Add("placeholder", "Dejar vacío para mantener actual");
+                //txtRepetirPassword.Attributes.Add("placeholder", "Repetir nueva contraseña");
+            }
+            catch (Exception ex)
+            {
+                MostrarMensaje("Error al cargar: " + ex.Message, "alert-danger");
+            }
         }
 
         protected void btnRegistrarse_Click(object sender, EventArgs e)
         {
-            if (!Page.IsValid) return;
+            if (!Page.IsValid && !UsuarioId.HasValue) return;
 
             try
             {
-                // Validar contraseñas
-                if (txtPassword.Text != txtRepetirPassword.Text)
-                {
-                    MostrarMensaje("Las contraseñas no coinciden.", "alert-danger");
-                    return;
-                }
-
-                // Crear objeto Rol
-                Rol rol = new Rol
-                {
-                    Id = (byte)Convert.ToInt64(ddlRol.SelectedValue),
-                    Nombre = ddlRol.SelectedItem.Text
-                };
-
-                // Crear usuario
-                Usuario nuevoUsuario = new Usuario
+                var usuario = new Usuario
                 {
                     Nickname = txtNickname.Text.Trim(),
                     Email = txtEmail.Text.Trim(),
-                    Contrasena = txtPassword.Text, 
-                    Rol = rol,
+                    Rol = new Rol { Id = byte.Parse(ddlRol.SelectedValue) },
                     Activo = true
                 };
 
-                // Llamar al Manager
-                long nuevoId = usuarioManager.Agregar(nuevoUsuario);
 
-                if (nuevoId > 0)
+                if (UsuarioId.HasValue)
                 {
-                    MostrarMensaje($"Usuario creado con éxito. ID: {nuevoId}", "alert-success");
-                    LimpiarFormulario();
+                    usuario.Id = UsuarioId.Value;
+                    usuarioManager.Modificar(usuario);
+                    Session["Exito"] = "Usuario modificado correctamente.";
                 }
                 else
                 {
-                    MostrarMensaje("Error al crear usuario.", "alert-danger");
+                    if (string.IsNullOrEmpty(txtPassword.Text))
+                    {
+                        MostrarMensaje("La contraseña es obligatoria al crear.", "alert-danger");
+                        return;
+                    }
+                    if (txtPassword.Text != txtRepetirPassword.Text)
+                    {
+                        MostrarMensaje("Las contraseñas no coinciden.", "alert-danger");
+                        return;
+                    }
+
+                    usuario.Contrasena = txtPassword.Text;
+                    long id = usuarioManager.Agregar(usuario);
+                    Session["Exito"] = $"Usuario creado. ID: {id}";
                 }
+
+                Response.Redirect(Request.RawUrl, false);
             }
             catch (Exception ex)
             {
-                MostrarMensaje(ex.Message, "alert-warning");
+                MostrarMensaje("Error: " + ex.Message, "alert-danger");
             }
         }
 
@@ -95,6 +138,23 @@ namespace Dominio
             lblMensaje.Text = texto;
             lblMensaje.CssClass = $"alert {tipo} d-block text-center";
             lblMensaje.Visible = true;
+        }
+
+        private void MostrarExitoJS(string mensaje)
+        {
+            string script = $@"
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+                <script>
+                    Swal.fire({{
+                        title: 'Éxito',
+                        text: '{mensaje}',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar'
+                    }}).then(() => {{
+                        window.location.href = 'Usuarios.aspx';
+                    }});
+                </script>";
+            ClientScript.RegisterStartupScript(this.GetType(), "exito", script, false);
         }
 
         private void LimpiarFormulario()

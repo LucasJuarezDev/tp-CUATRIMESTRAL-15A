@@ -52,20 +52,20 @@
 
                             <asp:TemplateField HeaderText="Acciones" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
-                                    <asp:LinkButton ID="btnEditar" runat="server" 
-                                        CommandName="Editar" 
+                                    <asp:LinkButton ID="btnEditar" runat="server"
+                                        CommandName="Editar"
                                         CommandArgument='<%# Eval("Id") %>'
-                                        CssClass="btn btn-primary btn-sm" 
+                                        CssClass="btn btn-primary btn-sm"
                                         ToolTip="Editar">
                                         <i class="bi bi-pencil-fill"></i>
                                     </asp:LinkButton>
             
                                     <asp:LinkButton ID="btnEliminar" runat="server" 
-                                        CommandName="Eliminar" 
+                                        CommandName="Eliminar"
                                         CommandArgument='<%# Eval("Id") %>'
-                                        CssClass="btn btn-danger btn-sm" 
-                                        ToolTip="Eliminar"
-                                        OnClientClick="return confirm('¿Eliminar usuario?');">
+                                        CssClass="btn btn-danger btn-sm btn-eliminar"
+                                        data-id='<%# Eval("Id") %>'
+                                        ToolTip="Eliminar">
                                         <i class="bi bi-trash-fill"></i>
                                     </asp:LinkButton>
                                 </ItemTemplate>
@@ -84,5 +84,33 @@
                 </div>
             </div>
         </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-eliminar').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); 
+
+                const id = this.getAttribute('data-id');
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: '¿Eliminar usuario?',
+                    text: 'Esta acción no se puede deshacer',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        __doPostBack('EliminarUsuario', id);
+                    }
+                });
+            });
+        });
+    });
+</script>
 </asp:Content>
 
