@@ -67,7 +67,7 @@
 
                         <asp:BoundField DataField="StockMinimo" HeaderText="Minimo" />
 
-                        <asp:TemplateField HeaderText="Editar" ItemStyle-HorizontalAlign="Center">
+                        <asp:TemplateField HeaderText="Acciones" ItemStyle-HorizontalAlign="Center">
                             <ItemTemplate>
                                 <asp:LinkButton ID="btnEditar" runat="server"
                                     CommandName="Editar"
@@ -77,20 +77,19 @@
                                     <i class="bi bi-pencil-fill"></i>
                                 </asp:LinkButton>
                             </ItemTemplate>
-                        </asp:TemplateField>
 
-                        <asp:TemplateField HeaderText="Eliminar" ItemStyle-HorizontalAlign="Center">
                             <ItemTemplate>
                                 <asp:LinkButton ID="btnEliminar" runat="server"
                                     CommandName="Eliminar"
                                     CommandArgument='<%# Eval("Id") %>'
-                                    CssClass="btn btn-danger btn-sm"
-                                    ToolTip="Eliminar"
-                                    OnClientClick="return confirm('¿Eliminar producto?');">
+                                    CssClass="btn btn-danger btn-sm btn-eliminar"
+                                    data-id='<%# Eval("Id") %>'
+                                    ToolTip="Eliminar">
                                     <i class="bi bi-trash-fill"></i>
                                 </asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
+
                     </Columns>
 
                     <PagerStyle CssClass="pagination pagination-sm mb-0" />
@@ -111,6 +110,32 @@
         </div>
     </div>
 
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-eliminar').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); 
+
+                const id = this.getAttribute('data-id');
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: '¿Eliminar producto?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        __doPostBack('eliminarProducto', id);
+                    }
+                });
+            });
+        });
+    });
+   </script>
 </asp:Content>
 
 

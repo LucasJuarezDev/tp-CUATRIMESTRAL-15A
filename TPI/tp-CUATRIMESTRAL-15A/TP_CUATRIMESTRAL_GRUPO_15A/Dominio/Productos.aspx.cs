@@ -19,6 +19,17 @@ namespace Dominio
             {
                 CargarGrilla();
             }
+            else
+            {
+                string eventTarget = Request["__EVENTTARGET"];
+                string eventArgument = Request["__EVENTARGUMENT"];
+
+                if (eventTarget == "eliminarProducto")
+                {
+                    long id = Convert.ToInt64(eventArgument);
+                    eliminarProducto(id);
+                }
+            }
         }
 
         private void CargarGrilla()
@@ -34,18 +45,44 @@ namespace Dominio
             }
         }
 
+        private void eliminarProducto(long id)
+        {
+            try
+            {
+                manager.Eliminar(id);
+                CargarGrilla();
+                string script = @"
+                    Swal.fire({
+                        title: '¡Eliminado!',
+                        text: 'El producto ha sido eliminado.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });";
+
+                ClientScript.RegisterStartupScript(this.GetType(), "eliminarExito", script, true);
+            }
+            catch (Exception ex)
+            {
+                string mensajeError = ex.Message.Replace("'", @"\'");
+
+                string script = $@"
+                    Swal.fire({{
+                        title: 'Error',
+                        text: 'No se pudo eliminar: {mensajeError}',
+                        icon: 'error'
+                    }});";
+
+                ClientScript.RegisterStartupScript(this.GetType(), "eliminarError", script, true);
+            }
+        }
+
         protected void gvProductos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "Editar")
             {
                 long id = Convert.ToInt64(e.CommandArgument);
                 Response.Redirect($"AgregarProducto.aspx?id={id}");
-            }
-            else if (e.CommandName == "Eliminar")
-            {
-                long id = Convert.ToInt64(e.CommandArgument);
-                manager.Eliminar(id);
-                CargarGrilla();
             }
         }
     }

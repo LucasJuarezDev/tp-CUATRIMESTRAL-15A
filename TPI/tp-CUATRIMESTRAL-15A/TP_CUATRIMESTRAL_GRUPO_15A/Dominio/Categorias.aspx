@@ -51,7 +51,7 @@
                             <asp:BoundField HeaderText="Descripción" DataField="Descripcion" />
 
                             <%-- Columna Modificar --%>
-                            <asp:TemplateField HeaderText="Modificar">
+                            <asp:TemplateField HeaderText="Acciones" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEditar" runat="server"
                                         CssClass="btn btn-primary btn-sm"
@@ -61,20 +61,19 @@
                                     </asp:LinkButton>
                                 </ItemTemplate>
                                 <ItemStyle HorizontalAlign="Center" />
-                            </asp:TemplateField>
-
-                            <%-- Columna Eliminar --%>
-                            <asp:TemplateField HeaderText="Eliminar">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEliminar" runat="server"
-                                        CssClass="btn btn-danger btn-sm"
                                         CommandName="Eliminar"
-                                        CommandArgument='<%# Eval("Id") %>'>
+                                        CommandArgument='<%# Eval("Id") %>'
+                                        CssClass="btn btn-danger btn-sm btn-eliminar"
+                                        data-id='<%# Eval("Id") %>'
+                                        >
                                         <i class="bi bi-trash-fill"></i>
                                     </asp:LinkButton>
                                 </ItemTemplate>
                                 <ItemStyle HorizontalAlign="Center" />
                             </asp:TemplateField>
+
                         </Columns>
                     </asp:GridView>
                 </div>
@@ -94,6 +93,33 @@
             </div>
         </div>
     </div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-eliminar').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault(); 
+
+                const id = this.getAttribute('data-id');
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: '¿Eliminar categoria?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        __doPostBack('eliminarCategoria', id);
+                    }
+                });
+            });
+        });
+    });
+   </script>
 </asp:Content>
 
 
