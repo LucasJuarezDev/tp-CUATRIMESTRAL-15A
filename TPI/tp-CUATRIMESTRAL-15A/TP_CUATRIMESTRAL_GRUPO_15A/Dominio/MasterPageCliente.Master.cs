@@ -11,7 +11,16 @@ namespace Dominio
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["usuario"] != null)
+            {
+                phLogueado.Visible = true;
+                phNoLogueado.Visible = false;
+            }
+            else
+            {
+                phLogueado.Visible = false;
+                phNoLogueado.Visible = true;
+            }
         }
     }
 }

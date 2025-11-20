@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 
 namespace Dominio
 {
-    public partial class alterarEmpleado : Page
+    public partial class alterarEmpleado : AuthenticationPage
     {
         private EmpleadoManager empleadoManager = new EmpleadoManager();
         public long? EmpleadoId => long.TryParse(Request.QueryString["id"], out long id) ? id : (long?)null;

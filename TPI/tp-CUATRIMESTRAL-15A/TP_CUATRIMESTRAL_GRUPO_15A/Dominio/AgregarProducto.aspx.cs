@@ -10,7 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace Dominio
 {
-    public partial class AgregarProducto : System.Web.UI.Page
+    public partial class AgregarProducto : AuthenticationPage
     {
         private ProductoManager manager = new ProductoManager();
         private long? ProductoId => long.TryParse(Request.QueryString["id"], out long id) ? id : (long?)null;

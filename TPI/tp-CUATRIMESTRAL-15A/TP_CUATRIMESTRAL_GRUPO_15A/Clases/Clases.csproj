@@ -50,6 +50,7 @@
     <Compile Include="Rol.cs" />
     <Compile Include="TipoPago.cs" />
     <Compile Include="Usuario.cs" />
+    <Compile Include="UsuarioLogueado.cs" />
     <Compile Include="Venta.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

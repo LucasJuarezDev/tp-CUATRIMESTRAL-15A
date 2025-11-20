@@ -43,7 +43,9 @@
   <ItemGroup>
     <Compile Include="AccesoDatos.cs" />
     <Compile Include="CategoriaManager.cs" />
+    <Compile Include="ClienteManager.cs" />
     <Compile Include="EmpleadoManager.cs" />
+    <Compile Include="LoginManager.cs" />
     <Compile Include="MarcaManager.cs" />
     <Compile Include="ProductoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +56,9 @@
       <Project>{2076aa4d-6d65-4139-9f5b-f12bc0883927}</Project>
       <Name>Clases</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System\Web\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

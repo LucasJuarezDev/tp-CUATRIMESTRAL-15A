@@ -9,7 +9,7 @@ using Manager;
 
 namespace Dominio
 {
-    public partial class Usuarios : System.Web.UI.Page
+    public partial class Usuarios : AuthenticationPage
     {
         private UsuarioManager manager = new UsuarioManager();
 

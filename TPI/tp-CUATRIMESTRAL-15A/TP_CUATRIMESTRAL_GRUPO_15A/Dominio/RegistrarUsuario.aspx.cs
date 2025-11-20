@@ -6,7 +6,7 @@ using System.Web.UI.WebControls;
 
 namespace Dominio
 {
-    public partial class RegistrarUsuario1 : System.Web.UI.Page
+    public partial class RegistrarUsuario1 : AuthenticationPage
     {
         private UsuarioManager usuarioManager = new UsuarioManager();
         public long? UsuarioId => long.TryParse(Request.QueryString["id"], out long id) ? id : (long?)null;

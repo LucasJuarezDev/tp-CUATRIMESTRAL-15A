@@ -35,16 +35,11 @@
                                          placeholder="••••••••" />
                         </div>
 
-                        <!-- Recordarme -->
-                        <div class="form-check mb-3">
-                            <asp:CheckBox ID="chkRecordarme" runat="server" CssClass="form-check-input" />
-                            <label class="form-check-label fw-medium">Recordarme</label>
-                        </div>
-
                         <!-- Botón Iniciar Sesión -->
                         <asp:Button ID="btnLogin" runat="server" 
                                     Text="INICIAR SESIÓN" 
                                     CssClass="btn btn-success w-100 fw-bold py-2" 
+                                    OnClick="btnLogin_Click"
                                      />
 
                         <!-- Enlaces -->

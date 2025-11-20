@@ -5,7 +5,7 @@ using Manager;
 
 namespace Dominio
 {
-    public partial class ModificarCategoria : System.Web.UI.Page
+    public partial class ModificarCategoria : AuthenticationPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

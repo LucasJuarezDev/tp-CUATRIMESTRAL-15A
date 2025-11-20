@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace Dominio
 {
-    public partial class AgregarMarca : System.Web.UI.Page
+    public partial class AgregarMarca : AuthenticationPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

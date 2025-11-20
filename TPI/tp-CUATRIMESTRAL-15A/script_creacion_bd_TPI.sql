@@ -188,7 +188,41 @@ SELECT
 	INNER JOIN CATEGORIA cat ON cat.ID = prod.ID_CATEGORIA
 	WHERE prod.ACTIVO = 1;
 
-	----------------------------------------------------------
+-------------------------------------------------------------------------------
+-- CREACION DE VISTA PARA CHEQUEAR SI EL USUARIO QUE SE LOGUEA TIENE UNA CUENTA
+
+CREATE VIEW vw_LoginUsuario AS
+SELECT 
+    u.ID AS UsuarioId,
+    u.NICKNAME,
+	u.CONTRASENA AS Contrasena,
+    u.EMAIL,
+    u.ACTIVO,
+    r.ID AS RolId,
+    r.ROL AS RolNombre,
+    
+    -- Cliente
+    c.ID AS ClienteId,
+    c.NOMBRE AS ClienteNombre,
+    c.APELLIDO AS ClienteApellido,
+    c.TELEFONO AS ClienteTelefono,
+    c.RAZON_SOCIAL AS ClienteRazonSocial,
+    c.FECHA_REGISTRO AS ClienteFechaRegistro,
+    
+    -- Empleado
+    e.ID AS EmpleadoId,
+    e.NOMBRE AS EmpleadoNombre,
+    e.APELLIDO AS EmpleadoApellido,
+    e.TELEFONO AS EmpleadoTelefono,
+    e.SUELDO AS EmpleadoSueldo
+
+FROM USUARIO u
+INNER JOIN ROL r ON u.ROLE_ID = r.ID
+LEFT JOIN CLIENTE c ON u.ID = c.ID_USUARIO AND (c.ACTIVO = 1 OR c.ACTIVO IS NULL)
+LEFT JOIN EMPLEADO e ON u.ID = e.ID_USUARIO AND (e.ACTIVO = 1 OR e.ACTIVO IS NULL)
+WHERE u.ACTIVO = 1
+
+----------------------------------------------------------
 
 -- SP PARA LA CREACION DE USUARIOS
 CREATE PROCEDURE sp_AgregarUsuario
@@ -363,4 +397,52 @@ BEGIN
         THROW;
     END CATCH
 END
+
+---------------------------------------------------------------
+-- SP PARA REGISTRAR UN CLIENTE
+
+CREATE PROCEDURE sp_RegistrarCliente
+    @Nickname     NVARCHAR(100),
+    @Contrasena   NVARCHAR(250),
+    @Email        NVARCHAR(250),
+    @Nombre       VARCHAR(100),
+    @Apellido     VARCHAR(100),
+    @Telefono     VARCHAR(100) = NULL,
+    @EsEmpresa    BIT = 0,
+    @RazonSocial  VARCHAR(250) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @RolCliente TINYINT = 3;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Validaciones
+        IF EXISTS (SELECT 1 FROM USUARIO WHERE NICKNAME = @Nickname)
+            THROW 50001, 'El nombre de usuario ya existe', 1;
+
+        IF @Email IS NOT NULL AND LTRIM(RTRIM(@Email)) <> ''
+            IF EXISTS (SELECT 1 FROM USUARIO WHERE EMAIL = @Email)
+                THROW 50002, 'El email ya está registrado', 1;
+
+        -- Insertar en USUARIO
+        INSERT INTO USUARIO (NICKNAME, CONTRASENA, EMAIL, ROLE_ID, ACTIVO)
+        VALUES (@Nickname, @Contrasena, @Email, @RolCliente, 1);
+
+        DECLARE @NuevoUsuarioId BIGINT = SCOPE_IDENTITY();
+
+        -- Insertar en CLIENTE
+        INSERT INTO CLIENTE (NOMBRE, APELLIDO, TELEFONO, FECHA_REGISTRO, ROLE_ID, ID_USUARIO, RAZON_SOCIAL, ACTIVO)
+        VALUES (@Nombre, @Apellido, @Telefono, GETDATE(), @RolCliente, @NuevoUsuarioId,
+               CASE WHEN @EsEmpresa = 1 THEN @RazonSocial ELSE NULL END, 1);
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
 

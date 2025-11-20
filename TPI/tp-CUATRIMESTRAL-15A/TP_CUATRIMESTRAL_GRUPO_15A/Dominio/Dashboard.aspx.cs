@@ -4,7 +4,7 @@ using Manager;
 
 namespace Dominio
 {
-    public partial class Dashboard : System.Web.UI.Page
+    public partial class Dashboard : AuthenticationPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
