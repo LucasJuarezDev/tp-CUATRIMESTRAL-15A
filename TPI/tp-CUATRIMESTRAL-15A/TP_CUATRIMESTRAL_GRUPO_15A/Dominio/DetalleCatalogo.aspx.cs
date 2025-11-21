@@ -55,29 +55,37 @@ namespace Dominio
             long id = Convert.ToInt64(btn.CommandArgument);
             Producto producto = manager.BuscarPorId(id);
 
-            if (producto == null || producto.Stock <= 0) return;
+            if (producto == null || producto.Stock <= 0)
+                return;
 
-            // C# 7.3: SIN ??=
             if (Session["Carrito"] == null)
-            {
-                Session["Carrito"] = new List<Producto>();
-            }
+                Session["Carrito"] = new List<ProductoCarrito>();
 
-            var carrito = (List<Producto>)Session["Carrito"];
-            var existente = carrito.Find(p => p.Id == id);
+            var carrito = (List<ProductoCarrito>)Session["Carrito"];
+
+            var existente = carrito.FirstOrDefault(x => x.IdProducto == id);
 
             if (existente == null)
             {
-                //producto.Cantidad = 1;
-                //carrito.Add(producto);
+                carrito.Add(new ProductoCarrito
+                {
+                    IdProducto = producto.Id,
+                    Nombre = producto.Nombre,
+                    Precio = producto.Precio,
+                    Cantidad = 1
+                });
             }
             else
             {
-                //existente.Cantidad++;
+                existente.Cantidad++;
             }
+
+            Session["Carrito"] = carrito;
 
             MostrarExito($"'{producto.Nombre}' agregado al carrito");
         }
+
+
 
         private void MostrarExito(string msg)
         {
