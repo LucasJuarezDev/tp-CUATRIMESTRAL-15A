@@ -102,5 +102,43 @@ namespace Manager
             }
         }
 
+        public List<Marca> ListarConFiltro(string filtro = "")
+        {
+            List<Marca> lista = new List<Marca>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = @"
+            SELECT ID, NOMBRE, DESCRIPCION 
+            FROM MARCA 
+            WHERE ACTIVO = 1
+              AND (@filtro = '' OR NOMBRE LIKE @filtro)";
+
+                datos.SetearConsulta(consulta);
+                datos.SetearParametro("@filtro", string.IsNullOrEmpty(filtro) ? "" : $"%{filtro}%");
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Marca aux = new Marca
+                    {
+                        Id = Convert.ToInt64(datos.Lector["ID"]),
+                        Nombre = datos.Lector["NOMBRE"].ToString(),
+                        Descripcion = datos.Lector["DESCRIPCION"] == DBNull.Value ? "" : datos.Lector["DESCRIPCION"].ToString()
+                    };
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar marcas: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
     }
 }

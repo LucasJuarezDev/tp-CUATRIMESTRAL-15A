@@ -222,5 +222,63 @@ namespace Manager
                 datos.CerrarConeccion();
             }
         }
+
+        public List<Producto> ListarConFiltro(string filtro = "")
+        {
+            List<Producto> lista = new List<Producto>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = @"
+            SELECT p.*, m.NOMBRE AS NombreMarca, c.NOMBRE AS NombreCategoria
+            FROM PRODUCTO p
+            INNER JOIN MARCA m ON p.ID_MARCA = m.ID
+            INNER JOIN CATEGORIA c ON p.ID_CATEGORIA = c.ID
+            WHERE p.ACTIVO = 1
+              AND (@filtro = '' 
+                   OR p.NOMBRE LIKE @filtro 
+                   OR m.NOMBRE LIKE @filtro)";
+
+                datos.SetearConsulta(consulta);
+                datos.SetearParametro("@filtro", string.IsNullOrEmpty(filtro) ? "" : $"%{filtro}%");
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Producto prod = new Producto
+                    {
+                        Id = Convert.ToInt64(datos.Lector["ID"]),
+                        Nombre = datos.Lector["NOMBRE"].ToString(),
+                        Precio = Convert.ToDecimal(datos.Lector["PRECIO"]),
+                        DescripcionCorta = datos.Lector["DESCRIPCION_CORTA"].ToString(),
+                        DescripcionExtendida = datos.Lector["DESCRIPCION_EXTENDIDA"].ToString(),
+                        Stock = Convert.ToInt32(datos.Lector["STOCK"]),
+                        StockMinimo = Convert.ToInt32(datos.Lector["STOCK_MINIMO"]),
+                        ImagenUrl = datos.Lector["IMAGEN_URL"] == DBNull.Value ? "" : datos.Lector["IMAGEN_URL"].ToString(),
+
+                        Marca = new Marca
+                        {
+                            Id = Convert.ToInt64(datos.Lector["ID_MARCA"]),
+                            Nombre = datos.Lector["NombreMarca"].ToString()
+                        },
+                        Categoria = new Categoria
+                        {
+                            Id = Convert.ToInt64(datos.Lector["ID_CATEGORIA"]),
+                            Nombre = datos.Lector["NombreCategoria"].ToString()
+                        }
+                    };
+                    lista.Add(prod);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar productos: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
     }
 }

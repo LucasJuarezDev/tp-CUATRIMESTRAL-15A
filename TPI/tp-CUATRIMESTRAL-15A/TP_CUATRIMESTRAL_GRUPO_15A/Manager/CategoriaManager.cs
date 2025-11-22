@@ -109,7 +109,43 @@ namespace Manager
             }
         }
 
+        public List<Categoria> ListarConFiltro(string filtro = "")
+        {
+            List<Categoria> lista = new List<Categoria>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = @"
+            SELECT ID, NOMBRE, DESCRIPCION 
+            FROM CATEGORIA 
+            WHERE ACTIVO = 1
+              AND (@filtro = '' OR NOMBRE LIKE @filtro)";
 
+                datos.SetearConsulta(consulta);
+                datos.SetearParametro("@filtro", string.IsNullOrEmpty(filtro) ? "" : $"%{filtro}%");
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Categoria cat = new Categoria
+                    {
+                        Id = Convert.ToInt64(datos.Lector["ID"]),
+                        Nombre = datos.Lector["NOMBRE"].ToString(),
+                        Descripcion = datos.Lector["DESCRIPCION"] == DBNull.Value ? "" : datos.Lector["DESCRIPCION"].ToString()
+                    };
+                    lista.Add(cat);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al listar categorías: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
 
     }
 }

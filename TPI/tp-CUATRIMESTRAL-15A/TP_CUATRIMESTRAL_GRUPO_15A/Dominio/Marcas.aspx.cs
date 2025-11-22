@@ -7,11 +7,13 @@ using Manager;
 
 namespace Dominio
 {
-    public partial class Marcas : System.Web.UI.Page
+    public partial class Marcas : AuthenticationPage  
     {
+        private MarcaManager manager = new MarcaManager();
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack) // para que solo cargue la lista la primera vez
+            if (!IsPostBack)
             {
                 CargarMarcas();
             }
@@ -19,42 +21,63 @@ namespace Dominio
 
         private void CargarMarcas()
         {
-            MarcaManager marcaManager = new MarcaManager();
-            var lista = marcaManager.Listar();
-            Session["listaMarcas"] = lista; // guardo la lista en sesion
-            DGVmarcas.DataSource = lista;
-            DGVmarcas.DataBind();
+            try
+            {
+                string filtro = txtBuscar.Text.Trim();
+                int pageSize = int.Parse(ddlPageSize.SelectedValue);
+
+                var lista = manager.ListarConFiltro(filtro);
+
+                DGVmarcas.PageSize = pageSize;
+                DGVmarcas.DataSource = lista;
+                DGVmarcas.DataBind();
+            }
+            catch (Exception ex)
+            {
+                // opcional: mostrar error
+            }
+        }
+
+        protected void ddlPageSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DGVmarcas.PageIndex = 0;
+            CargarMarcas();
+        }
+
+        protected void txtBuscar_TextChanged(object sender, EventArgs e)
+        {
+            DGVmarcas.PageIndex = 0;
+            CargarMarcas();
+        }
+
+        protected void DGVmarcas_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            DGVmarcas.PageIndex = e.NewPageIndex;
+            CargarMarcas();
         }
 
         protected void DGVmarcas_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            var listaMarcas = (List<Marca>)Session["listaMarcas"];
-            long id = Convert.ToInt64(e.CommandArgument); //sirve para obtener el ID del registro sobre el que se hizo clic en el GridView
+            long id = Convert.ToInt64(e.CommandArgument);
 
-            if (e.CommandName == "Eliminar") // el CommandName es el de las columnas que estan en el DGV
+            if (e.CommandName == "Editar")
             {
-                MarcaManager manager = new MarcaManager();
-
+                Response.Redirect($"ModificarMarca.aspx?id={id}");
+            }
+            else if (e.CommandName == "Eliminar")
+            {
                 try
                 {
                     manager.EliminarLogico(id);
                     CargarMarcas();
+
+                    string script = "Swal.fire('¡Eliminada!', 'La marca ha sido eliminada.', 'success');";
+                    ClientScript.RegisterStartupScript(this.GetType(), "eliminarOk", script, true);
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Error al eliminar la marca: " + ex.Message);
-                }
-            }
-            else if (e.CommandName == "Editar")
-            {
-                // se busca el objeto en la lista
-                Marca seleccionada = listaMarcas.Find(x => x.Id == id);
-
-                if (seleccionada != null)
-                {
-                    // Lo guardo en sesion para la otra pagina
-                    Session["marcaSeleccionada"] = seleccionada;
-                    Response.Redirect("ModificarMarca.aspx");
+                    string script = $"Swal.fire('Error', 'No se pudo eliminar: {ex.Message.Replace("'", "\\'")}', 'error');";
+                    ClientScript.RegisterStartupScript(this.GetType(), "eliminarError", script, true);
                 }
             }
         }

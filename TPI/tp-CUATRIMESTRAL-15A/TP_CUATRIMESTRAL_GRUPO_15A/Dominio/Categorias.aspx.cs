@@ -9,20 +9,31 @@ namespace Dominio
 {
     public partial class Categorias : AuthenticationPage
     {
+        private CategoriaManager manager = new CategoriaManager();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                ViewState["PageSize"] = 10;
                 CargarCategorias();
             }
             else
             {
-                string eventTarget = Request["__EVENTTARGET"];
-                string eventArgument = Request["__EVENTARGUMENT"];
-
-                if (eventTarget == "eliminarCategoria")
+                // FILTRO REACTIVO
+                if (Request["__EVENTTARGET"] == "filtrarCategorias")
                 {
-                    long id = Convert.ToInt64(eventArgument);
+                    string texto = Request["__EVENTARGUMENT"] ?? "";
+                    txtBuscar.Text = texto;
+                    DGVcategorias.PageIndex = 0;
+                    CargarCategorias();
+                    return;
+                }
+
+                // ELIMINAR
+                if (Request["__EVENTTARGET"] == "eliminarCategoria")
+                {
+                    long id = Convert.ToInt64(Request["__EVENTARGUMENT"]);
                     eliminarCategoria(id);
                 }
             }
@@ -30,61 +41,73 @@ namespace Dominio
 
         private void CargarCategorias()
         {
-            CategoriaManager categoriaManager = new CategoriaManager();
-            DGVcategorias.DataSource = categoriaManager.Listar();
-            DGVcategorias.DataBind();
+            try
+            {
+                string filtro = txtBuscar.Text.Trim();
+
+                // GUARDAR EL PageSize en ViewState para que no se pierda
+                if (ViewState["PageSize"] != null)
+                {
+                    DGVcategorias.PageSize = (int)ViewState["PageSize"];
+                }
+                else
+                {
+                    DGVcategorias.PageSize = 10;
+                }
+
+                var lista = manager.ListarConFiltro(filtro);
+
+                DGVcategorias.DataSource = lista;
+                DGVcategorias.DataBind();
+            }
+            catch (Exception ex)
+            {
+                // opcional: mostrar error
+            }
         }
 
+        // CAMBIO DE CANTIDAD POR PÁGINA
+        protected void ddlPageSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ViewState["PageSize"] = int.Parse(ddlPageSize.SelectedValue);
+            DGVcategorias.PageIndex = 0;
+            CargarCategorias();
+        }
+
+        // PAGINACIÓN
+        protected void DGVcategorias_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            DGVcategorias.PageIndex = e.NewPageIndex;
+            CargarCategorias();
+        }
+
+        // EDITAR
+        protected void DGVcategorias_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            long id = Convert.ToInt64(e.CommandArgument);
+
+            if (e.CommandName == "Editar")
+            {
+                Response.Redirect($"ModificarCategoria.aspx?id={id}");
+            }
+        }
+
+        // ELIMINAR
         private void eliminarCategoria(long id)
         {
-            CategoriaManager manager = new CategoriaManager();
             try
             {
                 manager.EliminarLogico(id);
                 CargarCategorias();
-                string script = @"
-                    Swal.fire({
-                        title: '¡Eliminado!',
-                        text: 'La categoria ha sido eliminado.',
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });";
 
-                ClientScript.RegisterStartupScript(this.GetType(), "eliminarExito", script, true);
+                string script = "Swal.fire({title: '¡Eliminada!', text: 'La categoría ha sido eliminada.', icon: 'success', timer: 2000, showConfirmButton: false});";
+                ClientScript.RegisterStartupScript(this.GetType(), "eliminarOk", script, true);
             }
             catch (Exception ex)
             {
-                string mensajeError = ex.Message.Replace("'", @"\'");
-
-                string script = $@"
-                    Swal.fire({{
-                        title: 'Error',
-                        text: 'No se pudo eliminar: {mensajeError}',
-                        icon: 'error'
-                    }});";
-
+                string msg = ex.Message.Replace("'", @"\'");
+                string script = $"Swal.fire({{title: 'Error', text: 'No se pudo eliminar: {msg}', icon: 'error'}});";
                 ClientScript.RegisterStartupScript(this.GetType(), "eliminarError", script, true);
-            }
-        }
-
-        protected void DGVcategorias_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            CategoriaManager manager = new CategoriaManager();
-
-            // ID de la categoria desde el CommandArgument
-            long id = Convert.ToInt64(e.CommandArgument);
-            if (e.CommandName == "Editar")
-            {
-                // Buscar la categoria en la lista
-                Categoria seleccionada = manager.Listar().Find(x => x.Id == id);
-
-                if (seleccionada != null)
-                {
-                    // Guardar en sesion y redirigir
-                    Session["categoriaSeleccionada"] = seleccionada;
-                    Response.Redirect("ModificarCategoria.aspx");
-                }
             }
         }
     }

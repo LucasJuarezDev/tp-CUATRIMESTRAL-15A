@@ -27,65 +27,79 @@
                     <div>
                         <label class="form-label mb-0">
                             Mostrar
-                            <select class="form-select form-select-sm d-inline w-auto mx-1">
-                                <option>10</option>
-                                <option>25</option>
-                                <option>50</option>
-                                <option>100</option>
-                            </select>
+                            <asp:DropDownList ID="ddlPageSize" runat="server" AutoPostBack="true" 
+                                OnSelectedIndexChanged="ddlPageSize_SelectedIndexChanged"
+                                CssClass="form-select form-select-sm d-inline w-auto mx-1">
+                                <asp:ListItem Value="10" Selected="True">10</asp:ListItem>
+                                <asp:ListItem Value="25">25</asp:ListItem>
+                                <asp:ListItem Value="50">50</asp:ListItem>
+                                <asp:ListItem Value="100">100</asp:ListItem>
+                            </asp:DropDownList>
                             registros
                         </label>
                     </div>
                     <div>
-                        <input type="text" class="form-control form-control-sm" placeholder="Buscar...">
+                        <asp:TextBox ID="txtBuscar" runat="server" 
+                            placeholder="Buscar por nombre..." 
+                            CssClass="form-control form-control-sm" 
+                            AutoPostBack="true"
+                            OnTextChanged="txtBuscar_TextChanged">
+                        </asp:TextBox>
                     </div>
                 </div>
-                                                                                                                                                     <%-- puse este evento para usar el eliminar --%>                                      
-                <div>
-                    <asp:GridView ID="DGVmarcas" runat="server" AutoGenerateColumns="false" CssClass="table table-bordered table-hover align-middle" OnRowCommand="DGVmarcas_RowCommand">
-                        <Columns>
-                            <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
 
-                            <asp:BoundField HeaderText="Descripcion" DataField="Descripcion" />
+                <asp:GridView ID="DGVmarcas" runat="server" 
+                    AutoGenerateColumns="false" 
+                    CssClass="table table-bordered table-hover align-middle"
+                    AllowPaging="True"
+                    PageSize="10"
+                    OnPageIndexChanging="DGVmarcas_PageIndexChanging"
+                    OnRowCommand="DGVmarcas_RowCommand"
+                    DataKeyNames="ID">
+    
+                    <PagerStyle CssClass="pagination pagination-sm justify-content-center mt-3" />
 
-                            <%-- Columna Modificar --%>
-                            <asp:TemplateField HeaderText="Modificar">
-                                <ItemTemplate>
-                                    <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-primary btn-sm" CommandName="Editar" CommandArgument='<%# Eval("ID") %>'>
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </asp:LinkButton>
-                                </ItemTemplate>
-                                <ItemStyle HorizontalAlign="Center" />
-                            </asp:TemplateField>
-
-                            <%-- Columna Eliminar --%>
-                            <asp:TemplateField HeaderText="Eliminar">                                                                   
-                                <ItemTemplate>
-                                    <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-danger btn-sm" CommandName="Eliminar" CommandArgument='<%# Eval("ID") %>'>
-                                        <i class="bi bi-trash-fill"></i>
-                                    </asp:LinkButton>
-                                </ItemTemplate>
-                                <ItemStyle HorizontalAlign="Center" />
-                            </asp:TemplateField>
-                        </Columns>
-                    </asp:GridView>
-                </div>
-
-                <!-- Paginacion -->
-                <div class="d-flex justify-content-between align-items-center mt-2 flex-wrap">
-                    <div class="small text-muted">Mostrando 1 a 10 de 23 registros</div>
-                    <nav>
-                        <ul class="pagination pagination-sm mb-0">
-                            <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
-                        </ul>
-                    </nav>
+                    <Columns>
+                        <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
+                        <asp:BoundField HeaderText="Descripción" DataField="Descripcion" />
+        
+                        <asp:TemplateField HeaderText="Modificar">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="btnEditar" runat="server" CssClass="btn btn-primary btn-sm" 
+                                    CommandName="Editar" CommandArgument='<%# Eval("ID") %>'>
+                                    <i class="bi bi-pencil-fill"></i>
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                            <ItemStyle HorizontalAlign="Center" />
+                        </asp:TemplateField>
+        
+                        <asp:TemplateField HeaderText="Eliminar">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="btnEliminar" runat="server" CssClass="btn btn-danger btn-sm btn-eliminar" 
+                                    CommandName="Eliminar" CommandArgument='<%# Eval("ID") %>'
+                                    data-id='<%# Eval("ID") %>'>
+                                    <i class="bi bi-trash-fill"></i>
+                                </asp:LinkButton>
+                            </ItemTemplate>
+                            <ItemStyle HorizontalAlign="Center" />
+                        </asp:TemplateField>
+                    </Columns>
+                </asp:GridView>
                 </div>
 
             </div>
         </div>
     </div>
+    <script>
+        // Esto hace que filtre apenas dejás de escribir 600ms (sin postback molesto)
+        let timer;
+        document.getElementById('<%= txtBuscar.ClientID %>').addEventListener('keyup', function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            __doPostBack('<%= txtBuscar.UniqueID %>', '');
+        }, 600);
+    });
+    </script>
 </asp:Content>
 
 

@@ -25,69 +25,68 @@
                     <div>
                         <label class="form-label mb-0">
                             Mostrar
-                            <select class="form-select form-select-sm d-inline w-auto mx-1">
-                                <option>10</option>
-                                <option>25</option>
-                                <option>50</option>
-                                <option>100</option>
-                            </select>
+                            <asp:DropDownList ID="ddlPageSize" runat="server" AutoPostBack="true" 
+                                OnSelectedIndexChanged="ddlPageSize_SelectedIndexChanged"
+                                CssClass="form-select form-select-sm d-inline w-auto mx-1">
+                                <asp:ListItem Value="10" Selected="True">10</asp:ListItem>
+                                <asp:ListItem Value="25">25</asp:ListItem>
+                                <asp:ListItem Value="50">50</asp:ListItem>
+                                <asp:ListItem Value="100">100</asp:ListItem>
+                            </asp:DropDownList>
                             registros
                         </label>
                     </div>
                     <div>
-                        <input type="text" class="form-control form-control-sm" placeholder="Buscar...">
+                        <asp:TextBox ID="txtBuscar" runat="server" 
+                            CssClass="form-control form-control-sm" 
+                            placeholder="Buscar por nombre..."
+                            onkeyup="filtrarCategorias(this.value)">
+                        </asp:TextBox>
                     </div>
                 </div>
 
                 <!-- GridView -->
                 <div>
-                    <asp:GridView ID="DGVcategorias" runat="server" 
+                    <asp:GridView ID="DGVcategorias" runat="server"
                         AutoGenerateColumns="false"
                         CssClass="table table-bordered table-hover align-middle"
-                        OnRowCommand="DGVcategorias_RowCommand">
+                        AllowPaging="True"
+                        OnPageIndexChanging="DGVcategorias_PageIndexChanging"
+                        OnRowCommand="DGVcategorias_RowCommand"
+                        DataKeyNames="Id"
+                        PagerSettings-Mode="NumericFirstLast"
+                        PagerSettings-FirstPageText="Anterior"
+                        PagerSettings-LastPageText="Siguiente"
+                        PagerSettings-PageButtonCount="10">
+
+                        <PagerStyle CssClass="pagination pagination-sm justify-content-center mt-3" 
+                                    HorizontalAlign="Center" />
+
                         <Columns>
                             <asp:BoundField HeaderText="ID" DataField="Id" />
                             <asp:BoundField HeaderText="Nombre" DataField="Nombre" />
                             <asp:BoundField HeaderText="Descripción" DataField="Descripcion" />
-
-                            <%-- Columna Modificar --%>
+        
                             <asp:TemplateField HeaderText="Acciones" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
                                     <asp:LinkButton ID="btnEditar" runat="server"
-                                        CssClass="btn btn-primary btn-sm"
+                                        CssClass="btn btn-primary btn-sm me-1"
                                         CommandName="Editar"
                                         CommandArgument='<%# Eval("Id") %>'>
                                         <i class="bi bi-pencil-fill"></i>
                                     </asp:LinkButton>
-                                </ItemTemplate>
-                                <ItemStyle HorizontalAlign="Center" />
-                                <ItemTemplate>
+
                                     <asp:LinkButton ID="btnEliminar" runat="server"
                                         CommandName="Eliminar"
                                         CommandArgument='<%# Eval("Id") %>'
                                         CssClass="btn btn-danger btn-sm btn-eliminar"
-                                        data-id='<%# Eval("Id") %>'
-                                        >
+                                        data-id='<%# Eval("Id") %>'>
                                         <i class="bi bi-trash-fill"></i>
                                     </asp:LinkButton>
                                 </ItemTemplate>
-                                <ItemStyle HorizontalAlign="Center" />
                             </asp:TemplateField>
-
                         </Columns>
                     </asp:GridView>
-                </div>
-
-                <!-- Paginacion (por el momento decorativa) -->
-                <div class="d-flex justify-content-between align-items-center mt-2 flex-wrap">
-                    <div class="small text-muted">Mostrando 1 a 10 de 23 registros</div>
-                    <nav>
-                        <ul class="pagination pagination-sm mb-0">
-                            <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
-                        </ul>
-                    </nav>
                 </div>
 
             </div>
@@ -95,6 +94,17 @@
     </div>
 
    <script>
+    let timerCat;
+    function filtrarCategorias(texto) {
+        clearTimeout(timerCat);
+        timerCat = setTimeout(function () {
+            __doPostBack('filtrarCategorias', texto);
+        }, 500);
+    }
+
+    document.getElementById('<%= txtBuscar.ClientID %>').addEventListener('search', function () {
+        filtrarCategorias('');
+    });
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.btn-eliminar').forEach(btn => {
             btn.addEventListener('click', function (e) {
