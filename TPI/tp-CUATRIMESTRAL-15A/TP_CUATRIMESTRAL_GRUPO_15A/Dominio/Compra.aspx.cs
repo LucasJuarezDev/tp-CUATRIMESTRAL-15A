@@ -3,12 +3,13 @@ using Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI;
 
 namespace Dominio
 {
     public partial class Compra : System.Web.UI.Page
     {
-        private decimal totalCarrito;
+        decimal totalBase = 0;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -34,35 +35,36 @@ namespace Dominio
             var carrito = Session["Carrito"] as List<ProductoCarrito>;
             if (carrito == null) return;
 
-            totalCarrito = carrito.Sum(x => x.Precio * x.Cantidad);
-
             var resumen = carrito.Select(x => new
             {
                 x.Nombre,
                 x.Cantidad,
-                Subtotal = x.Precio * x.Cantidad
+                Subtotal = x.Cantidad * x.Precio
             });
 
             repResumen.DataSource = resumen;
             repResumen.DataBind();
 
+            totalBase = carrito.Sum(x => x.Cantidad * x.Precio);
             ActualizarTotal();
         }
 
         private void ActualizarTotal()
         {
             decimal envio = decimal.Parse(ddlEnvio.SelectedValue);
-            decimal final = totalCarrito + envio;
+            decimal final = totalBase + envio;
+
             lblTotal.Text = final.ToString("C");
         }
 
         protected void ddlPago_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string metodo = ddlPago.SelectedItem.Text.ToUpper();
 
-            if (ddlPago.SelectedItem.Text.ToUpper().Contains("TARJETA"))
-                panelTarjeta.Visible = true;
+            if (metodo.Contains("DEBITO") || metodo.Contains("CREDITO"))
+                pnlTarjeta.Visible = true;
             else
-                panelTarjeta.Visible = false;
+                pnlTarjeta.Visible = false;
         }
 
         protected void ddlEnvio_SelectedIndexChanged(object sender, EventArgs e)
@@ -72,11 +74,20 @@ namespace Dominio
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
         {
-            // Registrar venta 
-            Session["Carrito"] = null;
+            var carrito = Session["Carrito"] as List<ProductoCarrito>;
+            if (carrito == null || carrito.Count == 0)
+                return;
+
+            byte idPago = byte.Parse(ddlPago.SelectedValue);
+            string comentario = txtComentario.Text;
+
+            // aca va a ir la logica para crear la venta
+            // VentaManager manager = new VentaManager();
+            // manager.RegistrarVenta(carrito, idPago, comentario);
+
+            Session["Carrito"] = null; // Limpia el carrito
             Response.Redirect("CompraExitosa.aspx");
         }
     }
 }
-
 
