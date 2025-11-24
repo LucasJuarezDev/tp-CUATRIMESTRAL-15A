@@ -20,6 +20,23 @@ INSERT INTO TIPO_PAGO (NOMBRE, DESCRIPCION) VALUES
 ('CHEQUE', 'Pago mediante cheque nominativo');
 GO
 
+-----------para dejar lo existente y agregar solo lo nuevo
+
+INSERT INTO TIPO_PAGO (NOMBRE, DESCRIPCION)
+SELECT v.NOMBRE, v.DESCRIPCION
+FROM (VALUES
+    ('EFECTIVO', 'Pago en efectivo al momento de la venta'),
+    ('TRANSFERENCIA', 'Pago mediante transferencia bancaria'),
+    ('TARJETA DE CREDITO', 'Pago con tarjeta de crédito (Visa, MasterCard, etc.)'),
+    ('CHEQUE', 'Pago mediante cheque nominativo')
+) AS v(NOMBRE, DESCRIPCION)
+WHERE NOT EXISTS (
+    SELECT 1 FROM TIPO_PAGO t WHERE t.NOMBRE = v.NOMBRE
+);
+
+
+
+
 -- =============================================
 -- 3. INSERCIÓN EN TABLA MARCA
 -- =============================================
@@ -61,6 +78,8 @@ INSERT INTO USUARIO (NICKNAME, CONTRASENA, EMAIL, ROLE_ID, ACTIVO) VALUES
 ('Ana', 'ana123', 'ana.rodriguez@outlook.com', 3, 1),
 ('EmpresaXYZ', 'corp123', 'xyz@empresa.com', 3, 1);
 GO
+
+select * from USUARIO
 
 -- =============================================
 -- 6. INSERCIÓN EN TABLA EMPLEADO

@@ -67,5 +67,11 @@ namespace Dominio
             Session["Carrito"] = carrito;
             CargarCarrito();
         }
+
+        protected void btnContinuar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Compra.aspx");
+        }
+
     }
 }

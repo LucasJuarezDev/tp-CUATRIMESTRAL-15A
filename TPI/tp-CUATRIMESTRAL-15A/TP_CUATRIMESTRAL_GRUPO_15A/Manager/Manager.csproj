@@ -49,6 +49,7 @@
     <Compile Include="MarcaManager.cs" />
     <Compile Include="ProductoManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TipoPagoManager.cs" />
     <Compile Include="UsuarioManager.cs" />
   </ItemGroup>
   <ItemGroup>

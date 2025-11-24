@@ -107,8 +107,11 @@
                                     <asp:Label ID="lblTotal" runat="server" CssClass="h4 fw-bold">$0.00</asp:Label>
                                 </div>
 
-                                <button type="button" class="btn btn-secondary w-100 mt-auto">
-                                    CONTINUAR
+                                <button type="button"
+                                        class="btn btn-secondary w-100 mt-auto"
+                                        runat="server"
+                                        onserverclick="btnContinuar_Click">
+                                     CONTINUAR
                                 </button>
 
                             </div>
