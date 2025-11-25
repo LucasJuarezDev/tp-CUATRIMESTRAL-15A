@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <form id="form1" runat="server">
+      <form id="form1" runat="server" enctype="multipart/form-data">
         <div class="d-flex">
             <!-- Sidebar -->
             <div class="sidebar p-3">
@@ -64,6 +64,9 @@
                     </li>
                     <li class="nav-item">         
                         <a class="nav-link" href="gestionEmpleados.aspx" ><i class="bi bi-people-fill me-2"></i>Empleados</a>
+                    </li>
+                     <li class="nav-item">         
+                        <a class="nav-link" href="Logout.aspx"><i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>

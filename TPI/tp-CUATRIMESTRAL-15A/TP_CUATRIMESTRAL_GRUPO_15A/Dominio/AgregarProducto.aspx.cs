@@ -3,6 +3,7 @@ using Manager;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -91,7 +92,6 @@ namespace Dominio
                 txtDescripcionExtendida.Text = prod.DescripcionExtendida;
                 txtStock.Text = prod.Stock.ToString();
                 txtStockMinimo.Text = prod.StockMinimo.ToString();
-                txtImagenUrl.Text = prod.ImagenUrl ?? "";
                 ddlMarca.SelectedValue = prod.Marca.Id.ToString();
                 ddlCategoria.SelectedValue = prod.Categoria.Id.ToString();
             }
@@ -107,38 +107,88 @@ namespace Dominio
 
             try
             {
-                string precioTexto = txtPrecio.Text.Trim().Replace(".", "").Replace(",", ".");
-
-                decimal precio = decimal.Parse(precioTexto, CultureInfo.InvariantCulture);
+                // === CREAR O MODIFICAR PRODUCTO ===
                 var producto = new Producto
                 {
                     Nombre = txtNombre.Text.Trim(),
-                    Precio = precio,
+                    Precio = decimal.Parse(txtPrecio.Text.Trim().Replace(".", ",")),
                     DescripcionCorta = txtDescripcionCorta.Text.Trim(),
                     DescripcionExtendida = txtDescripcionExtendida.Text.Trim(),
-                    ImagenUrl = string.IsNullOrWhiteSpace(txtImagenUrl.Text) ? null : txtImagenUrl.Text.Trim(),
                     Stock = int.Parse(txtStock.Text),
                     StockMinimo = int.Parse(txtStockMinimo.Text),
                     Marca = new Marca { Id = long.Parse(ddlMarca.SelectedValue) },
-                    Categoria = new Categoria { Id = long.Parse(ddlCategoria.SelectedValue) }
+                    Categoria = new Categoria { Id = long.Parse(ddlCategoria.SelectedValue) },
+                    Estado = true
                 };
 
-                if (ProductoId.HasValue)
+                long idProducto;
+
+                if (Request.QueryString["id"] != null)
                 {
-                    producto.Id = ProductoId.Value;
+                    producto.Id = long.Parse(Request.QueryString["id"]);
                     manager.Modificar(producto);
-                    MostrarExitoJS("Producto modificado correctamente.");
+                    idProducto = producto.Id;
                 }
                 else
                 {
-                    producto.Estado = true;
-                    manager.nuevoProducto(producto);
-                    MostrarExitoJS("Producto creado correctamente.");
+                    idProducto = manager.nuevoProducto(producto);
                 }
+
+                List<string> rutasGuardadas = new List<string>(); // ← ESTA LÍNEA FALTABA
+
+                if (fuImagenes.HasFiles)
+                {
+
+                    string carpetaFisica = Server.MapPath("~/img/productos/");
+
+                    if (!Directory.Exists(carpetaFisica))
+                    {
+                        Directory.CreateDirectory(carpetaFisica);
+                    }
+
+                    int contador = 0;
+                    foreach (HttpPostedFile file in fuImagenes.PostedFiles)
+                    {
+                        contador++;
+
+                        string extension = Path.GetExtension(file.FileName).ToLower();
+                        if (!new[] { ".jpg", ".jpeg", ".png", ".webp" }.Contains(extension))
+                        {
+                            continue;
+                        }
+
+                        string nombreArchivo = $"{idProducto}_{DateTime.Now:yyyyMMddHHmmssfff}_{contador}{extension}";
+                        string rutaCompleta = Path.Combine(carpetaFisica, nombreArchivo);
+
+                        try
+                        {
+                            file.SaveAs(rutaCompleta);
+
+                            if (File.Exists(rutaCompleta))
+                            {
+                                rutasGuardadas.Add("~/img/productos/" + nombreArchivo);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"EXCEPCIÓN: {ex.Message}");
+                        }
+                    }
+                }
+
+                // === GUARDAR RUTAS EN BD ===
+                if (rutasGuardadas.Count > 0)
+                {
+                    manager.AgregarImagenes(idProducto, rutasGuardadas);
+                }
+
+                Response.Redirect("Productos.aspx?exito=1");
             }
             catch (Exception ex)
             {
-                MostrarError("Error: " + ex.Message);
+                lblMensaje.Text = "Error: " + ex.Message;
+                pnlMensaje.CssClass = "alert alert-danger";
+                pnlMensaje.Visible = true;
             }
         }
 

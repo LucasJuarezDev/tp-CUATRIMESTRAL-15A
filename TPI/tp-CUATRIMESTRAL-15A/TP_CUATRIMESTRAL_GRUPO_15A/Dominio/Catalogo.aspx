@@ -27,15 +27,11 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
                             <!-- IMAGEN -->
-                            <img src='<%# string.IsNullOrEmpty(Eval("ImagenUrl")?.ToString()) 
-                                            ? "https://via.placeholder.com/400x300/cccccc/666666?text=" + 
-                                              Server.UrlEncode(Eval("Nombre").ToString().Length > 15 
-                                                ? Eval("Nombre").ToString().Substring(0,15) + "..." 
-                                                : Eval("Nombre").ToString())
-                                            : Eval("ImagenUrl") %>'
-                                 class="card-img-top" 
-                                 alt='<%# Eval("Nombre") %>' 
-                                 style="height: 220px; object-fit: cover;">
+                            <img src='<%# ResolveUrl(Eval("ImagenPrincipal").ToString()) %>'
+                                 class="card-img-top"
+                                 alt='<%# Eval("Nombre") %>'
+                                 style="height: 220px; object-fit: cover;"
+                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300/cccccc/666666?text=Sin+Imagen';">
 
                             <div class="card-body d-flex flex-column p-4">
                                 <!-- NOMBRE -->

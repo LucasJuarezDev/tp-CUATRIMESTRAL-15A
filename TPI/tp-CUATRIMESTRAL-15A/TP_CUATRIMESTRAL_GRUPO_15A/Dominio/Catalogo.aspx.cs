@@ -28,7 +28,7 @@ namespace Dominio
         {
             try
             {
-                List<Producto> lista = productoManager.Listar();
+                List<Producto> lista = productoManager.Listar(1);
                 AplicarOrdenamiento(ref lista);
                 rptProductos.DataSource = lista;
                 rptProductos.DataBind();

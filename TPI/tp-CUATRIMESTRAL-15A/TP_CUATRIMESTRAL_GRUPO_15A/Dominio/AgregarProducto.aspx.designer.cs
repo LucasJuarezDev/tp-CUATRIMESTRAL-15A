@@ -213,13 +213,13 @@ namespace Dominio
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDescripcionExtendida;
 
         /// <summary>
-        /// Control txtImagenUrl.
+        /// Control fuImagenes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtImagenUrl;
+        protected global::System.Web.UI.WebControls.FileUpload fuImagenes;
 
         /// <summary>
         /// Control btnGuardar.

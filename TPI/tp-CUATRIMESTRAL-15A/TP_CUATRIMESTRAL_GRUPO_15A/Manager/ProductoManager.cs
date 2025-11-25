@@ -10,14 +10,20 @@ namespace Manager
 {
     public class ProductoManager
     {
-        public List<Producto> Listar()
+        public List<Producto> Listar(int fromCatalogo = 0)
         {
             List<Producto> lista = new List<Producto>();
             AccesoDatos datos = new AccesoDatos();
-
             try
             {
-                datos.SetearConsulta("SELECT * FROM vw_ProductosActivos");
+                if(fromCatalogo == 1)
+                {
+                    datos.SetearConsulta("SELECT * FROM vw_ProductosActivos ORDER BY NOMBRE");
+                }
+                else
+                {
+                    datos.SetearConsulta("SELECT * FROM vw_ProductosActivos ORDER BY ID DESC");
+                }
                 datos.EjecutarLectura();
 
                 while (datos.Lector.Read())
@@ -31,33 +37,28 @@ namespace Manager
                         DescripcionExtendida = datos.Lector["DESCRIPCION_EXTENDIDA"].ToString(),
                         Stock = Convert.ToInt32(datos.Lector["STOCK"]),
                         StockMinimo = Convert.ToInt32(datos.Lector["STOCK_MINIMO"]),
-                        ImagenUrl = datos.Lector["IMAGEN_URL"] == DBNull.Value ? string.Empty : datos.Lector["IMAGEN_URL"].ToString(),
+                        ImagenPrincipal = datos.Lector["ImagenPrincipal"].ToString(), // ← Viene de la vista
 
-                        // MARCA
                         Marca = new Marca
                         {
                             Id = Convert.ToInt64(datos.Lector["IdMarca"]),
-                            Nombre = datos.Lector["NombreMarca"].ToString(),
-                            Descripcion = datos.Lector["DescripcionMarca"].ToString()
+                            Nombre = datos.Lector["NombreMarca"].ToString()
                         },
-
-                        // CATEGORÍA
                         Categoria = new Categoria
                         {
                             Id = Convert.ToInt64(datos.Lector["IdCategoria"]),
-                            Nombre = datos.Lector["NombreCategoria"].ToString(),
-                            Descripcion = datos.Lector["DescripcionCategoria"].ToString()
-                        }
+                            Nombre = datos.Lector["NombreCategoria"].ToString()
+                        },
+                        Estado = true
                     };
 
                     lista.Add(prod);
                 }
-
                 return lista;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Error al listar productos: " + ex.Message);
             }
             finally
             {
@@ -95,26 +96,40 @@ namespace Manager
 
                 if (datos.Lector.Read())
                 {
-                    return new Producto
+                    var prod = new Producto
                     {
                         Id = Convert.ToInt64(datos.Lector["ID"]),
-                        Nombre = datos.Lector["NOMBRE"]?.ToString(),
+                        Nombre = datos.Lector["NOMBRE"].ToString(),
                         Precio = Convert.ToDecimal(datos.Lector["PRECIO"]),
                         DescripcionCorta = datos.Lector["DESCRIPCION_CORTA"].ToString(),
                         DescripcionExtendida = datos.Lector["DESCRIPCION_EXTENDIDA"].ToString(),
                         Stock = Convert.ToInt32(datos.Lector["STOCK"]),
                         StockMinimo = Convert.ToInt32(datos.Lector["STOCK_MINIMO"]),
-                        ImagenUrl = datos.Lector["IMAGEN_URL"]?.ToString(),
-                        Marca = new Marca { Id = Convert.ToInt64(datos.Lector["IdMarca"]), Nombre = datos.Lector["NombreMarca"]?.ToString() },
-                        Categoria = new Categoria { Id = Convert.ToInt64(datos.Lector["IdCategoria"]), Nombre = datos.Lector["NombreCategoria"]?.ToString() },
+                        ImagenPrincipal = datos.Lector["ImagenPrincipal"].ToString(),
+
+                        Marca = new Marca
+                        {
+                            Id = Convert.ToInt64(datos.Lector["IdMarca"]),
+                            Nombre = datos.Lector["NombreMarca"].ToString()
+                        },
+                        Categoria = new Categoria
+                        {
+                            Id = Convert.ToInt64(datos.Lector["IdCategoria"]),
+                            Nombre = datos.Lector["NombreCategoria"].ToString()
+                        },
                         Estado = Convert.ToBoolean(datos.Lector["ACTIVO"])
                     };
+
+                    // Cargar todas las imágenes (para el carrusel)
+                    prod.Imagenes = ListarImagenes(prod.Id);
+
+                    return prod;
                 }
                 return null;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Error al buscar producto: " + ex.Message);
             }
             finally
             {
@@ -122,44 +137,36 @@ namespace Manager
             }
         }
 
-        public void nuevoProducto(Producto obj)
+        public long nuevoProducto(Producto obj)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 datos.SetearConsulta(@"
                 INSERT INTO PRODUCTO (
-                    NOMBRE, PRECIO, 
-                    DESCRIPCION_CORTA, DESCRIPCION_EXTENDIDA,
-                    IMAGEN_URL,
-                    STOCK, STOCK_MINIMO,
-                    ID_MARCA, ID_CATEGORIA,
-                    ACTIVO
+                    NOMBRE, PRECIO, DESCRIPCION_CORTA, DESCRIPCION_EXTENDIDA,
+                    STOCK, STOCK_MINIMO, ID_MARCA, ID_CATEGORIA, ACTIVO
                 ) VALUES (
-                    @Nombre, @Precio,
-                    @DescCorta, @DescExtendida,
-                    @ImagenUrl,
-                    @Stock, @StockMinimo,
-                    @IdMarca, @IdCategoria,
-                    @Activo
-                )");
+                    @Nombre, @Precio, @DescCorta, @DescExtendida,
+                    @Stock, @StockMinimo, @IdMarca, @IdCategoria, @Activo
+                );
+                SELECT SCOPE_IDENTITY();");
 
                 datos.SetearParametro("@Nombre", obj.Nombre);
                 datos.SetearParametro("@Precio", obj.Precio);
                 datos.SetearParametro("@DescCorta", obj.DescripcionCorta);
                 datos.SetearParametro("@DescExtendida", obj.DescripcionExtendida);
-                datos.SetearParametro("@ImagenUrl",string.IsNullOrWhiteSpace(obj.ImagenUrl) ? (object)DBNull.Value : obj.ImagenUrl);
                 datos.SetearParametro("@Stock", obj.Stock);
                 datos.SetearParametro("@StockMinimo", obj.StockMinimo);
                 datos.SetearParametro("@IdMarca", obj.Marca.Id);
                 datos.SetearParametro("@IdCategoria", obj.Categoria.Id);
                 datos.SetearParametro("@Activo", obj.Estado);
 
-                datos.ejecutarAccion();
+                return Convert.ToInt64(datos.ejecutarEscalar());
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Error al crear producto: " + ex.Message);
             }
             finally
             {
@@ -178,7 +185,6 @@ namespace Manager
                 PRECIO = @Precio,
                 DESCRIPCION_CORTA = @DescCorta,
                 DESCRIPCION_EXTENDIDA = @DescExtendida,
-                IMAGEN_URL = @ImagenUrl,
                 STOCK = @Stock,
                 STOCK_MINIMO = @StockMinimo,
                 ID_MARCA = @IdMarca,
@@ -190,13 +196,16 @@ namespace Manager
                 datos.SetearParametro("@Precio", obj.Precio);
                 datos.SetearParametro("@DescCorta", obj.DescripcionCorta);
                 datos.SetearParametro("@DescExtendida", obj.DescripcionExtendida);
-                datos.SetearParametro("@ImagenUrl", obj.ImagenUrl ?? (object)DBNull.Value);
                 datos.SetearParametro("@Stock", obj.Stock);
                 datos.SetearParametro("@StockMinimo", obj.StockMinimo);
                 datos.SetearParametro("@IdMarca", obj.Marca.Id);
                 datos.SetearParametro("@IdCategoria", obj.Categoria.Id);
 
                 datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al modificar producto: " + ex.Message);
             }
             finally
             {
@@ -254,7 +263,6 @@ namespace Manager
                         DescripcionExtendida = datos.Lector["DESCRIPCION_EXTENDIDA"].ToString(),
                         Stock = Convert.ToInt32(datos.Lector["STOCK"]),
                         StockMinimo = Convert.ToInt32(datos.Lector["STOCK_MINIMO"]),
-                        ImagenUrl = datos.Lector["IMAGEN_URL"] == DBNull.Value ? "" : datos.Lector["IMAGEN_URL"].ToString(),
 
                         Marca = new Marca
                         {
@@ -278,6 +286,98 @@ namespace Manager
             finally
             {
                 datos.CerrarConeccion();
+            }
+        }
+
+        public void GuardarImagenes(long idProducto, List<string> rutasImagenes)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Primero eliminamos las antiguas (opcional, o solo insertamos nuevas)
+                datos.SetearConsulta("DELETE FROM PRODUCTO_IMAGENES WHERE ID_PRODUCTO = @IdProducto");
+                datos.SetearParametro("@IdProducto", idProducto);
+                datos.ejecutarAccion();
+                datos.CerrarConeccion();
+
+                if (rutasImagenes == null || !rutasImagenes.Any()) return;
+
+                for (int i = 0; i < rutasImagenes.Count; i++)
+                {
+                    datos = new AccesoDatos();
+                    datos.SetearConsulta(@"
+                INSERT INTO PRODUCTO_IMAGENES (ID_PRODUCTO, URL_IMAGEN, ES_PRINCIPAL, ORDEN)
+                VALUES (@IdProducto, @Url, @Principal, @Orden)");
+                    datos.SetearParametro("@IdProducto", idProducto);
+                    datos.SetearParametro("@Url", rutasImagenes[i]);
+                    datos.SetearParametro("@Principal", i == 0); // la primera es principal
+                    datos.SetearParametro("@Orden", i);
+                    datos.ejecutarAccion();
+                    datos.CerrarConeccion();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al guardar imágenes: " + ex.Message);
+            }
+        }
+
+        public List<ProductoImagen> ListarImagenes(long idProducto)
+        {
+            List<ProductoImagen> lista = new List<ProductoImagen>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("SELECT ID, URL_IMAGEN, ES_PRINCIPAL, ORDEN FROM PRODUCTO_IMAGENES WHERE ID_PRODUCTO = @Id ORDER BY ORDEN");
+                datos.SetearParametro("@Id", idProducto);
+                datos.EjecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new ProductoImagen
+                    {
+                        Id = Convert.ToInt64(datos.Lector["ID"]),
+                        IdProducto = idProducto,
+                        UrlImagen = datos.Lector["URL_IMAGEN"].ToString(),
+                        EsPrincipal = Convert.ToBoolean(datos.Lector["ES_PRINCIPAL"]),
+                        Orden = Convert.ToInt32(datos.Lector["ORDEN"])
+                    });
+                }
+            }
+            finally { datos.CerrarConeccion(); }
+            return lista;
+        }
+
+        public void AgregarImagenes(long idProducto, List<string> rutasNuevas)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Obtener el máximo orden actual
+                datos.SetearConsulta("SELECT ISNULL(MAX(ORDEN), -1) FROM PRODUCTO_IMAGENES WHERE ID_PRODUCTO = @Id");
+                datos.SetearParametro("@Id", idProducto);
+                int ultimoOrden = Convert.ToInt32(datos.ejecutarEscalar());
+                datos.CerrarConeccion();
+
+                int ordenActual = ultimoOrden + 1;
+
+                foreach (string ruta in rutasNuevas)
+                {
+                    datos = new AccesoDatos();
+                    datos.SetearConsulta(@"
+                INSERT INTO PRODUCTO_IMAGENES (ID_PRODUCTO, URL_IMAGEN, ES_PRINCIPAL, ORDEN)
+                VALUES (@IdProducto, @Url, @EsPrincipal, @Orden)");
+
+                    datos.SetearParametro("@IdProducto", idProducto);
+                    datos.SetearParametro("@Url", ruta);
+                    datos.SetearParametro("@EsPrincipal", ordenActual == 0); // la primera del producto será principal
+                    datos.SetearParametro("@Orden", ordenActual++);
+                    datos.ejecutarAccion();
+                    datos.CerrarConeccion();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al agregar imágenes: " + ex.Message);
             }
         }
     }

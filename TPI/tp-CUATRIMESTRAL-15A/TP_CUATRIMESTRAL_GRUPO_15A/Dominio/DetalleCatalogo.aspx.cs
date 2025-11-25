@@ -13,11 +13,48 @@ namespace Dominio
     {
         private readonly ProductoManager manager = new ProductoManager();
 
+        protected Repeater rptImagenes;
+        protected Repeater rptMiniaturas;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                CargarProducto();
+                if (long.TryParse(Request.QueryString["id"], out long id))
+                {
+                    var manager = new ProductoManager();
+                    var prod = manager.BuscarPorId(id);
+
+                    if (prod != null)
+                    {
+                        // Cargar imágenes (si tiene)
+                        if (prod.Imagenes != null && prod.Imagenes.Count > 0)
+                        {
+                            rptImagenes.DataSource = prod.Imagenes;
+                            rptImagenes.DataBind();
+
+                            rptMiniaturas.DataSource = prod.Imagenes;
+                            rptMiniaturas.DataBind();
+                        }
+                        else
+                        {
+                            // Placeholder si no hay imágenes
+                            var placeholder = new[] { new ProductoImagen { UrlImagen = "https://via.placeholder.com/600x600/cccccc/666666?text=Sin+Imagen" } };
+                            rptImagenes.DataSource = placeholder;
+                            rptMiniaturas.DataSource = placeholder;
+                            rptImagenes.DataBind();
+                            rptMiniaturas.DataBind();
+                        }
+
+                        fvProducto.DataSource = new[] { prod };
+                        fvProducto.DataBind();
+                    }
+                    else
+                    {
+                        // Producto no encontrado
+                        Response.Redirect("Catalogo.aspx");
+                    }
+                }
             }
         }
 

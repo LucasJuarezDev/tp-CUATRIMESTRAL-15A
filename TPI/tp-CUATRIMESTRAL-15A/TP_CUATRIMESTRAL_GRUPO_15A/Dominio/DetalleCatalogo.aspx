@@ -5,15 +5,38 @@
         <asp:FormView ID="fvProducto" runat="server" ItemType="Clases.Producto">
             <ItemTemplate>
                 <div class="row">
-                    <!-- IMAGEN -->
+                    <!-- CARRUSEL DE IMÁGENES -->
                     <div class="col-lg-5">
-                        <div class="position-sticky" style="top: 2rem;">
-                            <img src='<%# string.IsNullOrEmpty(Item.ImagenUrl) 
-                                        ? "https://via.placeholder.com/600x600/cccccc/666666?text=" + Server.UrlEncode(Item.Nombre.Length > 20 ? Item.Nombre.Substring(0,20)+"..." : Item.Nombre)
-                                        : Item.ImagenUrl %>'
-                                 class="img-fluid rounded shadow-sm"
-                                 alt='<%# Item.Nombre %>'
-                                 onerror="this.src='https://via.placeholder.com/600x600/cccccc/666666?text=Sin+Imagen'">
+                        <div id="carouselProducto" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <asp:Repeater ID="rptImagenes" runat="server">
+                                    <ItemTemplate>
+                                        <div class='carousel-item <%# Container.ItemIndex == 0 ? "active" : "" %>'>
+                                            <img src='<%# Eval("UrlImagen") %>' 
+                                                 class="d-block w-100 rounded shadow-sm" 
+                                                 style="max-height:600px; object-fit:contain; background:#000"
+                                                 alt="Imagen del producto"
+                                                 onerror="this.src='https://via.placeholder.com/600x600/cccccc/666666?text=Sin+Imagen'">
+                                        </div>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
+                            <!-- controles del carrusel -->
+                        </div>
+
+                        <!-- Miniaturas -->
+                        <div class="row mt-3 g-2">
+                            <asp:Repeater ID="rptMiniaturas" runat="server">
+                                <ItemTemplate>
+                                    <div class="col-3">
+                                        <img src='<%# Eval("UrlImagen") %>' 
+                                             class="img-fluid rounded border cursor-pointer" 
+                                             style="height:80px; object-fit:cover;"
+                                             onclick="$('#carouselProducto').carousel(<%# Container.ItemIndex %>);"
+                                             onerror="this.src='https://via.placeholder.com/80'"/>
+                                    </div>
+                                </ItemTemplate>
+                            </asp:Repeater>
                         </div>
                     </div>
 

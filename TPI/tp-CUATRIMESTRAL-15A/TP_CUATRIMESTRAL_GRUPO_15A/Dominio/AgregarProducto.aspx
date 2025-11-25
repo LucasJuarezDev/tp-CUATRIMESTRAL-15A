@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/MasterPageAdmin.Master" CodeBehind="AgregarProducto.aspx.cs" Inherits="Dominio.AgregarProducto" %>
+﻿
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="AgregarProducto.aspx.cs" Inherits="Dominio.AgregarProducto" MasterPageFile="~/MasterPageAdmin.Master"ValidateRequest="false" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -125,12 +126,14 @@
                                     Display="Dynamic" />
                             </div>
 
-                            <!-- Imagen URL -->
-                            <div class="col-12">
-                                <label class="form-label fw-semibold">URL de la imagen</label>
-                                <asp:TextBox ID="txtImagenUrl" runat="server" CssClass="form-control" 
-                                             placeholder="https://ejemplo.com/imagen.jpg" />
-                                <small class="text-muted">Pega el enlace directo a la imagen (opcional).</small>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Imágenes del producto</label>
+                                <asp:FileUpload ID="fuImagenes" runat="server" 
+                                                AllowMultiple="true" 
+                                                CssClass="form-control" 
+                                                accept="image/*" />
+                                <small class="text-muted">Seleccioná una o varias imágenes (JPG, PNG, WebP)</small>
                             </div>
                         </div>
 
@@ -154,7 +157,6 @@
     function validarStock() {
         const stock = parseInt(document.getElementById('<%= txtStock.ClientID %>').value) || 0;
         const stockMinimo = parseInt(document.getElementById('<%= txtStockMinimo.ClientID %>').value) || 0;
-
         if (stock <= stockMinimo) {
             alert('El stock inicial debe ser mayor al stock mínimo.');
             return false;
@@ -162,18 +164,24 @@
         return true;
     }
 
-    function mostrarExito() {
+    // Mostrar mensaje de éxito con SweetAlert
+    function mostrarExito(mensaje) {
         Swal.fire({
             title: '¡Éxito!',
-            text: 'El producto se creó correctamente.',
+            text: mensaje || 'Producto guardado correctamente.',
             icon: 'success',
-            confirmButtonText: 'Aceptar',
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = 'Productos.aspx';
-            }
+            confirmButtonText: 'Aceptar'
+        }).then(() => {
+            window.location.href = 'Productos.aspx';
+        });
+    }
+
+    function mostrarError(mensaje) {
+        Swal.fire({
+            title: 'Error',
+            text: mensaje || 'Ocurrió un error al guardar.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
         });
     }
 </script>
