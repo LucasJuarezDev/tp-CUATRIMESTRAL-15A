@@ -76,6 +76,7 @@
     <Content Include="Catalogo.aspx" />
     <Content Include="Categorias.aspx" />
     <Content Include="Compra.aspx" />
+    <Content Include="CompraExitosa.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="DetalleCatalogo.aspx" />
     <Content Include="gestionEmpleados.aspx" />
@@ -157,6 +158,13 @@
     </Compile>
     <Compile Include="Compra.aspx.designer.cs">
       <DependentUpon>Compra.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CompraExitosa.aspx.cs">
+      <DependentUpon>CompraExitosa.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CompraExitosa.aspx.designer.cs">
+      <DependentUpon>CompraExitosa.aspx</DependentUpon>
     </Compile>
     <Compile Include="Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
