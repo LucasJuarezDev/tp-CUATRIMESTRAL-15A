@@ -29,11 +29,11 @@
                             <asp:Repeater ID="rptMiniaturas" runat="server">
                                 <ItemTemplate>
                                     <div class="col-3">
-                                        <img src='<%# Eval("UrlImagen") %>' 
-                                             class="img-fluid rounded border cursor-pointer" 
-                                             style="height:80px; object-fit:cover;"
-                                             onclick="$('#carouselProducto').carousel(<%# Container.ItemIndex %>);"
-                                             onerror="this.src='https://via.placeholder.com/80'"/>
+                                    <img src='<%# ResolveUrl(Eval("ImagenPrincipal").ToString()) %>'
+                                         class="card-img-top"
+                                         alt='<%# Eval("Nombre") %>'
+                                         style="height: 220px; object-fit: cover;"
+                                         onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300/cccccc/666666?text=Sin+Imagen';">
                                     </div>
                                 </ItemTemplate>
                             </asp:Repeater>

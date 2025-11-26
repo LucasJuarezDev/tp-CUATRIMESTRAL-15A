@@ -13,47 +13,61 @@ namespace Dominio
     {
         private readonly ProductoManager manager = new ProductoManager();
 
-        protected Repeater rptImagenes;
-        protected Repeater rptMiniaturas;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 if (long.TryParse(Request.QueryString["id"], out long id))
                 {
-                    var manager = new ProductoManager();
-                    var prod = manager.BuscarPorId(id);
+                    Producto producto = manager.BuscarPorId(id);
 
-                    if (prod != null)
+                    if (producto == null || !producto.Estado)
                     {
-                        // Cargar imágenes (si tiene)
-                        if (prod.Imagenes != null && prod.Imagenes.Count > 0)
-                        {
-                            rptImagenes.DataSource = prod.Imagenes;
-                            rptImagenes.DataBind();
-
-                            rptMiniaturas.DataSource = prod.Imagenes;
-                            rptMiniaturas.DataBind();
-                        }
-                        else
-                        {
-                            // Placeholder si no hay imágenes
-                            var placeholder = new[] { new ProductoImagen { UrlImagen = "https://via.placeholder.com/600x600/cccccc/666666?text=Sin+Imagen" } };
-                            rptImagenes.DataSource = placeholder;
-                            rptMiniaturas.DataSource = placeholder;
-                            rptImagenes.DataBind();
-                            rptMiniaturas.DataBind();
-                        }
-
-                        fvProducto.DataSource = new[] { prod };
-                        fvProducto.DataBind();
-                    }
-                    else
-                    {
-                        // Producto no encontrado
                         Response.Redirect("Catalogo.aspx");
+                        return;
                     }
+
+                    // === CARGAR IMÁGENES EN LOS REPEATERS ===
+                    var imagenes = producto.Imagenes ?? new List<ProductoImagen>();
+
+                    // Si no tiene imágenes → placeholder
+                    if (imagenes.Count == 0)
+                    {
+                        imagenes.Add(new ProductoImagen
+                        {
+                            UrlImagen = "https://via.placeholder.com/600x600/cccccc/666666?text=Sin+Imagen"
+                        });
+                    }
+
+                    // BUSCAR LOS REPEATERS DENTRO DEL FORMVIEW
+                    Repeater rptImagenes = (Repeater)fvProducto.FindControl("rptImagenes");
+                    Repeater rptMiniaturas = (Repeater)fvProducto.FindControl("rptMiniaturas");
+
+                    if (rptImagenes != null)
+                    {
+                        rptImagenes.DataSource = imagenes.Select(img => new
+                        {
+                            UrlImagen = ResolveUrl(img.UrlImagen) // ← IMPORTANTE: ResolveUrl para la ~
+                        });
+                        rptImagenes.DataBind();
+                    }
+
+                    if (rptMiniaturas != null)
+                    {
+                        rptMiniaturas.DataSource = imagenes.Select(img => new
+                        {
+                            UrlImagen = ResolveUrl(img.UrlImagen)
+                        });
+                        rptMiniaturas.DataBind();
+                    }
+
+                    // CARGAR EL PRODUCTO EN EL FORMVIEW
+                    fvProducto.DataSource = new[] { producto };
+                    fvProducto.DataBind();
+                }
+                else
+                {
+                    Response.Redirect("Catalogo.aspx");
                 }
             }
         }
