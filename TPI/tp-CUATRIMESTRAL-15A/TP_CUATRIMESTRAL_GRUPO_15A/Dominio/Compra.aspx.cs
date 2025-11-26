@@ -80,11 +80,9 @@ namespace Dominio
                 return;
 
             byte idPago = byte.Parse(ddlPago.SelectedValue);
-            string comentario = txtComentario.Text;
 
-            // acá se va a registrar la venta
-            // VentaManager manager = new VentaManager();
-            // manager.RegistrarVenta(carrito, idPago, comentario);
+            VentaManager manager = new VentaManager();
+            manager.RegistrarVenta(carrito, idPago);
 
             Session["Carrito"] = null;
             Response.Redirect("CompraExitosa.aspx");

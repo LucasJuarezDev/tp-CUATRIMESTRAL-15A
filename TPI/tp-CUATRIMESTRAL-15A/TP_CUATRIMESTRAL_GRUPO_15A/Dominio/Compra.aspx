@@ -129,8 +129,7 @@
                     <ItemTemplate>
                         <div class="d-flex justify-content-between border-bottom border-secondary py-2">
                             <span><%# Eval("Nombre") %> (x<%# Eval("Cantidad") %>)</span>
-
-                            <!-- CORREGIDO: ELIMINO FORMATO DE MONEDA -->
+                            
                             <span>$ <%# String.Format("{0:N2}", Eval("Subtotal")) %></span>
                         </div>
                     </ItemTemplate>
