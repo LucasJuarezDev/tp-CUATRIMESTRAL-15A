@@ -71,7 +71,7 @@ namespace Dominio
             Response.Redirect($"DetalleCatalogo.aspx?id={id}");
         }
 
-        // Helper para truncar descripción
+        // Helper para truncar descripcion
         public string Truncate(object texto, int longitud)
         {
             string str = texto?.ToString() ?? "";

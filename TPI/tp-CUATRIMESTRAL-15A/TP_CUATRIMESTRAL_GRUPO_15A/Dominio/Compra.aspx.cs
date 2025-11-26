@@ -9,7 +9,11 @@ namespace Dominio
 {
     public partial class Compra : System.Web.UI.Page
     {
-        decimal totalBase = 0;
+        private decimal totalBase
+        {
+            get { return ViewState["totalBase"] != null ? (decimal)ViewState["totalBase"] : 0; }
+            set { ViewState["totalBase"] = value; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -54,17 +58,14 @@ namespace Dominio
             decimal envio = decimal.Parse(ddlEnvio.SelectedValue);
             decimal final = totalBase + envio;
 
-            lblTotal.Text = final.ToString("C");
+            lblTotal.Text = final.ToString("N2");
         }
 
         protected void ddlPago_SelectedIndexChanged(object sender, EventArgs e)
         {
             string metodo = ddlPago.SelectedItem.Text.ToUpper();
 
-            if (metodo.Contains("DEBITO") || metodo.Contains("CREDITO"))
-                pnlTarjeta.Visible = true;
-            else
-                pnlTarjeta.Visible = false;
+            pnlTarjeta.Visible = (metodo.Contains("DEBITO") || metodo.Contains("CREDITO"));
         }
 
         protected void ddlEnvio_SelectedIndexChanged(object sender, EventArgs e)
@@ -81,13 +82,14 @@ namespace Dominio
             byte idPago = byte.Parse(ddlPago.SelectedValue);
             string comentario = txtComentario.Text;
 
-            // aca va a ir la logica para crear la venta
+            // acá se va a registrar la venta
             // VentaManager manager = new VentaManager();
             // manager.RegistrarVenta(carrito, idPago, comentario);
 
-            Session["Carrito"] = null; // Limpia el carrito
+            Session["Carrito"] = null;
             Response.Redirect("CompraExitosa.aspx");
         }
     }
 }
+
 

@@ -26,6 +26,7 @@
                 <ItemTemplate>
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
+
                             <!-- IMAGEN -->
                             <img src='<%# ResolveUrl(Eval("ImagenPrincipal").ToString()) %>'
                                  class="card-img-top"
@@ -34,32 +35,36 @@
                                  onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300/cccccc/666666?text=Sin+Imagen';">
 
                             <div class="card-body d-flex flex-column p-4">
+
                                 <!-- NOMBRE -->
                                 <h6 class="card-title fw-bold mb-2">
                                     <%# Eval("Nombre") %>
                                 </h6>
 
-                                <!-- DESCRIPCIÓN CORTA -->
+                                <!-- DESCRIPCION CORTA -->
                                 <p class="text-muted small mb-3">
                                     <%# Truncate(Eval("DescripcionCorta"), 60) %>
                                 </p>
 
-                                <!-- PRECIO -->
+                                <!-- PRECIO (FORMATO UNIFICADO) -->
                                 <div class="mb-3">
                                     <div class="h5 text-success fw-bold mb-1">
-                                        $<%# Eval("Precio") %>
+                                        <%# "$ " + String.Format(new System.Globalization.CultureInfo("es-AR"), "{0:N2}", Eval("Precio")) %>
                                     </div>
+
                                     <small class="text-success">
-                                        Precio s/imp. nac. $<%# Math.Round(Convert.ToDecimal(Eval("Precio")) * 0.82m, 0) %>
+                                        Precio s/imp. nac.
+                                        <%# "$ " + String.Format(new System.Globalization.CultureInfo("es-AR"), "{0:N0}", Math.Round(Convert.ToDecimal(Eval("Precio")) * 0.82m, 0)) %>
                                     </small>
                                 </div>
 
-                                <!-- BOTÓN COMPRAR -->
+                                <!-- BOTON COMPRAR -->
                                 <asp:Button ID="btnComprar" runat="server" 
                                             Text="QUIERO VER MAS"
                                             CssClass="btn btn-success w-100 mt-auto"
                                             CommandArgument='<%# Eval("Id") %>'
                                             OnClick="btnVerDetalle_Click" />
+
                             </div>
                         </div>
                     </div>
@@ -67,52 +72,55 @@
             </asp:Repeater>
         </div>
 
-    <!-- Modal de Filtros -->
-    <div class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="filtroModalLabel">Filtrar Productos</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Categoría</label>
-                        <asp:DropDownList ID="ddlCategoria" runat="server" CssClass="form-select">
-                            <asp:ListItem Value="">Todas las categorías</asp:ListItem>
-                            <asp:ListItem>Refrigeradores</asp:ListItem>
-                            <asp:ListItem>Lavadoras</asp:ListItem>
-                            <asp:ListItem>Televisores</asp:ListItem>
-                            <asp:ListItem>Pequeños electrodomésticos</asp:ListItem>
-                        </asp:DropDownList>
+        <!-- Modal de Filtros -->
+        <div class="modal fade" id="filtroModal" tabindex="-1" aria-labelledby="filtroModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filtroModalLabel">Filtrar Productos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Marca</label>
-                        <asp:DropDownList ID="ddlMarca" runat="server" CssClass="form-select">
-                            <asp:ListItem Value="">Todas las marcas</asp:ListItem>
-                            <asp:ListItem>LG</asp:ListItem>
-                            <asp:ListItem>Samsung</asp:ListItem>
-                            <asp:ListItem>Whirlpool</asp:ListItem>
-                            <asp:ListItem>Philips</asp:ListItem>
-                            <asp:ListItem>Rowenta</asp:ListItem>
-                        </asp:DropDownList>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="form-label">Precio desde</label>
-                            <asp:TextBox ID="txtPrecioDesde" runat="server" CssClass="form-control" TextMode="Number" placeholder="0"></asp:TextBox>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Categoría</label>
+                            <asp:DropDownList ID="ddlCategoria" runat="server" CssClass="form-select">
+                                <asp:ListItem Value="">Todas las categorías</asp:ListItem>
+                                <asp:ListItem>Refrigeradores</asp:ListItem>
+                                <asp:ListItem>Lavadoras</asp:ListItem>
+                                <asp:ListItem>Televisores</asp:ListItem>
+                                <asp:ListItem>Pequeños electrodomésticos</asp:ListItem>
+                            </asp:DropDownList>
                         </div>
-                        <div class="col-6">
-                            <label class="form-label">Precio hasta</label>
-                            <asp:TextBox ID="txtPrecioHasta" runat="server" CssClass="form-control" TextMode="Number" placeholder="100000"></asp:TextBox>
+                        <div class="mb-3">
+                            <label class="form-label">Marca</label>
+                            <asp:DropDownList ID="ddlMarca" runat="server" CssClass="form-select">
+                                <asp:ListItem Value="">Todas las marcas</asp:ListItem>
+                                <asp:ListItem>LG</asp:ListItem>
+                                <asp:ListItem>Samsung</asp:ListItem>
+                                <asp:ListItem>Whirlpool</asp:ListItem>
+                                <asp:ListItem>Philips</asp:ListItem>
+                                <asp:ListItem>Rowenta</asp:ListItem>
+                            </asp:DropDownList>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label">Precio desde</label>
+                                <asp:TextBox ID="txtPrecioDesde" runat="server" CssClass="form-control" TextMode="Number" placeholder="0"></asp:TextBox>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Precio hasta</label>
+                                <asp:TextBox ID="txtPrecioHasta" runat="server" CssClass="form-control" TextMode="Number" placeholder="100000"></asp:TextBox>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <asp:Button ID="btnAplicarFiltro" runat="server" Text="Aplicar Filtros" CssClass="btn btn-success" />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <asp:Button ID="btnAplicarFiltro" runat="server" Text="Aplicar Filtros" CssClass="btn btn-success" />
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </asp:Content>

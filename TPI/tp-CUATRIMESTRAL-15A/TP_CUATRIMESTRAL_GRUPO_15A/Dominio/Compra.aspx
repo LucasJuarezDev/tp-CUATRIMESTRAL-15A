@@ -6,7 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Finalizar Compra</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <style>
@@ -43,7 +42,6 @@
             background-color: #5a6268;
         }
 
-        /* Estilo de inputs para tarjeta */
         .card-box {
             background-color: #3e444a;
             padding: 20px;
@@ -53,111 +51,104 @@
         }
 
         .small-input {
-            width: 120px;  /* CVV más pequeño */
+            width: 120px;
         }
     </style>
 </head>
 
 <body>
-    <form id="form1" runat="server">
+<form id="form1" runat="server">
 
-        <div class="container py-5">
+<div class="container py-5">
 
-            <h2 class="text-white mb-4 fw-bold">Finalizar Compra</h2>
+    <h2 class="text-white mb-4 fw-bold">Finalizar Compra</h2>
 
-            <div class="row g-4">
+    <div class="row g-4">
 
-                <!-- FORMULARIO DE DATOS -->
-                <div class="col-lg-8">
-                    <div class="form-box">
+        <div class="col-lg-8">
+            <div class="form-box">
 
-                        <h4 class="mb-4 fw-bold">Datos de Pago</h4>
+                <h4 class="mb-4 fw-bold">Datos de Pago</h4>
 
-                        <!-- Tipo de pago -->
-                        <div class="mb-3">
-                            <label class="form-label">Tipo de Pago</label>
-                            <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlPago_SelectedIndexChanged"></asp:DropDownList>
-                        </div>
-
-                        <!-- Panel Tarjeta -->
-                        <asp:Panel ID="pnlTarjeta" runat="server" Visible="false" CssClass="card-box">
-
-                            <h5 class="fw-bold mb-3">Datos de Tarjeta</h5>
-
-                            <!-- Numero de tarjeta -->
-                            <div class="mb-3">
-                                <label class="form-label">Número de Tarjeta</label>
-                                <asp:TextBox ID="txtNumeroTarjeta" runat="server" CssClass="form-control" MaxLength="16" placeholder="1234 5678 9012 3456"></asp:TextBox>
-                            </div>
-
-                            <!-- Fecha + CVV -->
-                            <div class="row">
-                                <div class="col-md-8 mb-3">
-                                    <label class="form-label">Fecha de Vencimiento</label>
-                                    <asp:TextBox ID="txtVencimiento" runat="server" CssClass="form-control" placeholder="MM/AA"></asp:TextBox>
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    <label class="form-label">CVV</label>
-                                    <asp:TextBox ID="txtCVV" runat="server" CssClass="form-control small-input" MaxLength="4" placeholder="***"></asp:TextBox>
-                                </div>
-                            </div>
-
-                        </asp:Panel>
-
-                        <!-- Envio -->
-                        <div class="mt-4">
-                            <label class="form-label">Envío</label>
-                            <asp:DropDownList ID="ddlEnvio" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlEnvio_SelectedIndexChanged">
-                                <asp:ListItem Text="Retiro en tienda (Gratis)" Value="0" />
-                                <asp:ListItem Text="Envío a domicilio ($500)" Value="500" />
-                            </asp:DropDownList>
-                        </div>
-
-                        <!-- Comentarios -->
-                        <div class="mb-3 mt-3">
-                            <label class="form-label">Comentarios (opcional)</label>
-                            <asp:TextBox ID="txtComentario" TextMode="MultiLine" Rows="3" CssClass="form-control" runat="server"></asp:TextBox>
-                        </div>
-
-                        <!-- Botón continuar -->
-                        <asp:Button ID="btnConfirmar" runat="server"
-                            Text="Confirmar Compra"
-                            CssClass="btn btn-finalizar w-100 mt-3"
-                            OnClick="btnConfirmar_Click" />
-
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Pago</label>
+                    <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlPago_SelectedIndexChanged"></asp:DropDownList>
                 </div>
 
-                <!-- RESUMEN -->
-                <div class="col-lg-4">
-                    <div class="resumen-box">
-                        <h4 class="fw-bold mb-3">Resumen</h4>
+                <asp:Panel ID="pnlTarjeta" runat="server" Visible="false" CssClass="card-box">
 
-                        <p class="mb-1 text-white-50">Productos:</p>
-                        <asp:Repeater ID="repResumen" runat="server">
-                            <ItemTemplate>
-                                <div class="d-flex justify-content-between border-bottom border-secondary py-2">
-                                    <span><%# Eval("Nombre") %> (x<%# Eval("Cantidad") %>)</span>
-                                    <span>$ <%# Eval("Subtotal") %></span>
-                                </div>
-                            </ItemTemplate>
-                        </asp:Repeater>
+                    <h5 class="fw-bold mb-3">Datos de Tarjeta</h5>
 
-                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
-                            <span class="fw-bold">TOTAL:</span>
-                            <asp:Label ID="lblTotal" runat="server" CssClass="h4 fw-bold">$0.00</asp:Label>
+                    <div class="mb-3">
+                        <label class="form-label">Número de Tarjeta</label>
+                        <asp:TextBox ID="txtNumeroTarjeta" runat="server" CssClass="form-control" MaxLength="16" placeholder="1234 5678 9012 3456"></asp:TextBox>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Fecha de Vencimiento</label>
+                            <asp:TextBox ID="txtVencimiento" runat="server" CssClass="form-control" placeholder="MM/AA"></asp:TextBox>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">CVV</label>
+                            <asp:TextBox ID="txtCVV" runat="server" CssClass="form-control small-input" MaxLength="4" placeholder="***"></asp:TextBox>
                         </div>
                     </div>
+
+                </asp:Panel>
+
+                <div class="mt-4">
+                    <label class="form-label">Envío</label>
+                    <asp:DropDownList ID="ddlEnvio" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlEnvio_SelectedIndexChanged">
+                        <asp:ListItem Text="Retiro en tienda (Gratis)" Value="0" />
+                        <asp:ListItem Text="Envío a domicilio ($500)" Value="500" />
+                    </asp:DropDownList>
                 </div>
+
+                <div class="mb-3 mt-3">
+                    <label class="form-label">Comentarios (opcional)</label>
+                    <asp:TextBox ID="txtComentario" TextMode="MultiLine" Rows="3" CssClass="form-control" runat="server"></asp:TextBox>
+                </div>
+
+                <asp:Button ID="btnConfirmar" runat="server"
+                    Text="Confirmar Compra"
+                    CssClass="btn btn-finalizar w-100 mt-3"
+                    OnClick="btnConfirmar_Click" />
 
             </div>
         </div>
 
-    </form>
+        <div class="col-lg-4">
+            <div class="resumen-box">
+                <h4 class="fw-bold mb-3">Resumen</h4>
+
+                <p class="mb-1 text-white-50">Productos:</p>
+
+                <asp:Repeater ID="repResumen" runat="server">
+                    <ItemTemplate>
+                        <div class="d-flex justify-content-between border-bottom border-secondary py-2">
+                            <span><%# Eval("Nombre") %> (x<%# Eval("Cantidad") %>)</span>
+
+                            <!-- CORREGIDO: ELIMINO FORMATO DE MONEDA -->
+                            <span>$ <%# String.Format("{0:N2}", Eval("Subtotal")) %></span>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top border-secondary">
+                    <span class="fw-bold">TOTAL:</span>
+                    <asp:Label ID="lblTotal" runat="server" CssClass="h4 fw-bold">$0.00</asp:Label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</form>
 </body>
 </html>
-
 
 
 
