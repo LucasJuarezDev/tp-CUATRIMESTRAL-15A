@@ -32,7 +32,13 @@ namespace Dominio
                 // Guardar en sesión (ahora es un objeto fuerte)
                 Session["usuario"] = usuario;
 
-                // Redirección según rol
+                // Si es cliente, tambien guardamos el cliente en sesion
+                if (usuario.Rol.Id == 3 && usuario.Cliente != null)
+                {
+                    Session["cliente"] = usuario.Cliente;
+                }
+
+                // Redirección segun rol
                 if (usuario.Rol.Id == 3) // Cliente
                 {
                     Response.Redirect("Catalogo.aspx");
@@ -48,7 +54,7 @@ namespace Dominio
             }
         }
 
-        // MÉTODOS SEGUROS
+        // METODOS SEGUROS
         private void MostrarError(string mensaje)
         {
             string safe = mensaje.Replace("'", "\\'").Replace("\n", "").Replace("\r", "");

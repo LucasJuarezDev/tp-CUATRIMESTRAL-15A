@@ -70,8 +70,15 @@ namespace Dominio
 
         protected void btnContinuar_Click(object sender, EventArgs e)
         {
+            if (Session["usuario"] == null)
+            {
+                Response.Redirect("LoginCliente.aspx");
+                return;
+            }
+
             Response.Redirect("Compra.aspx");
         }
+
 
     }
 }

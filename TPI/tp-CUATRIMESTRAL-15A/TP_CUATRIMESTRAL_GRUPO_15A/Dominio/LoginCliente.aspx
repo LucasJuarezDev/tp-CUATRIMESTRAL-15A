@@ -16,7 +16,7 @@
                             <i class="bi bi-person-circle display-1 text-white"></i>
                         </div>
 
-                        <!-- Título -->
+                        <!-- Titulo -->
                         <h2 class="text-center fw-bold mb-4">Iniciar Sesión</h2>
 
                         <!-- Formulario -->

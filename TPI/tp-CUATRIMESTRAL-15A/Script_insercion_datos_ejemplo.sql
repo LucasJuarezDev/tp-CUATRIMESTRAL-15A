@@ -43,7 +43,6 @@ INSERT INTO USUARIO (NICKNAME, CONTRASENA, EMAIL, ROLE_ID, ACTIVO) VALUES
 ('EmpresaXYZ', 'corp123', 'xyz@empresa.com', 3, 1);
 GO
 
-select * from USUARIO
 
 -- =============================================
 -- 6. INSERCIÓN EN TABLA EMPLEADO

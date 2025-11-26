@@ -7,13 +7,13 @@ namespace Manager
 {
     public class VentaManager
     {
-        public long RegistrarVenta(List<ProductoCarrito> carrito, byte idTipoPago)
+        public long RegistrarVenta(List<ProductoCarrito> carrito, byte idTipoPago, long idCliente)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                // 1) Insertar VENTA (ver si hacemos lo de comentario)
+                // 1) Insertar VENTA
                 datos.SetearConsulta(@"
                     INSERT INTO VENTA (FECHAVENTA, MONTOTOTAL, ID_TIPO_PAGO, ID_CLIENTE, NUM_FACTURA)
                     VALUES (@fecha, @monto, @tipoPago, @cliente, @factura);
@@ -27,11 +27,8 @@ namespace Manager
                 datos.SetearParametro("@fecha", DateTime.Now);
                 datos.SetearParametro("@monto", total);
                 datos.SetearParametro("@tipoPago", idTipoPago);
+                datos.SetearParametro("@cliente", idCliente); // viene desde la sesión
 
-                // Cliente de prueba momentaneo (hasta resolver lo de la secion)
-                datos.SetearParametro("@cliente", 1);
-
-                // Generar numero de factura 
                 string nroFactura = "FAC-" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 datos.SetearParametro("@factura", nroFactura);
 
@@ -59,7 +56,7 @@ namespace Manager
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error al registrar la venta: " + ex.Message);
             }
             finally
             {
@@ -68,6 +65,7 @@ namespace Manager
         }
     }
 }
+
 
 
 
