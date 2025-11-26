@@ -93,9 +93,9 @@ CREATE TABLE PRODUCTO_IMAGENES (
         FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO(ID) 
         ON DELETE CASCADE
 );
-
+GO
 CREATE INDEX IX_PRODUCTO_IMAGENES_PRODUCTO ON PRODUCTO_IMAGENES(ID_PRODUCTO);
-
+GO
 -- =============================================
 -- 3. USUARIO 
 -- =============================================
@@ -250,7 +250,7 @@ INNER JOIN ROL r ON u.ROLE_ID = r.ID
 LEFT JOIN CLIENTE c ON u.ID = c.ID_USUARIO AND (c.ACTIVO = 1 OR c.ACTIVO IS NULL)
 LEFT JOIN EMPLEADO e ON u.ID = e.ID_USUARIO AND (e.ACTIVO = 1 OR e.ACTIVO IS NULL)
 WHERE u.ACTIVO = 1
-
+GO
 ----------------------------------------------------------
 
 -- SP PARA LA CREACION DE USUARIOS
@@ -312,7 +312,7 @@ BEGIN
         THROW;
     END CATCH
 END
-
+GO
 ----------------------------------------------------------
 
 -- SP PARA LA MODIFICACION DE USUARIOS
@@ -384,7 +384,7 @@ BEGIN
         THROW;
     END CATCH
 END
-
+GO
 --------------------------------------------------------------
 -- SP PARA LA BAJA DE USUARIOS
 CREATE PROCEDURE sp_bajaUsuario
@@ -426,7 +426,7 @@ BEGIN
         THROW;
     END CATCH
 END
-
+GO
 ---------------------------------------------------------------
 -- SP PARA REGISTRAR UN CLIENTE
 
@@ -474,9 +474,4 @@ BEGIN
     END CATCH
 END
 GO
-
---------------------------------------------------------------
-			-- CREACION DE USER ADMIN --
---------------------------------------------------------------
-INSERT INTO USUARIO (NICKNAME, CONTRASENA, EMAIL, ROLE_ID, ACTIVO) VALUES ('ADMIN', 'ADMIN123', 'ADMIN@TPIPROGRA3.COM', 1, 1)
 
