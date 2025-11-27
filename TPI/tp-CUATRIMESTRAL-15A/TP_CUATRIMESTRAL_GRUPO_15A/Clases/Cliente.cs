@@ -16,5 +16,6 @@ namespace Clases
         public Rol Rol { get; set; }
         public Usuario Usuario { get; set; }
         public string RazonSocial { get; set; }
+        public bool Activo { get; set; }
     }
 }

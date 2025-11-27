@@ -13,6 +13,18 @@ namespace Dominio
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            var usuarioLogueado = Session["usuario"] as UsuarioLogueado;
+            if (usuarioLogueado?.Rol?.Id != 1)
+            {
+                if(usuarioLogueado?.Rol?.Id == 2)
+                {
+                    Response.Redirect("Productos.aspx");
+                }
+                else
+                {
+                    Response.Redirect("Catalogo.aspx"); 
+                }
+            }
             if (!IsPostBack)
             {
                 CargarEmpleados();

@@ -41,17 +41,30 @@
                 <h5 class="text-center mb-4">Mi Tienda</h5>
                 <hr class="text-secondary">
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2">
-                        <span class="text-secondary small">RESUMEN</span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Dashboard.aspx"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-                    </li>
+                     <!-- SOLO ADMIN -->
+                    <asp:PlaceHolder ID="phMenuAdmin" runat="server">
+                        <li class="nav-item mb-2">
+                            <span class="text-secondary small">RESUMEN</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Dashboard.aspx"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                        </li>
+                        <li class="nav-item mt-3">
+                            <span class="text-secondary small">ADMINISTRACIÓN</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Usuarios.aspx"><i class="bi bi-person-lines-fill me-2"></i>Usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="gestionEmpleados.aspx"><i class="bi bi-person-badge-fill me-2"></i>Empleados</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="gestionClientes.aspx"><i class="bi bi-people-fill me-2"></i>Clientes</a>
+                        </li>
+                    </asp:PlaceHolder>
+                    <!-- EMPLEADO / ADMIN -->
                     <li class="nav-item mb-2 mt-3">
                         <span class="text-secondary small">MANTENIMIENTO</span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Usuarios.aspx"><i class="bi bi-people me-2"></i>Usuarios</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="Categorias.aspx"><i class="bi bi-tags me-2"></i>Categorías</a>
@@ -59,14 +72,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="Marcas.aspx"><i class="bi bi-badge-3d me-2"></i>Marcas</a>
                     </li>
-                    <li class="nav-item">         
-                        <a class="nav-link" href="Productos.aspx" ><i class="bi bi-box-seam me-2"></i>Productos</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Productos.aspx"><i class="bi bi-box-seam me-2"></i>Productos</a>
                     </li>
-                    <li class="nav-item">         
-                        <a class="nav-link" href="gestionEmpleados.aspx" ><i class="bi bi-people-fill me-2"></i>Empleados</a>
-                    </li>
-                     <li class="nav-item">         
-                        <a class="nav-link" href="Logout.aspx"><i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión</a>
+                    <!-- Cerrar sesión -->
+                    <li class="nav-item mt-4">
+                        <a class="nav-link" href="Logout.aspx"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>

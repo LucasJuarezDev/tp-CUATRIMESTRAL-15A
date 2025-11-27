@@ -45,5 +45,74 @@ namespace Manager
                 datos.CerrarConeccion();
             }
         }
+
+        public List<Cliente> Listar(string filtro = "")
+        {
+            List<Cliente> lista = new List<Cliente>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta(@"
+            SELECT 
+                c.ID, c.NOMBRE, c.APELLIDO, c.TELEFONO, c.FECHA_REGISTRO,
+                c.RAZON_SOCIAL, c.ACTIVO,
+                u.ID AS IdUsuario, u.NICKNAME, u.EMAIL, u.ACTIVO AS UsuarioActivo
+            FROM CLIENTE c
+            LEFT JOIN USUARIO u ON c.ID_USUARIO = u.ID
+            WHERE 1=1
+        ");
+
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Cliente cliente = new Cliente
+                    {
+                        Id = (long)datos.Lector["ID"],
+                        Nombre = datos.Lector["NOMBRE"].ToString(),
+                        Apellido = datos.Lector["APELLIDO"].ToString(),
+                        Telefono = datos.Lector["TELEFONO"] as string,
+                        FechaRegistro = (DateTime)datos.Lector["FECHA_REGISTRO"],
+                        RazonSocial = datos.Lector["RAZON_SOCIAL"] as string,
+                        Activo = (bool)datos.Lector["ACTIVO"],
+
+                        // Cargar Usuario si existe
+                        Usuario = datos.Lector["IdUsuario"] != DBNull.Value ? new Usuario
+                        {
+                            Id = (long)datos.Lector["IdUsuario"],
+                            Nickname = datos.Lector["NICKNAME"]?.ToString(),
+                            Email = datos.Lector["EMAIL"]?.ToString(),
+                            Activo = (bool)datos.Lector["UsuarioActivo"]
+                        } : null
+                    };
+
+                    lista.Add(cliente);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al cargar clientes: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+
+            return lista;
+        }
+
+        // Para activar/desactivar cliente
+        public void CambiarEstado(long idCliente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("UPDATE CLIENTE SET ACTIVO = ~ACTIVO WHERE ID = @id");
+                datos.SetearParametro("@id", idCliente);
+                datos.ejecutarAccion();
+            }
+            finally { datos.CerrarConeccion(); }
+        }
     }
 }
