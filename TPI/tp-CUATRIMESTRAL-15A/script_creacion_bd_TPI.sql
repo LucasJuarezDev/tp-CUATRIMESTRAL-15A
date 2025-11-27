@@ -475,6 +475,45 @@ BEGIN
 END
 GO
 
+---------------------------------------------------------------
+-- SP PARA restar el stock en una venta
+
+CREATE OR ALTER PROCEDURE SP_ActualizarStockPorVenta
+    @IdVenta BIGINT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- 1 Validar que exista la venta
+        IF NOT EXISTS (SELECT 1 FROM VENTA WHERE ID = @IdVenta)
+            THROW 51000, 'La venta no existe.', 1;
+
+        -- 2 Recorrer cada item vendido y actualizar el stock
+        UPDATE p
+        SET p.STOCK = p.STOCK - dv.CANTIDAD
+        FROM PRODUCTO p
+        INNER JOIN DETALLE_VENTA dv ON dv.ID_PRODUCTO = p.ID
+        WHERE dv.ID_VENTA = @IdVenta;
+
+        -- 3 Validar que ningun producto quede con stock negativo
+        IF EXISTS (SELECT 1 FROM PRODUCTO WHERE STOCK < 0)
+            THROW 51001, 'Stock insuficiente para uno o más productos.', 1;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+
+
+
 
 
 

@@ -13,7 +13,7 @@ namespace Manager
 
             try
             {
-                // 1) Insertar VENTA
+                // Insertar VENTA
                 datos.SetearConsulta(@"
                     INSERT INTO VENTA (FECHAVENTA, MONTOTOTAL, ID_TIPO_PAGO, ID_CLIENTE, NUM_FACTURA)
                     VALUES (@fecha, @monto, @tipoPago, @cliente, @factura);
@@ -27,14 +27,14 @@ namespace Manager
                 datos.SetearParametro("@fecha", DateTime.Now);
                 datos.SetearParametro("@monto", total);
                 datos.SetearParametro("@tipoPago", idTipoPago);
-                datos.SetearParametro("@cliente", idCliente); // viene desde la sesión
+                datos.SetearParametro("@cliente", idCliente); // viene desde la sesion
 
                 string nroFactura = "FAC-" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 datos.SetearParametro("@factura", nroFactura);
 
                 long idVenta = Convert.ToInt64(datos.ejecutarEscalar());
 
-                // 2) Insertar DETALLES
+                // Insertar DETALLES
                 foreach (var item in carrito)
                 {
                     AccesoDatos det = new AccesoDatos();
@@ -52,6 +52,16 @@ namespace Manager
                     det.CerrarConeccion();
                 }
 
+                // ------------------------------------------------
+                // 3) Llamar al SP para actualizar stock por venta
+                // ------------------------------------------------
+
+                AccesoDatos stock = new AccesoDatos();
+                stock.SetearConsulta("EXEC SP_ActualizarStockPorVenta @IdVenta");
+                stock.SetearParametro("@IdVenta", idVenta);
+                stock.ejecutarAccion();
+                stock.CerrarConeccion();
+
                 return idVenta;
             }
             catch (Exception ex)
@@ -65,6 +75,7 @@ namespace Manager
         }
     }
 }
+
 
 
 
