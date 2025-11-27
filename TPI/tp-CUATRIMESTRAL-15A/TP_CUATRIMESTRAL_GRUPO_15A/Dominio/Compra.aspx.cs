@@ -81,11 +81,13 @@ namespace Dominio
 
             byte idPago = byte.Parse(ddlPago.SelectedValue);
 
-            // Traer cliente de la sesion
+            // Costo del envio
+            decimal costoEnvio = Convert.ToDecimal(ddlEnvio.SelectedValue);
+
+            // Cliente en sesión
             var cliente = Session["cliente"] as Cliente;
             if (cliente == null)
             {
-                // Si No hay cliente en sesion redirigir a login
                 Response.Redirect("LoginCliente.aspx");
                 return;
             }
@@ -93,11 +95,12 @@ namespace Dominio
             long idCliente = cliente.Id;
 
             VentaManager manager = new VentaManager();
-            manager.RegistrarVenta(carrito, idPago, idCliente);
+            manager.RegistrarVenta(carrito, idPago, idCliente, costoEnvio);
 
             Session["Carrito"] = null;
             Response.Redirect("CompraExitosa.aspx");
         }
+
 
     }
 }
