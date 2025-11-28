@@ -380,5 +380,102 @@ namespace Manager
                 throw new Exception("Error al agregar imágenes: " + ex.Message);
             }
         }
+
+        public List<Producto> ListarConFiltros(string categoriaId = "", string marcaId = "", decimal? precioDesde = null, decimal? precioHasta = null)
+        {
+            List<Producto> lista = new List<Producto>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string consulta = @"
+            SELECT  p.ID, 
+                    p.NOMBRE, 
+                    p.DESCRIPCION_CORTA AS DescripcionCorta,
+                    p.DESCRIPCION_EXTENDIDA,
+                    p.PRECIO, 
+                    p.STOCK,
+                    p.ID_MARCA,
+                    p.ID_CATEGORIA,
+                    c.NOMBRE AS CategoriaNombre,
+                    m.NOMBRE AS MarcaNombre,
+                    -- Traemos la imagen principal (la que tiene ES_PRINCIPAL = 1, o la primera si no hay)
+                    ISNULL((
+                        SELECT TOP 1 URL_IMAGEN 
+                        FROM PRODUCTO_IMAGENES 
+                        WHERE ID_PRODUCTO = p.ID AND ES_PRINCIPAL = 1
+                    ), (
+                        SELECT TOP 1 URL_IMAGEN 
+                        FROM PRODUCTO_IMAGENES 
+                        WHERE ID_PRODUCTO = p.ID 
+                        ORDER BY ORDEN, ID
+                    )) AS ImagenPrincipal
+            FROM PRODUCTO p
+            INNER JOIN CATEGORIA c ON p.ID_CATEGORIA = c.ID
+            INNER JOIN MARCA m ON p.ID_MARCA = m.ID
+            WHERE p.ACTIVO = 1";
+
+                List<string> condiciones = new List<string>();
+                if (!string.IsNullOrEmpty(categoriaId))
+                    condiciones.Add("p.ID_CATEGORIA = @catId");
+                if (!string.IsNullOrEmpty(marcaId))
+                    condiciones.Add("p.ID_MARCA = @marcaId");
+                if (precioDesde.HasValue)
+                    condiciones.Add("p.PRECIO >= @precioDesde");
+                if (precioHasta.HasValue)
+                    condiciones.Add("p.PRECIO <= @precioHasta");
+
+                if (condiciones.Count > 0)
+                    consulta += " AND " + string.Join(" AND ", condiciones);
+
+                datos.SetearConsulta(consulta);
+
+                if (!string.IsNullOrEmpty(categoriaId))
+                    datos.SetearParametro("@catId", categoriaId);
+                if (!string.IsNullOrEmpty(marcaId))
+                    datos.SetearParametro("@marcaId", marcaId);
+                if (precioDesde.HasValue)
+                    datos.SetearParametro("@precioDesde", precioDesde.Value);
+                if (precioHasta.HasValue)
+                    datos.SetearParametro("@precioHasta", precioHasta.Value);
+
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Producto p = new Producto
+                    {
+                        Id = (long)datos.Lector["ID"],
+                        Nombre = datos.Lector["NOMBRE"].ToString(),
+                        DescripcionCorta = datos.Lector["DescripcionCorta"]?.ToString() ?? "",
+                        DescripcionExtendida = datos.Lector["DESCRIPCION_EXTENDIDA"]?.ToString() ?? "",
+                        Precio = (decimal)datos.Lector["PRECIO"],
+                        Stock = (int)datos.Lector["STOCK"],
+                        ImagenPrincipal = datos.Lector["ImagenPrincipal"]?.ToString() ?? "https://via.placeholder.com/400x300/cccccc/666666?text=Sin+Imagen",
+                        Categoria = new Categoria
+                        {
+                            Id = (long)datos.Lector["ID_CATEGORIA"],
+                            Nombre = datos.Lector["CategoriaNombre"].ToString()
+                        },
+                        Marca = new Marca
+                        {
+                            Id = (long)datos.Lector["ID_MARCA"],
+                            Nombre = datos.Lector["MarcaNombre"].ToString()
+                        }
+                    };
+                    lista.Add(p);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al cargar productos con filtros: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
     }
 }

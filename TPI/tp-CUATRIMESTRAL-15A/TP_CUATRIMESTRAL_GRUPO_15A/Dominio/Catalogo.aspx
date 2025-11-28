@@ -8,7 +8,10 @@
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <label class="me-2 fw-semibold text-dark">Ordenar por:</label>
-                    <asp:DropDownList ID="ddlOrdenar" runat="server" CssClass="form-select w-auto" AutoPostBack="true" >
+                    <asp:DropDownList ID="ddlOrdenar" runat="server" 
+                                      CssClass="form-select w-auto" 
+                                      AutoPostBack="true" 
+                                      OnSelectedIndexChanged="ddlOrdenar_SelectedIndexChanged">
                         <asp:ListItem Value="precio_desc" Selected="True">Mayor precio</asp:ListItem>
                         <asp:ListItem Value="precio_asc">Menor precio</asp:ListItem>
                     </asp:DropDownList>
@@ -32,7 +35,8 @@
                                  class="card-img-top"
                                  alt='<%# Eval("Nombre") %>'
                                  style="height: 220px; object-fit: cover;"
-                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/400x300/cccccc/666666?text=Sin+Imagen';">
+                                 onerror="this.onerror=null; this.src='<%= ResolveUrl("~/img/productos/no_img.png") %>';"
+                                 loading="lazy">
 
                             <div class="card-body d-flex flex-column p-4">
 
@@ -51,11 +55,6 @@
                                     <div class="h5 text-success fw-bold mb-1">
                                         <%# "$ " + String.Format(new System.Globalization.CultureInfo("es-AR"), "{0:N2}", Eval("Precio")) %>
                                     </div>
-
-                                    <small class="text-success">
-                                        Precio s/imp. nac.
-                                        <%# "$ " + String.Format(new System.Globalization.CultureInfo("es-AR"), "{0:N0}", Math.Round(Convert.ToDecimal(Eval("Precio")) * 0.82m, 0)) %>
-                                    </small>
                                 </div>
 
                                 <!-- BOTON COMPRAR -->
@@ -116,7 +115,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <asp:Button ID="btnAplicarFiltro" runat="server" Text="Aplicar Filtros" CssClass="btn btn-success" />
+                        <asp:Button ID="btnAplicarFiltro" runat="server" Text="Aplicar Filtros" CssClass="btn btn-success" OnClick="btnAplicarFiltro_Click" />
                     </div>
                 </div>
             </div>

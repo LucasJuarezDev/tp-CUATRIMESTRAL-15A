@@ -182,14 +182,27 @@ namespace Dominio
                     manager.AgregarImagenes(idProducto, rutasGuardadas);
                 }
 
-                Response.Redirect("Productos.aspx?exito=1");
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = "Error: " + ex.Message;
-                pnlMensaje.CssClass = "alert alert-danger";
-                pnlMensaje.Visible = true;
+                string scriptError = "Swal.fire({title: 'Error', text: '" + ex.Message.Replace("'", @"\'") + @"', icon: 'error', confirmButtonText: 'Aceptar'});";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "error", scriptError, true);
+                return;
             }
+
+            string mensaje = Request.QueryString["id"] != null ? "Producto modificado correctamente." : "Producto agregado exitosamente.";
+
+            string scriptExito = $@"
+                Swal.fire({{
+                    title: '¡Perfecto!',
+                    text: '{mensaje}',
+                    icon: 'success',
+                    confirmButtonText: 'Genial'
+                }}).then(() => {{
+                    window.location.href = 'Productos.aspx';
+                }});";
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "exito", scriptExito, true);
         }
 
         private void MostrarError(string mensaje)
@@ -197,12 +210,6 @@ namespace Dominio
             pnlMensaje.CssClass = "alert alert-danger";
             lblMensaje.Text = mensaje;
             pnlMensaje.Visible = true;
-        }
-
-        private void MostrarExitoJS(string mensaje)
-        {
-            string script = $"mostrarExito('{mensaje}');";
-            ClientScript.RegisterStartupScript(this.GetType(), "exito", script, true);
         }
     }
 }

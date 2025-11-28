@@ -85,6 +85,7 @@
     <Content Include="LoginCliente.aspx" />
     <Content Include="Logout.aspx" />
     <Content Include="Marcas.aspx" />
+    <Content Include="MiCuenta.aspx" />
     <Content Include="ModificarCategoria.aspx" />
     <Content Include="ModificarMarca.aspx" />
     <Content Include="Productos.aspx" />
@@ -239,6 +240,13 @@
     </Compile>
     <Compile Include="MasterPageLogin.Master.designer.cs">
       <DependentUpon>MasterPageLogin.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MiCuenta.aspx.cs">
+      <DependentUpon>MiCuenta.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MiCuenta.aspx.designer.cs">
+      <DependentUpon>MiCuenta.aspx</DependentUpon>
     </Compile>
     <Compile Include="ModificarCategoria.aspx.cs">
       <DependentUpon>ModificarCategoria.aspx</DependentUpon>
