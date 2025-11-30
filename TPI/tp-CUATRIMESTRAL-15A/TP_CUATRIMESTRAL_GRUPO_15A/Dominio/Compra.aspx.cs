@@ -3,7 +3,6 @@ using Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI;
 
 namespace Dominio
 {
@@ -26,12 +25,9 @@ namespace Dominio
 
         private void CargarTiposPago()
         {
-            TipoPagoManager manager = new TipoPagoManager();
-
-            ddlPago.DataSource = manager.Listar();
-            ddlPago.DataTextField = "Nombre";
-            ddlPago.DataValueField = "Id";
-            ddlPago.DataBind();
+            ddlPago.Items.Clear();
+            ddlPago.Items.Add(new System.Web.UI.WebControls.ListItem("Efectivo", "1"));
+            ddlPago.Items.Add(new System.Web.UI.WebControls.ListItem("Transferencia", "2"));
         }
 
         private void CargarResumenCarrito()
@@ -55,22 +51,7 @@ namespace Dominio
 
         private void ActualizarTotal()
         {
-            decimal envio = decimal.Parse(ddlEnvio.SelectedValue);
-            decimal final = totalBase + envio;
-
-            lblTotal.Text = final.ToString("N2");
-        }
-
-        protected void ddlPago_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string metodo = ddlPago.SelectedItem.Text.ToUpper();
-
-            pnlTarjeta.Visible = (metodo.Contains("DEBITO") || metodo.Contains("CREDITO"));
-        }
-
-        protected void ddlEnvio_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActualizarTotal();
+            lblTotal.Text = totalBase.ToString("N2");
         }
 
         protected void btnConfirmar_Click(object sender, EventArgs e)
@@ -81,10 +62,6 @@ namespace Dominio
 
             byte idPago = byte.Parse(ddlPago.SelectedValue);
 
-            // Costo del envio
-            decimal costoEnvio = Convert.ToDecimal(ddlEnvio.SelectedValue);
-
-            // Cliente en sesión
             var cliente = Session["cliente"] as Cliente;
             if (cliente == null)
             {
@@ -95,14 +72,10 @@ namespace Dominio
             long idCliente = cliente.Id;
 
             VentaManager manager = new VentaManager();
-            manager.RegistrarVenta(carrito, idPago, idCliente, costoEnvio);
+            manager.RegistrarVenta(carrito, idPago, idCliente);
 
             Session["Carrito"] = null;
             Response.Redirect("CompraExitosa.aspx");
         }
-
-
     }
 }
-
-

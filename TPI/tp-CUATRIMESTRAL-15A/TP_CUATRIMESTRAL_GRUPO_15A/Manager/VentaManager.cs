@@ -7,29 +7,25 @@ namespace Manager
 {
     public class VentaManager
     {
-        // Firma con costoEnvio opcional
-        public long RegistrarVenta(List<ProductoCarrito> carrito, byte idTipoPago, long idCliente, decimal costoEnvio = 0m)
+        public long RegistrarVenta(List<ProductoCarrito> carrito, byte idTipoPago, long idCliente)
         {
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                // 1) Calcular total (productos) + envio
-                decimal total = 0m;
-                foreach (var item in carrito)
-                    total += item.Precio * item.Cantidad;
-
-                total += costoEnvio; // <-- aca se suma el envio
-
-                // 2) Insertar VENTA con total ya sumado
+                // 1) Insertar VENTA
                 datos.SetearConsulta(@"
                     INSERT INTO VENTA (FECHAVENTA, MONTOTOTAL, ID_TIPO_PAGO, ID_CLIENTE, NUM_FACTURA)
                     VALUES (@fecha, @monto, @tipoPago, @cliente, @factura);
                     SELECT SCOPE_IDENTITY();
                 ");
 
+                decimal total = 0;
+                foreach (var item in carrito)
+                    total += item.Precio * item.Cantidad;
+
                 datos.SetearParametro("@fecha", DateTime.Now);
-                datos.SetearParametro("@monto", total);           // <-- total ya incluye envio
+                datos.SetearParametro("@monto", total);
                 datos.SetearParametro("@tipoPago", idTipoPago);
                 datos.SetearParametro("@cliente", idCliente);
 
@@ -37,9 +33,8 @@ namespace Manager
                 datos.SetearParametro("@factura", nroFactura);
 
                 long idVenta = Convert.ToInt64(datos.ejecutarEscalar());
-                datos.CerrarConeccion();
 
-                // 3) Insertar DETALLES
+                // 2) Insertar DETALLES
                 foreach (var item in carrito)
                 {
                     AccesoDatos det = new AccesoDatos();
@@ -57,7 +52,7 @@ namespace Manager
                     det.CerrarConeccion();
                 }
 
-                // 4) Llamada al SP para actualizar stock 
+                // 3) LLAMADA AL SP para descontar stock 
                 AccesoDatos stock = new AccesoDatos();
                 stock.SetearConsulta("EXEC SP_ActualizarStockPorVenta @IdVenta");
                 stock.SetearParametro("@IdVenta", idVenta);
@@ -77,6 +72,7 @@ namespace Manager
         }
     }
 }
+
 
 
 

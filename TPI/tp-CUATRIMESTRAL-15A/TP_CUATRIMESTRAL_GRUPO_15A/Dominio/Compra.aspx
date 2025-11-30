@@ -41,18 +41,6 @@
         .btn-finalizar:hover {
             background-color: #5a6268;
         }
-
-        .card-box {
-            background-color: #3e444a;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            box-shadow: inset 0px 0px 8px rgba(0,0,0,0.4);
-        }
-
-        .small-input {
-            width: 120px;
-        }
     </style>
 </head>
 
@@ -65,6 +53,9 @@
 
     <div class="row g-4">
 
+        <!-- ======================
+             SECCION IZQUIERDA
+        ======================== -->
         <div class="col-lg-8">
             <div class="form-box">
 
@@ -72,38 +63,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Tipo de Pago</label>
-                    <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlPago_SelectedIndexChanged"></asp:DropDownList>
-                </div>
-
-                <asp:Panel ID="pnlTarjeta" runat="server" Visible="false" CssClass="card-box">
-
-                    <h5 class="fw-bold mb-3">Datos de Tarjeta</h5>
-
-                    <div class="mb-3">
-                        <label class="form-label">Número de Tarjeta</label>
-                        <asp:TextBox ID="txtNumeroTarjeta" runat="server" CssClass="form-control" MaxLength="16" placeholder="1234 5678 9012 3456"></asp:TextBox>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-8 mb-3">
-                            <label class="form-label">Fecha de Vencimiento</label>
-                            <asp:TextBox ID="txtVencimiento" runat="server" CssClass="form-control" placeholder="MM/AA"></asp:TextBox>
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">CVV</label>
-                            <asp:TextBox ID="txtCVV" runat="server" CssClass="form-control small-input" MaxLength="4" placeholder="***"></asp:TextBox>
-                        </div>
-                    </div>
-
-                </asp:Panel>
-
-                <div class="mt-4">
-                    <label class="form-label">Envío</label>
-                    <asp:DropDownList ID="ddlEnvio" runat="server" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlEnvio_SelectedIndexChanged">
-                        <asp:ListItem Text="Retiro en tienda (Gratis)" Value="0" />
-                        <asp:ListItem Text="Envío a domicilio ($500)" Value="500" />
-                    </asp:DropDownList>
+                    <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select"></asp:DropDownList>
                 </div>
 
                 <div class="mb-3 mt-3">
@@ -119,6 +79,9 @@
             </div>
         </div>
 
+        <!-- ======================
+             SECCION DERECHA
+        ======================== -->
         <div class="col-lg-4">
             <div class="resumen-box">
                 <h4 class="fw-bold mb-3">Resumen</h4>
@@ -129,7 +92,6 @@
                     <ItemTemplate>
                         <div class="d-flex justify-content-between border-bottom border-secondary py-2">
                             <span><%# Eval("Nombre") %> (x<%# Eval("Cantidad") %>)</span>
-                            
                             <span>$ <%# String.Format("{0:N2}", Eval("Subtotal")) %></span>
                         </div>
                     </ItemTemplate>
@@ -148,6 +110,10 @@
 </form>
 </body>
 </html>
+
+
+
+
 
 
 
