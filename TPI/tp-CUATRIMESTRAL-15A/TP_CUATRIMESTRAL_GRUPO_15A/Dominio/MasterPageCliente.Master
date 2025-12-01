@@ -24,6 +24,39 @@
         .main-content {
             min-height: calc(100vh - 140px); 
         }
+        #popupCarrito {
+        position: fixed;
+        bottom: 130px;
+        right: 30px;
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 9999;
+        animation: popup 0.6s ease-out forwards, fadeout 0.6s 2.4s forwards;
+        font-weight: bold;
+        opacity: 0;
+    }
+    #popupCarrito {
+        top: 10px; /* ajustá según la altura de tu navbar */
+        right: 20px;
+        animation: slideIn 0.4s ease-out forwards, fadeOut 0.6s 2.5s forwards;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+        to { transform: translateX(100%); opacity: 0; }
+    }
     </style>
 </head>
 <body>
@@ -47,8 +80,17 @@
                             <a class="nav-link" href="Catalogo.aspx">Catálogo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="Carrito.aspx">
-                                <i class="bi bi-cart"></i> Carrito
+                            <a class="nav-link d-flex align-items-center" href="Carrito.aspx">
+                                <i class="bi bi-cart3 me-2"></i>
+                                <span>Carrito</span>
+        
+                                <!-- NÚMERO AL LADO DEL TEXTO, A LA MISMA ALTURA -->
+                                <span id="badgeCarrito" 
+                                      class="ms-2 badge rounded-pill bg-danger"
+                                      style="font-size: 0.75rem; min-width: 22px; height: 22px; 
+                                             display: none; align-items: center; justify-content: center;">
+                                    0
+                                </span>
                             </a>
                         </li>
 

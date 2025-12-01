@@ -72,34 +72,6 @@ namespace Dominio
             }
         }
 
-        private void CargarProducto()
-        {
-            try
-            {
-                if (!long.TryParse(Request.QueryString["id"], out long id))
-                {
-                    Response.Redirect("Catalogo.aspx");
-                    return;
-                }
-
-                Producto producto = manager.BuscarPorId(id);
-
-                if (producto == null || !producto.Estado)
-                {
-                    Response.Redirect("Catalogo.aspx");
-                    return;
-                }
-
-                // ASIGNAR AL FORMVIEW
-                fvProducto.DataSource = new List<Producto> { producto };
-                fvProducto.DataBind();
-            }
-            catch
-            {
-                Response.Redirect("Catalogo.aspx");
-            }
-        }
-
         protected void btnAgregarCarrito_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -113,7 +85,6 @@ namespace Dominio
                 Session["Carrito"] = new List<ProductoCarrito>();
 
             var carrito = (List<ProductoCarrito>)Session["Carrito"];
-
             var existente = carrito.FirstOrDefault(x => x.IdProducto == id);
 
             if (existente == null)
@@ -132,7 +103,34 @@ namespace Dominio
             }
 
             Session["Carrito"] = carrito;
+            int totalItems = carrito.Sum(x => x.Cantidad);
 
+            // === SCRIPT MÁGICO QUE HACE TODO ===
+            string script = @"
+        <script>
+            // Actualizar badge del header
+            const badge = document.getElementById('badgeCarrito');
+            const totalItems = " + carrito.Sum(x => x.Cantidad) + @";
+            badge.textContent = totalItems;
+            badge.style.display = totalItems > 0 ? 'block' : 'none';
+
+            // Mostrar popup redondo
+            const popup = document.getElementById('popupCarrito');
+            const popupCant = document.getElementById('popupCantidad');
+            popupCant.textContent = totalItems;
+
+            popup.style.opacity = '0';
+            popup.style.display = 'flex';
+            
+            // Forzar reflow para que la animación funcione
+            void popup.offsetWidth;
+            
+            popup.style.animation = 'popup 0.6s ease-out forwards, fadeout 0.6s 2.4s forwards';
+        </script>";
+
+            ClientScript.RegisterStartupScript(this.GetType(), "carritoUpdate", script, false);
+
+            // Mensajito lindo con SweetAlert (opcional, queda pro)
             MostrarExito($"'{producto.Nombre}' agregado al carrito");
         }
 
@@ -141,7 +139,7 @@ namespace Dominio
         private void MostrarExito(string msg)
         {
             string script = $@"Swal.fire({{icon:'success', title:'¡Listo!', text:'{msg}', timer:1500, showConfirmButton:false}})";
-            ClientScript.RegisterStartupScript(this.GetType(), "exito", script, true);
+            ClientScript.RegisterStartupScript(this.GetType(), "carritoUpdate_" + DateTime.Now.Ticks, script, false);
         }
     }
 }
