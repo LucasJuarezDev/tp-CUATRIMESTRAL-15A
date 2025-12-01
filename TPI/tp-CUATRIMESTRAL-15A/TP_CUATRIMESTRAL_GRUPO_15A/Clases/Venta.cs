@@ -14,5 +14,8 @@ namespace Clases
         public TipoPago TipoPago { get; set; }
         public Cliente Cliente { get; set; }
         public string NumeroFactura { get; set; }
+        public EstadoPago EstadoPago { get; set; }
+        public EstadoPreparacion EstadoPreparacion { get; set; }
+        public EstadoEnvio EstadoEnvio { get; set; }
     }
 }

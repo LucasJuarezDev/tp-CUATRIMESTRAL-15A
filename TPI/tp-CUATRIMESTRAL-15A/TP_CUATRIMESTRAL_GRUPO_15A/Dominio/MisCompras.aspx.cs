@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace Dominio
 {
-    public partial class MisCompras : System.Web.UI.Page
+    public partial class MisCompras : AuthenticationPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {

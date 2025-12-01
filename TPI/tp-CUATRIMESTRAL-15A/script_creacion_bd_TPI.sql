@@ -179,6 +179,60 @@ CREATE TABLE DETALLE_VENTA (
 );
 GO
 
+-- =============================================
+-- ESTADOS DE PAGO
+-- =============================================
+CREATE TABLE ESTADO_PAGO (
+    ID TINYINT PRIMARY KEY,
+    NOMBRE VARCHAR(30) NOT NULL UNIQUE
+);
+GO
+INSERT INTO ESTADO_PAGO VALUES
+(1, 'Pendiente'),
+(2, 'Aprobado'),
+(3, 'Rechazado'),
+(4, 'Pendiente de comprobante'); -- Transferencia esperando comprobante
+GO
+
+-- =============================================
+-- ESTADOS DE PREPARACIÓN (ARMADO)
+-- =============================================
+CREATE TABLE ESTADO_PREPARACION (
+    ID TINYINT PRIMARY KEY,
+    NOMBRE VARCHAR(30) NOT NULL UNIQUE
+);
+GO
+INSERT INTO ESTADO_PREPARACION VALUES
+(1, 'No iniciado'),
+(2, 'En preparación'),
+(3, 'Listo para envío'),
+(4, 'Cancelado');
+GO
+
+-- =============================================
+-- ESTADOS DE ENVÍO
+-- =============================================
+CREATE TABLE ESTADO_ENVIO (
+    ID TINYINT PRIMARY KEY,
+    NOMBRE VARCHAR(30) NOT NULL UNIQUE
+);
+GO
+INSERT INTO ESTADO_ENVIO VALUES
+(1, 'No iniciado'),
+(2, 'En camino'),
+(3, 'Entregado'),
+(4, 'Devuelto'),
+(5, 'Cancelado');
+GO
+
+-- =============================================
+-- 11. MODIFICAR VENTA PARA OBTENCION DE ESTADOS
+-- =============================================
+ALTER TABLE VENTA ADD 
+    ID_ESTADO_PAGO      TINYINT NOT NULL DEFAULT 1      CONSTRAINT FK_VENTA_ESTADO_PAGO      FOREIGN KEY REFERENCES ESTADO_PAGO(ID),
+    ID_ESTADO_PREPARACION TINYINT NOT NULL DEFAULT 1   CONSTRAINT FK_VENTA_ESTADO_PREPARACION FOREIGN KEY REFERENCES ESTADO_PREPARACION(ID),
+    ID_ESTADO_ENVIO     TINYINT NOT NULL DEFAULT 1      CONSTRAINT FK_VENTA_ESTADO_ENVIO     FOREIGN KEY REFERENCES ESTADO_ENVIO(ID);
+GO
 
 -- ===================================================================
 -- ================	FUNCIONES DE SISTEMA	=========================
@@ -510,7 +564,6 @@ BEGIN
     END CATCH
 END;
 GO
-
 
 
 

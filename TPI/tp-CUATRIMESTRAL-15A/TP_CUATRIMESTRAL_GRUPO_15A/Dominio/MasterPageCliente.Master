@@ -51,15 +51,13 @@
                                 <i class="bi bi-cart"></i> Carrito
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="MisCompras.aspx">
-                                <i class="bi bi-box-seam"></i> Mis Compras
-                            </a>
-                        </li>
-
-
 
                         <asp:PlaceHolder ID="phLogueado" runat="server" Visible="false">
+                            <li class="nav-item">
+                                <a class="nav-link" href="MisCompras.aspx">
+                                    <i class="bi bi-box-seam"></i> Mis Compras
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="MiCuenta.aspx">Mi Cuenta</a>
                             </li>
