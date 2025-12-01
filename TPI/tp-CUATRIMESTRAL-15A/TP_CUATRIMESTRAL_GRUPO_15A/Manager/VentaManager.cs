@@ -16,7 +16,9 @@ namespace Manager
         public List<dynamic> ListarEstadosPago() => ListarEstados("SELECT ID, NOMBRE FROM ESTADO_PAGO ORDER BY ID");
         public List<dynamic> ListarEstadosPreparacion() => ListarEstados("SELECT ID, NOMBRE FROM ESTADO_PREPARACION ORDER BY ID");
         public List<dynamic> ListarEstadosEnvio() => ListarEstados("SELECT ID, NOMBRE FROM ESTADO_ENVIO ORDER BY ID");
-        public long RegistrarVenta(List<ProductoCarrito> carrito, byte idTipoPago, long idCliente)
+
+        // ================================================================================================================================================ //
+        public long RegistrarVenta(List<ProductoCarrito> carrito, byte idTipoPago, long idCliente, decimal costoEnvio = 0)
         {
             AccesoDatos datos = new AccesoDatos();
 
@@ -33,8 +35,10 @@ namespace Manager
                 foreach (var item in carrito)
                     total += item.Precio * item.Cantidad;
 
+                decimal totalFinal = total + costoEnvio;
+
                 datos.SetearParametro("@fecha", DateTime.Now);
-                datos.SetearParametro("@monto", total);
+                datos.SetearParametro("@monto", totalFinal);
                 datos.SetearParametro("@tipoPago", idTipoPago);
                 datos.SetearParametro("@cliente", idCliente);
 

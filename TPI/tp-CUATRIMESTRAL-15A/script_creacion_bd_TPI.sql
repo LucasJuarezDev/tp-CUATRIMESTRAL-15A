@@ -46,7 +46,7 @@ GO
 -- TIPO_PAGO
 CREATE TABLE TIPO_PAGO (
     ID TINYINT IDENTITY(1,1) PRIMARY KEY, 
-    NOMBRE VARCHAR(100) NOT NULL UNIQUE, -- EFECTIVO , TRANSFERENCIA , TARJETA DE CREDITO, CHEQUE
+    NOMBRE VARCHAR(100) NOT NULL UNIQUE, -- EFECTIVO , TRANSFERENCIA
     DESCRIPCION VARCHAR(250) NULL
 );
 GO
@@ -55,9 +55,6 @@ GO
 INSERT INTO TIPO_PAGO (NOMBRE, DESCRIPCION) VALUES
 ('EFECTIVO', 'Pago en efectivo al momento de la entrega'),
 ('TRANSFERENCIA', 'Pago mediante transferencia bancaria'),
-('CHEQUE', 'Pago mediante cheque nominativo'),
-('DEBITO', 'Pago con tarjeta de débito'),
-('CREDITO', 'Pago con tarjeta de crédito');
 GO
 
 -- =============================================
@@ -180,7 +177,20 @@ CREATE TABLE DETALLE_VENTA (
 GO
 
 -- =============================================
--- ESTADOS DE PAGO
+-- 11. CONFIGURACION 
+-- =============================================
+CREATE TABLE CONFIGURACION (
+    Clave VARCHAR(100) PRIMARY KEY,
+    Valor VARCHAR(500) NOT NULL
+);
+GO
+INSERT INTO CONFIGURACION (Clave, Valor) VALUES 
+('COSTO_ENVIO', '2500'),
+('WHATSAPP_ADMIN', '5491167152188');
+GO
+
+-- =============================================
+-- 12. ESTADOS DE PAGO
 -- =============================================
 CREATE TABLE ESTADO_PAGO (
     ID TINYINT PRIMARY KEY,
@@ -195,7 +205,7 @@ INSERT INTO ESTADO_PAGO VALUES
 GO
 
 -- =============================================
--- ESTADOS DE PREPARACIÓN (ARMADO)
+-- 13. ESTADOS DE PREPARACIÓN (ARMADO)
 -- =============================================
 CREATE TABLE ESTADO_PREPARACION (
     ID TINYINT PRIMARY KEY,
@@ -210,7 +220,7 @@ INSERT INTO ESTADO_PREPARACION VALUES
 GO
 
 -- =============================================
--- ESTADOS DE ENVÍO
+-- 14. ESTADOS DE ENVÍO
 -- =============================================
 CREATE TABLE ESTADO_ENVIO (
     ID TINYINT PRIMARY KEY,
@@ -226,7 +236,7 @@ INSERT INTO ESTADO_ENVIO VALUES
 GO
 
 -- =============================================
--- 11. MODIFICAR VENTA PARA OBTENCION DE ESTADOS
+-- 15. MODIFICAR VENTA PARA OBTENCION DE ESTADOS
 -- =============================================
 ALTER TABLE VENTA ADD 
     ID_ESTADO_PAGO      TINYINT NOT NULL DEFAULT 1      CONSTRAINT FK_VENTA_ESTADO_PAGO      FOREIGN KEY REFERENCES ESTADO_PAGO(ID),
@@ -564,7 +574,6 @@ BEGIN
     END CATCH
 END;
 GO
-
 
 
 

@@ -33,6 +33,33 @@ namespace Dominio
         protected global::System.Web.UI.WebControls.DropDownList ddlPago;
 
         /// <summary>
+        /// Control lblSubtotal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSubtotal;
+
+        /// <summary>
+        /// Control lblEnvio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEnvio;
+
+        /// <summary>
+        /// Control lblTotalFinal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblTotalFinal;
+
+        /// <summary>
         /// Control txtComentario.
         /// </summary>
         /// <remarks>
@@ -60,12 +87,12 @@ namespace Dominio
         protected global::System.Web.UI.WebControls.Repeater repResumen;
 
         /// <summary>
-        /// Control lblTotal.
+        /// Control lblEnvioResumen.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotal;
+        protected global::System.Web.UI.WebControls.Label lblEnvioResumen;
     }
 }

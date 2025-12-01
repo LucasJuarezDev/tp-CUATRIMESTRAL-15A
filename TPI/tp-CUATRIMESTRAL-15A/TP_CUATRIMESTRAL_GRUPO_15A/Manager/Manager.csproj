@@ -44,6 +44,7 @@
     <Compile Include="AccesoDatos.cs" />
     <Compile Include="CategoriaManager.cs" />
     <Compile Include="ClienteManager.cs" />
+    <Compile Include="ConfigManager.cs" />
     <Compile Include="EmpleadoManager.cs" />
     <Compile Include="LoginManager.cs" />
     <Compile Include="MarcaManager.cs" />
