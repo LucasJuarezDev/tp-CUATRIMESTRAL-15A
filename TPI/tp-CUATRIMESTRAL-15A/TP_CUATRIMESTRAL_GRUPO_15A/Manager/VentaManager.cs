@@ -224,6 +224,139 @@ namespace Manager
                 datos.CerrarConeccion();
             }
         }
+
+        // ===================== para las ventas que figuran en el dashboard =====================
+
+
+        public int ContarVentas()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("SELECT COUNT(*) FROM VENTA");
+                return (int)datos.ejecutarEscalar();
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
+        public List<dynamic> ListarVentasDashboard()
+        {
+            List<dynamic> lista = new List<dynamic>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta(@"
+            SELECT 
+                v.ID AS IdVenta,
+                v.FECHAVENTA,
+                u.NICKNAME + ' (' + u.EMAIL + ')' AS Cliente,
+                p.NOMBRE AS Producto,
+                dv.PRECIO_UNITARIO AS Precio,
+                dv.CANTIDAD,
+                (dv.PRECIO_UNITARIO * dv.CANTIDAD) AS Total
+            FROM VENTA v
+            INNER JOIN DETALLE_VENTA dv ON v.ID = dv.ID_VENTA
+            INNER JOIN PRODUCTO p ON dv.ID_PRODUCTO = p.ID
+            INNER JOIN CLIENTE c ON v.ID_CLIENTE = c.ID
+            INNER JOIN USUARIO u ON c.ID_USUARIO = u.ID
+            ORDER BY v.FECHAVENTA DESC");
+
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new
+                    {
+                        IdVenta = Convert.ToInt64(datos.Lector["IdVenta"]),
+                        FechaVenta = Convert.ToDateTime(datos.Lector["FECHAVENTA"]),
+                        Cliente = datos.Lector["Cliente"].ToString(),
+                        Producto = datos.Lector["Producto"].ToString(),
+                        Precio = Convert.ToDecimal(datos.Lector["Precio"]),
+                        Cantidad = Convert.ToInt32(datos.Lector["CANTIDAD"]),
+                        Total = Convert.ToDecimal(datos.Lector["Total"])
+                    });
+                }
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+
+            return lista;
+        }
+
+        public List<dynamic> ListarVentasDashboard(DateTime? fechaInicio = null, DateTime? fechaFin = null, string cliente = null, long? idVenta = null)
+        {
+            List<dynamic> lista = new List<dynamic>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                string query = @"
+        SELECT 
+            v.ID,
+            v.FECHAVENTA,
+            CONCAT(c.NOMBRE, ' ', c.APELLIDO) AS Cliente,
+            p.NOMBRE AS Producto,
+            dv.PRECIO_UNITARIO AS Precio,
+            dv.CANTIDAD,
+            (dv.PRECIO_UNITARIO * dv.CANTIDAD) AS Total
+        FROM DETALLE_VENTA dv
+        INNER JOIN VENTA v ON v.ID = dv.ID_VENTA
+        INNER JOIN CLIENTE c ON c.ID = v.ID_CLIENTE
+        INNER JOIN PRODUCTO p ON p.ID = dv.ID_PRODUCTO
+        WHERE 1=1";  // Truco para ir agregando filtros dinamicos
+
+                if (fechaInicio.HasValue)
+                    query += " AND v.FECHAVENTA >= @fechaInicio";
+
+                if (fechaFin.HasValue)
+                    query += " AND v.FECHAVENTA <= @fechaFin";
+
+                if (!string.IsNullOrEmpty(cliente))
+                    query += " AND (c.NOMBRE LIKE @cliente OR c.APELLIDO LIKE @cliente OR c.ID IN (SELECT ID_USUARIO FROM USUARIO WHERE EMAIL LIKE @cliente))";
+
+                if (idVenta.HasValue)
+                    query += " AND v.ID = @idVenta";
+
+                query += " ORDER BY v.FECHAVENTA DESC";
+
+                datos.SetearConsulta(query);
+
+                if (fechaInicio.HasValue) datos.SetearParametro("@fechaInicio", fechaInicio.Value);
+                if (fechaFin.HasValue) datos.SetearParametro("@fechaFin", fechaFin.Value);
+                if (!string.IsNullOrEmpty(cliente)) datos.SetearParametro("@cliente", "%" + cliente + "%");
+                if (idVenta.HasValue) datos.SetearParametro("@idVenta", idVenta.Value);
+
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new
+                    {
+                        FechaVenta = Convert.ToDateTime(datos.Lector["FECHAVENTA"]),
+                        Cliente = datos.Lector["Cliente"].ToString(),
+                        Producto = datos.Lector["Producto"].ToString(),
+                        Precio = Convert.ToDecimal(datos.Lector["Precio"]),
+                        Cantidad = Convert.ToInt32(datos.Lector["CANTIDAD"]),
+                        Total = Convert.ToDecimal(datos.Lector["Total"]),
+                        IdVenta = Convert.ToInt64(datos.Lector["ID"])
+                    });
+                }
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+
+            return lista;
+        }
+
+
     }
 }
 
