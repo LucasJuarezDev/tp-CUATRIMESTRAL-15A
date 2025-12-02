@@ -1,16 +1,18 @@
-﻿using Manager;
+﻿using Clases;
+using Manager;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace Dominio
 {
-    public partial class ComprasAdmin : System.Web.UI.Page
+    public partial class ComprasAdmin : AuthenticationPage
     {
         private readonly VentaManager ventaManager = new VentaManager();
+        private readonly EstadoPagoManager estadoPagoManager = new EstadoPagoManager();
+        private readonly EstadoPreparacionManager estadoPreparacionManager = new EstadoPreparacionManager();
+        private readonly EstadoEnvioManager estadoEnvioManager = new EstadoEnvioManager();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -31,12 +33,12 @@ namespace Dominio
 
         private void CargarDropDowns()
         {
-            CargarDDL(ddlEstadoPago, ventaManager.ListarEstadosPago());
-            CargarDDL(ddlEstadoPreparacion, ventaManager.ListarEstadosPreparacion());
-            CargarDDL(ddlEstadoEnvio, ventaManager.ListarEstadosEnvio());
+            CargarDDL(ddlEstadoPago, estadoPagoManager.Listar());
+            CargarDDL(ddlEstadoPreparacion, estadoPreparacionManager.Listar());
+            CargarDDL(ddlEstadoEnvio, estadoEnvioManager.Listar());
         }
 
-        private void CargarDDL(DropDownList ddl, List<object> lista)
+        private void CargarDDL<T>(DropDownList ddl, List<T> lista)
         {
             ddl.DataValueField = "Id";
             ddl.DataTextField = "Nombre";
@@ -46,18 +48,27 @@ namespace Dominio
 
         protected void btnGuardarEstados_Click(object sender, EventArgs e)
         {
-            long idVenta = long.Parse(hfIdVenta.Value);
-            int pago = int.Parse(ddlEstadoPago.SelectedValue);
-            int prep = int.Parse(ddlEstadoPreparacion.SelectedValue);
-            int envio = int.Parse(ddlEstadoEnvio.SelectedValue);
+            try
+            {
+                long idVenta = long.Parse(hfIdVenta.Value);
+                int pago = int.Parse(ddlEstadoPago.SelectedValue);
+                int prep = int.Parse(ddlEstadoPreparacion.SelectedValue);
+                int envio = int.Parse(ddlEstadoEnvio.SelectedValue);
 
-            ventaManager.CambiarEstadoPago(idVenta, pago);
-            ventaManager.CambiarEstadoPreparacion(idVenta, prep);
-            ventaManager.CambiarEstadoEnvio(idVenta, envio);
+                ventaManager.CambiarEstadoPago(idVenta, pago);
+                ventaManager.CambiarEstadoPreparacion(idVenta, prep);
+                ventaManager.CambiarEstadoEnvio(idVenta, envio);
 
-            CargarPedidos();
-            ScriptManager.RegisterStartupScript(this, GetType(), "success",
-                "Swal.fire('¡Perfecto!', 'Estados actualizados correctamente', 'success');", true);
+                CargarPedidos();
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "success",
+                    "Swal.fire('¡Perfecto!', 'Estados actualizados correctamente', 'success');", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(), "error",
+                    $"Swal.fire('Error', '{ex.Message}', 'error');", true);
+            }
         }
 
         protected void gvPedidos_RowCommand(object sender, GridViewCommandEventArgs e)

@@ -47,7 +47,7 @@ namespace Dominio
             }
             catch (Exception ex)
             {
-                // Podés mostrar un SweetAlert o Label si querés
+               
                 ScriptManager.RegisterStartupScript(this, GetType(), "error",
                     $"alert('Error al cargar productos: {ex.Message}');", true);
             }
@@ -55,7 +55,7 @@ namespace Dominio
 
         private void CargarFiltros()
         {
-            // Categorías
+            // CategorIas
             var categorias = CategoriaManager.Listar();
             ddlCategoria.DataSource = categorias;
             ddlCategoria.DataTextField = "Nombre";
@@ -77,7 +77,6 @@ namespace Dominio
         {
             CargarProductos();
 
-            // ESTA ES LA FORMA CORRECTA Y QUE NUNCA FALLA
             string script = "<script type='text/javascript'>setTimeout(function(){ $('#filtroModal').modal('hide'); }, 150);</script>";
             Page.ClientScript.RegisterStartupScript(this.GetType(), "cerrarModal", script);
         }
@@ -96,7 +95,7 @@ namespace Dominio
             Response.Redirect($"DetalleCatalogo.aspx?id={id}");
         }
 
-        // Helper para truncar descripción
+        // Helper para truncar descripciOn
         public string Truncate(object texto, int longitud = 60)
         {
             string str = texto?.ToString() ?? "";
