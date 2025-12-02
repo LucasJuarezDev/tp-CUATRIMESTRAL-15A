@@ -3,23 +3,21 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <style>
-        /*  productos */
         .carrito-box {
-            height: 500px;              
-            overflow-y: auto;           
+            height: 500px;
+            overflow-y: auto;
             overflow-x: hidden;
         }
 
-        /*  resumen */
         .resumen-box {
-            height: 500px;              
+            height: 500px;
         }
     </style>
 
     <div class="container py-5">
         <div class="row g-4">
 
-            <!-- PANEL CUANDO ESTA VACIO -->
+            <!-- PANEL SIN PRODUCTOS -->
             <asp:Panel ID="pnlVacio" runat="server" Visible="true" CssClass="col-lg-12">
                 <div class="card text-white border-0 rounded-3 shadow-sm" style="background-color: #495057;">
                     <div class="card-body text-center py-5">
@@ -30,16 +28,14 @@
                 </div>
             </asp:Panel>
 
-            <!-- PANEL CUANDO HAY PRODUCTOS -->
+            <!-- PANEL CON CARRITO -->
             <asp:Panel ID="pnlCarrito" runat="server" Visible="false" CssClass="col-lg-12">
 
                 <div class="row">
 
                     <!-- LISTADO DE PRODUCTOS -->
                     <div class="col-lg-8">
-
                         <div class="card border-0 shadow-sm rounded-3 mb-4" style="background-color: #343a40;">
-
                             <div class="card-body carrito-box">
 
                                 <h4 class="text-white mb-3">Productos en tu carrito</h4>
@@ -49,23 +45,26 @@
                                     OnRowCommand="gvCarrito_RowCommand">
 
                                     <Columns>
-
+                                         <%-- NOMBRE PRODUCTO --%>
                                         <asp:BoundField DataField="Nombre" HeaderText="Producto" />
+                                         <%-- PRECIO UNITARIO --%>
                                         <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" />
 
-                                       
+                                         <%-- COLUMNA CANTIDAD --%>
                                         <asp:TemplateField HeaderText="Cantidad">
                                             <ItemTemplate>
 
+                                                 <%-- BOTÓN RESTAR --%>
                                                 <asp:LinkButton runat="server"
                                                     CssClass="btn btn-sm btn-secondary"
                                                     CommandName="Restar"
                                                     CommandArgument='<%# Eval("IdProducto") %>'>
                                                     -
                                                 </asp:LinkButton>
+                                                <%-- VALOR DE CANTIDAD --%>
+                                                <span class="mx-2 fw-bold"><%# Eval("Cantidad") %></span>
 
-                                                <span class="mx-2"><%# Eval("Cantidad") %></span>
-
+                                                <%-- BOTON SUMAR (VALIDACIoN EN CODE BEHIND) --%>
                                                 <asp:LinkButton runat="server"
                                                     CssClass="btn btn-sm btn-secondary"
                                                     CommandName="Sumar"
@@ -76,7 +75,7 @@
                                             </ItemTemplate>
                                         </asp:TemplateField>
 
-                                      
+                                        
                                         <asp:TemplateField HeaderText="Eliminar">
                                             <ItemTemplate>
                                                 <asp:LinkButton runat="server"
@@ -96,6 +95,7 @@
                         </div>
                     </div>
 
+                    <!-- RESUMEN -->
                     <div class="col-lg-4">
                         <div class="card text-white border-0 rounded-3 shadow-sm resumen-box" style="background-color: #495057;">
                             <div class="card-body d-flex flex-column">
@@ -126,6 +126,5 @@
     </div>
 
 </asp:Content>
-
 
 

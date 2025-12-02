@@ -477,5 +477,28 @@ namespace Manager
                 datos.CerrarConeccion();
             }
         }
+
+        //para el carrito
+
+        public int ObtenerStockPorId(long idProducto)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta("SELECT STOCK FROM PRODUCTO WHERE ID = @id");
+                datos.SetearParametro("@id", idProducto);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                    return Convert.ToInt32(datos.Lector["STOCK"]);
+                else
+                    return 0;
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
     }
 }
