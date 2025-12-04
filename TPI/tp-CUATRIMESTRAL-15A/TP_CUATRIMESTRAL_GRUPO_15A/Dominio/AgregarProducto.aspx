@@ -126,15 +126,18 @@
                                     Display="Dynamic" />
                             </div>
 
-
-                            <div class="mb-4">
-                                <label class="form-label fw-bold">Imágenes del producto</label>
-                                <asp:FileUpload ID="fuImagenes" runat="server" 
-                                                AllowMultiple="true" 
-                                                CssClass="form-control" 
-                                                accept="image/*" />
-                                <small class="text-muted">Seleccioná una o varias imágenes (JPG, PNG, WebP)</small>
-                            </div>
+                            <%-- SUBIR IMAGENES --%>
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Imágenes del producto</label>
+                                    <asp:FileUpload ID="fuImagenes" runat="server"
+                                                    AllowMultiple="true"
+                                                    CssClass="form-control"
+                                                    accept="image/*" />
+                                    <small class="text-muted d-block mt-2">
+                                        <i class="bi bi-info-circle"></i> 
+                                        Mantené presionado <strong>Ctrl</strong> (o Cmd en Mac) para seleccionar varias imágenes
+                                    </small>
+                                </div>
                         </div>
 
                         <!-- Botones -->
