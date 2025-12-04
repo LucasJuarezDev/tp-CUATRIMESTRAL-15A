@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Clases;
+using System;
 using System.Collections.Generic;
-using Clases;
+using System.Linq;
 
 namespace Manager
 {
@@ -91,7 +92,7 @@ namespace Manager
                 INNER JOIN TIPO_PAGO tp ON tp.ID = v.ID_TIPO_PAGO
                 INNER JOIN CLIENTE c ON c.ID = v.ID_CLIENTE
                 INNER JOIN USUARIO u ON u.ID = c.ID_USUARIO
-                ORDER BY v.FECHAVENTA DESC");
+                ORDER BY v.ID ASC");
 
                 datos.EjecutarLectura();
 

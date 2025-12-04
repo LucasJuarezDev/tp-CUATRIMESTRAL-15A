@@ -38,7 +38,7 @@
         <div class="d-flex">
             <!-- Sidebar -->
             <div class="sidebar p-3">
-                <h5 class="text-center mb-4">Mi Tienda</h5>
+                <h5 class="text-center mb-4 text-white">Mi Tienda</h5>
                 <hr class="text-secondary">
                 <ul class="nav flex-column">
                      <!-- SOLO ADMIN -->
@@ -60,6 +60,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="gestionClientes.aspx"><i class="bi bi-people-fill me-2"></i>Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="SettingsAdmin.aspx"><i class="bi bi-gear-fill me-2"></i>Configuración</a>
                         </li>
                     </asp:PlaceHolder>
                     <!-- EMPLEADO / ADMIN -->

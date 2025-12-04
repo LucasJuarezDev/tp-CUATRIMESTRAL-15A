@@ -93,6 +93,7 @@
     <Content Include="Productos.aspx" />
     <Content Include="RegistrarCliente.aspx" />
     <Content Include="RegistrarUsuario.aspx" />
+    <Content Include="SettingsAdmin.aspx" />
     <Content Include="Usuarios.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -299,6 +300,13 @@
     </Compile>
     <Compile Include="RegistrarUsuario.aspx.designer.cs">
       <DependentUpon>RegistrarUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsAdmin.aspx.cs">
+      <DependentUpon>SettingsAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SettingsAdmin.aspx.designer.cs">
+      <DependentUpon>SettingsAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="Usuarios.aspx.cs">
       <DependentUpon>Usuarios.aspx</DependentUpon>

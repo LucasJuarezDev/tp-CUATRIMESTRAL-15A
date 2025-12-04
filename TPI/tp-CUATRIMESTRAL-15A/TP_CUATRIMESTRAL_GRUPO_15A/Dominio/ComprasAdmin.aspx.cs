@@ -18,9 +18,35 @@ namespace Dominio
         {
             if (!IsPostBack)
             {
+                ConfigurarPaginacion();
                 CargarPedidos();
                 CargarDropDowns();
             }
+        }
+
+        private void ConfigurarPaginacion()
+        {
+            // Cargar valor guardado en ViewState o usar 10 por defecto
+            if (ViewState["PageSize"] != null)
+                gvPedidos.PageSize = (int)ViewState["PageSize"];
+            else
+                gvPedidos.PageSize = 10;
+
+            ddlPageSize.SelectedValue = gvPedidos.PageSize.ToString();
+        }
+
+        protected void ddlPageSize_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gvPedidos.PageIndex = 0;
+            ViewState["PageSize"] = int.Parse(ddlPageSize.SelectedValue);
+            gvPedidos.PageSize = (int)ViewState["PageSize"];
+            CargarPedidos();
+        }
+
+        protected void gvPedidos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            gvPedidos.PageIndex = e.NewPageIndex;
+            CargarPedidos();
         }
 
         private void CargarPedidos()
@@ -28,7 +54,11 @@ namespace Dominio
             var lista = ventaManager.ListarTodasConDetalleYEstados();
             gvPedidos.DataSource = lista;
             gvPedidos.DataBind();
+
             lblTotal.Text = lista.Count.ToString();
+            lblPaginaActual.Text = (gvPedidos.PageIndex + 1).ToString();
+            lblTotalPaginas.Text = gvPedidos.PageCount.ToString();
+            divPaginacion.Visible = gvPedidos.PageCount > 1;
         }
 
         private void CargarDropDowns()
