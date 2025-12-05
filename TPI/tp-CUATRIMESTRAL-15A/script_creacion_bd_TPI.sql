@@ -54,8 +54,9 @@ GO
 -- INSERCIÓN INMEDIATA DE TIPOS DE PAGO
 INSERT INTO TIPO_PAGO (NOMBRE, DESCRIPCION) VALUES
 ('EFECTIVO', 'Pago en efectivo al momento de la entrega'),
-('TRANSFERENCIA', 'Pago mediante transferencia bancaria'),
+('TRANSFERENCIA', 'Pago mediante transferencia bancaria');
 GO
+
 
 -- =============================================
 -- 2. PRODUCTO
@@ -158,6 +159,7 @@ CREATE TABLE VENTA (
     NUM_FACTURA VARCHAR(30) NULL UNIQUE, -- Se genera en app o trigger
     CONSTRAINT FK_VENTA_TIPO_PAGO FOREIGN KEY (ID_TIPO_PAGO) REFERENCES TIPO_PAGO(ID),
     CONSTRAINT FK_VENTA_CLIENTE FOREIGN KEY (ID_CLIENTE) REFERENCES CLIENTE(ID),
+	 COMPROBANTE VARCHAR(500) NULL, -- la ruta del comprobante
 );
 GO
 
@@ -574,7 +576,6 @@ BEGIN
     END CATCH
 END;
 GO
-
 
 
 

@@ -21,12 +21,12 @@ namespace Dominio
                 ConfigurarPaginacion();
                 CargarPedidos();
                 CargarDropDowns();
+                divComprobante.Visible = false; // Oculta el preview al inicio
             }
         }
 
         private void ConfigurarPaginacion()
         {
-            // Cargar valor guardado en ViewState o usar 10 por defecto
             if (ViewState["PageSize"] != null)
                 gvPedidos.PageSize = (int)ViewState["PageSize"];
             else
@@ -76,6 +76,27 @@ namespace Dominio
             ddl.DataBind();
         }
 
+        // -------------------------------------------------------
+        // Mostrar Comprobante
+        // -------------------------------------------------------
+        private void MostrarComprobante(long idVenta)
+        {
+            string ruta = ventaManager.ObtenerComprobantePorId(idVenta);
+
+            if (!string.IsNullOrEmpty(ruta))
+            {
+                imgComprobante.ImageUrl = ruta;
+                lnkDetalle.NavigateUrl = ruta;
+                divComprobante.Visible = true;
+            }
+            else
+            {
+                divComprobante.Visible = false;
+                ScriptManager.RegisterStartupScript(this, GetType(), "noimg",
+                    "Swal.fire('Sin comprobante', 'Este pedido no tiene comprobante cargado', 'warning');", true);
+            }
+        }
+
         protected void btnGuardarEstados_Click(object sender, EventArgs e)
         {
             try
@@ -90,7 +111,6 @@ namespace Dominio
                 ventaManager.CambiarEstadoEnvio(idVenta, envio);
 
                 CargarPedidos();
-
                 ScriptManager.RegisterStartupScript(this, GetType(), "success",
                     "Swal.fire('¡Perfecto!', 'Estados actualizados correctamente', 'success');", true);
             }
@@ -101,13 +121,30 @@ namespace Dominio
             }
         }
 
+        // -------------------------------------------------------
+        // para el Boton Ver Comprobante
+        // -------------------------------------------------------
         protected void gvPedidos_RowCommand(object sender, GridViewCommandEventArgs e)
         {
+            long idVenta = Convert.ToInt64(e.CommandArgument);
+
             if (e.CommandName == "GenerarFactura")
             {
-                long idVenta = Convert.ToInt64(e.CommandArgument);
                 Response.Redirect($"Factura.aspx?id={idVenta}");
             }
+            else if (e.CommandName == "VerComprobante")
+            {
+                MostrarComprobante(idVenta);
+            }
         }
+
+        protected void btnCerrarComprobante_Click(object sender, EventArgs e)
+        {
+            divComprobante.Visible = false;
+            imgComprobante.ImageUrl = "";
+            lnkDetalle.NavigateUrl = "";
+        }
+
     }
 }
+

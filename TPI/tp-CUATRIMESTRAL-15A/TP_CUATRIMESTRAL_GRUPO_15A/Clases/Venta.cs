@@ -17,5 +17,7 @@ namespace Clases
         public EstadoPago EstadoPago { get; set; }
         public EstadoPreparacion EstadoPreparacion { get; set; }
         public EstadoEnvio EstadoEnvio { get; set; }
+        public string Comprobante { get; set; }
+
     }
 }

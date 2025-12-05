@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace Dominio
 {
@@ -38,8 +37,8 @@ namespace Dominio
         private void CargarTiposPago()
         {
             ddlPago.Items.Clear();
-            ddlPago.Items.Add(new ListItem("Efectivo", "1"));
-            ddlPago.Items.Add(new ListItem("Transferencia", "2"));
+            ddlPago.Items.Add(new System.Web.UI.WebControls.ListItem("Efectivo", "1"));
+            ddlPago.Items.Add(new System.Web.UI.WebControls.ListItem("Transferencia", "2"));
             ddlPago.Attributes.Add("onchange", "mostrarComprobante()");
         }
 
@@ -66,10 +65,6 @@ namespace Dominio
             decimal totalFinal = subtotal + costoEnvio;
 
             lblSubtotal.Text = subtotal.ToString("N0");
-            lblEnvio.Text = costoEnvio.ToString("N0");
-            lblEnvioResumen.Text = costoEnvio.ToString("N0");
-
-            // ESTOS DOS SON LOS IMPORTANTES
             lblTotalFinal.Text = totalFinal.ToString("N0");
         }
 
@@ -86,30 +81,55 @@ namespace Dominio
             }
 
             byte idPago = byte.Parse(ddlPago.SelectedValue);
+            string rutaComprobante = null;
 
-            // REGISTRAR VENTA
+            // ================== SI ES TRANSFERENCIA ==================
+            if (idPago == 2 && fuComprobante.HasFile)
+            {
+                try
+                {
+                    string carpeta = Server.MapPath("~/comprobante/");
+                    Directory.CreateDirectory(carpeta);
+
+                    string ext = Path.GetExtension(fuComprobante.FileName).ToLower();
+                    if (ext == ".jpg" || ext == ".jpeg" || ext == ".png")
+                    {
+                        string nombreArchivo = $"comp_{DateTime.Now:yyyyMMddHHmmssfff}{ext}";
+                        string pathFisico = Path.Combine(carpeta, nombreArchivo);
+                        fuComprobante.SaveAs(pathFisico);
+
+                        rutaComprobante = "/comprobante/" + nombreArchivo;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ScriptManager.RegisterStartupScript(this, GetType(), "error",
+                        $"alert('Error al subir comprobante: {ex.Message}');", true);
+                }
+            }
+
+            // ================== REGISTRAR VENTA ==================
             VentaManager manager = new VentaManager();
             long idVenta = manager.RegistrarVenta(carrito, idPago, cliente.Id, costoEnvio);
 
+            // Guardar ruta comprobante + Cambiar estado a "Pendiente comprobante"
             if (idPago == 2)
             {
-                whatsappAdmin = configManager.ObtenerString("WHATSAPP_ADMIN", "5491167152188");
-
-                string mensaje = $"HOLA! ACABO DE REALIZAR UNA COMPRA  " +
-                                 $"Venta Nº: *{idVenta}  " +
-                                 $"Cliente: *{cliente.Nombre} {cliente.Apellido}  " +
-                                 $"Total: *${(carrito.Sum(x => x.Cantidad * x.Precio) + costoEnvio):N0}  " +
-                                 $"Fecha: {DateTime.Now:dd/MM/yyyy HH:mm}   " +
-                                 $"TE TRANSFERI EL TOTAL, ESTOY ATENTO A TU CONFIRMACION DE COMPRA.";
-
-                string mensajeCodificado = HttpUtility.UrlEncode(mensaje);
-
-                string urlWhatsApp = $"https://api.whatsapp.com/send?phone={whatsappAdmin}&text={mensajeCodificado}";
-                Response.Redirect(urlWhatsApp);
+                manager.GuardarComprobante(idVenta, rutaComprobante);
+                manager.CambiarEstadoPago(idVenta, 4);
             }
 
+            // Limpiar carrito
             Session["Carrito"] = null;
-            Response.Redirect("CompraExitosa.aspx?id=" + idVenta);
+
+            if (idPago == 2)
+            {
+                Response.Redirect("CompraExitosa.aspx?id=" + idVenta);
+            }
+            else
+            {
+                Response.Redirect("CompraExitosa.aspx?id=" + idVenta);
+            }
         }
     }
 }

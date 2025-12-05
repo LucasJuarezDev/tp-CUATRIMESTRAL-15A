@@ -6,16 +6,26 @@
     <title>Finalizar Compra</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
-    
+
     <script>
         function mostrarComprobante() {
             const ddl = document.getElementById('<%= ddlPago.ClientID %>');
             const div = document.getElementById('divComprobante');
-            if (ddl && div) {
-                div.style.display = ddl.value === "2" ? "block" : "none";
+            div.style.display = ddl.value === "2" ? "block" : "none";
+        }
+
+        // Vista previa de la imagen
+        function previewComprobante(input) {
+            const imagen = document.getElementById("imgPreviewComprobante");
+
+            if (input.files && input.files[0]) {
+                imagen.style.display = "block";
+                imagen.src = URL.createObjectURL(input.files[0]);
+            } else {
+                imagen.style.display = "none";
+                imagen.src = "";
             }
         }
-        document.addEventListener('DOMContentLoaded', mostrarComprobante);
     </script>
 
     <style>
@@ -33,9 +43,18 @@
             color: white;
         }
         .btn-finalizar:hover { background-color: #5a6268; }
+        #imgPreviewComprobante {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #444;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
+
 </head>
-<body>
+<body onload="mostrarComprobante()">
 <form id="form1" runat="server">
 <div class="container py-5">
     <h2 class="text-white mb-4 fw-bold">Finalizar Compra</h2>
@@ -46,13 +65,31 @@
             <div class="form-box">
                 <h4 class="mb-4 fw-bold">Datos de Pago</h4>
 
-                <!-- TIPO DE PAGO (ESTO ES LO QUE FALTABA!) -->
+                <!-- Método de Pago -->
                 <div class="mb-4">
                     <label class="form-label fw-bold">Método de Pago</label>
-                    <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select form-select-lg" onchange="mostrarComprobante()">
+                    <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select form-select-lg"
+                        onchange="mostrarComprobante()">
                         <asp:ListItem Value="1" Text="Efectivo (pago al recibir)"></asp:ListItem>
                         <asp:ListItem Value="2" Text="Transferencia bancaria"></asp:ListItem>
                     </asp:DropDownList>
+                </div>
+
+                <!-- SUBIR COMPROBANTE -->
+                <div id="divComprobante" class="mb-4 p-3 bg-dark rounded" style="display:none;">
+                    <label class="form-label fw-bold text-warning">
+                        Subir comprobante de transferencia
+                    </label>
+
+                    <asp:FileUpload ID="fuComprobante" runat="server"
+                        CssClass="form-control"
+                        accept="image/*"
+                        onchange="previewComprobante(this)" />
+
+                    <small class="text-muted">Acepta: JPG, PNG — Máx: 10 MB</small>
+
+                    <!-- Vista previa -->
+                    <img id="imgPreviewComprobante" />
                 </div>
 
                 <!-- RESUMEN DE PRECIOS -->
@@ -72,9 +109,12 @@
                     </div>
                 </div>
 
+                <!-- Comentarios -->
                 <div class="mb-3">
                     <label class="form-label">Comentarios (opcional)</label>
-                    <asp:TextBox ID="txtComentario" TextMode="MultiLine" Rows="3" CssClass="form-control" runat="server" placeholder="Ej: Dejar en portería, llamar al timbre, etc."></asp:TextBox>
+                    <asp:TextBox ID="txtComentario" runat="server"
+                        TextMode="MultiLine" Rows="3" CssClass="form-control"
+                        placeholder="Ej: Dejar en portería, llamar al timbre..."></asp:TextBox>
                 </div>
 
                 <asp:Button ID="btnConfirmar" runat="server"
@@ -88,6 +128,7 @@
         <div class="col-lg-4">
             <div class="resumen-box">
                 <h4 class="fw-bold mb-3">Resumen del Pedido</h4>
+
                 <asp:Repeater ID="repResumen" runat="server">
                     <ItemTemplate>
                         <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
@@ -103,8 +144,10 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 </form>
 </body>
 </html>
+
