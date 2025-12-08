@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/MasterPageAdmin.Master" AutoEventWireup="true" 
-    CodeBehind="ComprasAdmin.aspx.cs" Inherits="Dominio.ComprasAdmin" Title="Gestión de Pedidos" %>
+    CodeBehind="ComprasAdmin.aspx.cs" Inherits="Dominio.ComprasAdmin" Title="Gestión de Pedidos" Async="true" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
@@ -177,6 +177,24 @@
         </div>
     </div>
 
+    <script>
+    function cargarModal(idVenta, pago, prep, envio) {
+        // ESTO ES LO QUE FALTABA: GUARDAR EL ID EN EL HIDDENFIELD
+        const hidden = document.getElementById('<%= hfIdVenta.ClientID %>');
+        if (hidden) {
+            hidden.value = idVenta;
+        }
+
+        // Seleccionar valores en los dropdowns
+        const ddlPago = document.getElementById('<%= ddlEstadoPago.ClientID %>');
+        const ddlPrep = document.getElementById('<%= ddlEstadoPreparacion.ClientID %>');
+        const ddlEnvio = document.getElementById('<%= ddlEstadoEnvio.ClientID %>');
+
+        if (ddlPago) ddlPago.value = pago;
+        if (ddlPrep) ddlPrep.value = prep;
+        if (ddlEnvio) ddlEnvio.value = envio;
+    }
+</script>
 </asp:Content>
 
 

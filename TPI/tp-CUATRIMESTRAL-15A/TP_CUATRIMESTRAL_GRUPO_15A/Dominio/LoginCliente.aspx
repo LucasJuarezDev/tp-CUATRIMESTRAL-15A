@@ -52,7 +52,7 @@
                         <div class="text-center mt-2">
                             <small class="text-white-50">
                                 ¿No tienes cuenta? 
-                                <a href="RegistrarUsuario.aspx" class="text-white text-decoration-underline">
+                                <a href="RegistrarCliente.aspx" class="text-white text-decoration-underline">
                                     Registrarse
                                 </a>
                             </small>

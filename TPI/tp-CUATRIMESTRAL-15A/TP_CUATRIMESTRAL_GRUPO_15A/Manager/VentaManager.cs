@@ -449,7 +449,77 @@ namespace Manager
         }
 
 
+        public Venta ObtenerVentaCompletaConCliente(long idVenta)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta(@"
+            SELECT 
+                v.ID, v.FECHAVENTA, v.MONTOTOTAL,
+                v.ID_ESTADO_PAGO, ep.NOMBRE AS NombreEstadoPago,
+                v.ID_ESTADO_PREPARACION, eprep.NOMBRE AS NombreEstadoPreparacion,
+                v.ID_ESTADO_ENVIO, ee.NOMBRE AS NombreEstadoEnvio,
+                c.NOMBRE AS ClienteNombre, c.APELLIDO AS ClienteApellido,
+                u.EMAIL AS ClienteEmail
+            FROM VENTA v
+            INNER JOIN CLIENTE c ON v.ID_CLIENTE = c.ID
+            INNER JOIN USUARIO u ON c.ID_USUARIO = u.ID
+            LEFT JOIN ESTADO_PAGO ep ON v.ID_ESTADO_PAGO = ep.ID
+            LEFT JOIN ESTADO_PREPARACION eprep ON v.ID_ESTADO_PREPARACION = eprep.ID
+            LEFT JOIN ESTADO_ENVIO ee ON v.ID_ESTADO_ENVIO = ee.ID
+            WHERE v.ID = @id");
 
+                datos.SetearParametro("@id", idVenta);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return new Venta
+                    {
+                        Id = idVenta,
+                        FechaVenta = datos.Lector["FECHAVENTA"] != DBNull.Value ? (DateTime)datos.Lector["FECHAVENTA"] : DateTime.Now,
+                        MontoTotal = datos.Lector["MONTOTOTAL"] != DBNull.Value ? (decimal)datos.Lector["MONTOTOTAL"] : 0,
+
+                        // ESTADOS 100% SEGUROS
+                        EstadoPago = new EstadoPago
+                        {
+                            Id = datos.Lector["ID_ESTADO_PAGO"] != DBNull.Value ? Convert.ToInt32(datos.Lector["ID_ESTADO_PAGO"]) : 1,
+                            Nombre = datos.Lector["NombreEstadoPago"]?.ToString() ?? "Pendiente"
+                        },
+                        EstadoPreparacion = new EstadoPreparacion
+                        {
+                            Id = datos.Lector["ID_ESTADO_PREPARACION"] != DBNull.Value ? Convert.ToInt32(datos.Lector["ID_ESTADO_PREPARACION"]) : 1,
+                            Nombre = datos.Lector["NombreEstadoPreparacion"]?.ToString() ?? "No iniciado"
+                        },
+                        EstadoEnvio = new EstadoEnvio
+                        {
+                            Id = datos.Lector["ID_ESTADO_ENVIO"] != DBNull.Value ? Convert.ToInt32(datos.Lector["ID_ESTADO_ENVIO"]) : 1,
+                            Nombre = datos.Lector["NombreEstadoEnvio"]?.ToString() ?? "No iniciado"
+                        },
+
+                        Cliente = new Cliente
+                        {
+                            Nombre = datos.Lector["ClienteNombre"]?.ToString() ?? "Cliente",
+                            Apellido = datos.Lector["ClienteApellido"]?.ToString() ?? "",
+                            Usuario = new Usuario
+                            {
+                                Email = datos.Lector["ClienteEmail"]?.ToString() ?? ""
+                            }
+                        }
+                    };
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener venta completa: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
 
     }
 }

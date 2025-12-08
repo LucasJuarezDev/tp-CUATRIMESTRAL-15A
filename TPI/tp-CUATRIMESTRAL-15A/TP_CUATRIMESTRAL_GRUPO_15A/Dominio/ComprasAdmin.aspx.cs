@@ -99,26 +99,112 @@ namespace Dominio
 
         protected void btnGuardarEstados_Click(object sender, EventArgs e)
         {
+            // REGISTRAMOS LA TAREA ASÍNCRONA (esto es magia de WebForms)
+            Page.RegisterAsyncTask(new PageAsyncTask(ActualizarEstadosAsync));
+        }
+
+        private async System.Threading.Tasks.Task ActualizarEstadosAsync()
+        {
             try
             {
-                long idVenta = long.Parse(hfIdVenta.Value);
-                int pago = int.Parse(ddlEstadoPago.SelectedValue);
-                int prep = int.Parse(ddlEstadoPreparacion.SelectedValue);
-                int envio = int.Parse(ddlEstadoEnvio.SelectedValue);
+                // === TODA LA LÓGICA DENTRO DE UN TASK ===
+                if (!long.TryParse(hfIdVenta.Value, out long idVenta) || idVenta <= 0)
+                    throw new Exception("ID de venta inválido");
 
+                if (!int.TryParse(ddlEstadoPago.SelectedValue, out int pago) || pago <= 0)
+                    throw new Exception("Selecciona estado de pago");
+
+                if (!int.TryParse(ddlEstadoPreparacion.SelectedValue, out int prep) || prep <= 0)
+                    throw new Exception("Selecciona estado de preparación");
+
+                if (!int.TryParse(ddlEstadoEnvio.SelectedValue, out int envio) || envio <= 0)
+                    throw new Exception("Selecciona estado de envío");
+
+                var venta = ventaManager.ObtenerVentaCompletaConCliente(idVenta);
+                if (venta == null || string.IsNullOrWhiteSpace(venta.Cliente?.Usuario?.Email))
+                    throw new Exception("No se encontró el email del cliente");
+
+                string emailCliente = venta.Cliente.Usuario.Email;
+                string nombreCliente = $"{venta.Cliente.Nombre} {venta.Cliente.Apellido}".Trim();
+
+                int pagoAnterior = venta.EstadoPago?.Id ?? 0;
+                int prepAnterior = venta.EstadoPreparacion?.Id ?? 0;
+                int envioAnterior = venta.EstadoEnvio?.Id ?? 0;
+
+                var emailManager = new EmailManager();
+
+                // ENVIAR EMAILS (await funciona perfecto aquí)
+                if (pago != pagoAnterior)
+                {
+                    if (pago == 2)
+                        await emailManager.EnviarMailCambioEstadoPago(emailCliente, nombreCliente, idVenta, "Aprobado");
+                    else if (pago == 3)
+                        await emailManager.EnviarMailCambioEstadoPago(emailCliente, nombreCliente, idVenta, "Rechazado");
+                    else if (pago == 4)
+                        await emailManager.EnviarMailCambioEstadoPago(emailCliente, nombreCliente, idVenta, "Pendiente de comprobante");
+                }
+
+                if (prep != prepAnterior)
+                {
+                    if (prep == 2)
+                    await emailManager.EnviarMailCambioPreparacion(emailCliente, nombreCliente, idVenta, "En preparación");
+                    else if (prep == 3)
+                        await emailManager.EnviarMailCambioPreparacion(emailCliente, nombreCliente, idVenta, "Listo para envío");
+                    else if (prep == 4)
+                        await emailManager.EnviarMailCambioPreparacion(emailCliente, nombreCliente, idVenta, "Rechazado");
+                }
+
+                if (envio != envioAnterior)
+                {
+                    if (envio == 2)
+                        await emailManager.EnviarMailCambioEnvio(emailCliente, nombreCliente, idVenta, "En camino");
+                    else if (envio == 3)
+                        await emailManager.EnviarMailCambioEnvio(emailCliente, nombreCliente, idVenta, "Entregado");
+                    else if (envio == 4)
+                        await emailManager.EnviarMailCambioEnvio(emailCliente, nombreCliente, idVenta, "Devuelto");
+                    else if (envio == 5)
+                        await emailManager.EnviarMailCambioEnvio(emailCliente, nombreCliente, idVenta, "Cancelado");
+                }
+
+                // ACTUALIZAR BD
                 ventaManager.CambiarEstadoPago(idVenta, pago);
                 ventaManager.CambiarEstadoPreparacion(idVenta, prep);
                 ventaManager.CambiarEstadoEnvio(idVenta, envio);
 
+                // RECARGAR GRILLA
                 CargarPedidos();
-                ScriptManager.RegisterStartupScript(this, GetType(), "success",
-                    "Swal.fire('¡Perfecto!', 'Estados actualizados correctamente', 'success');", true);
+
+                // MENSAJE + CERRAR MODAL
+                MostrarExitoYcerrarModal("Estados actualizados y cliente notificado");
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(this, GetType(), "error",
-                    $"Swal.fire('Error', '{ex.Message}', 'error');", true);
+                MostrarError("Error: " + ex.Message);
             }
+        }
+
+        private void MostrarError(string mensaje)
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "error",
+                $"Swal.fire({{icon: 'error', title: 'Error', text: '{mensaje.Replace("'", "\\'")}'}});", true);
+        }
+
+        private void MostrarExitoYcerrarModal(string mensaje = "¡Estados actualizados correctamente!")
+        {
+            string script = $@"
+        <script>
+            Swal.fire({{
+                icon: 'success',
+                title: '¡Perfecto!',
+                text: '{mensaje}',
+                timer: 2000,
+                showConfirmButton: false
+            }}).then(() => {{
+                $('#modalSeguimiento').modal('hide'); // Cierra el modal
+            }});
+        </script>";
+
+            ScriptManager.RegisterStartupScript(this, GetType(), "exitoCerrar", script, false);
         }
 
         // -------------------------------------------------------
