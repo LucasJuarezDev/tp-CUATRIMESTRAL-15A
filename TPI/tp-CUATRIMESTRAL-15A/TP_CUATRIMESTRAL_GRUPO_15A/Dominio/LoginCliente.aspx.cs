@@ -29,16 +29,24 @@ namespace Dominio
                     return;
                 }
 
-                // Guardar en sesión (ahora es un objeto fuerte)
+                // Guardamos siempre el usuario logueado
                 Session["usuario"] = usuario;
 
-                // Si es cliente, tambien guardamos el cliente en sesion
+                // Si es cliente, cargamos la sesion del cliente y su email
                 if (usuario.Rol.Id == 3 && usuario.Cliente != null)
                 {
+                    usuario.Cliente.Usuario = new Usuario
+                    {
+                        Id = usuario.Id,
+                        Nickname = usuario.Nickname,
+                        Email = usuario.Email,
+                        Rol = usuario.Rol
+                    };
+
                     Session["cliente"] = usuario.Cliente;
                 }
 
-                // Redirección segun rol
+                // Redireccion segun rol
                 if (usuario.Rol.Id == 3) // Cliente
                 {
                     Response.Redirect("Catalogo.aspx");
@@ -53,6 +61,8 @@ namespace Dominio
                 MostrarError("Error del sistema: " + ex.Message);
             }
         }
+
+
 
         // METODOS SEGUROS
         private void MostrarError(string mensaje)

@@ -45,6 +45,7 @@
     <Compile Include="CategoriaManager.cs" />
     <Compile Include="ClienteManager.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="EmailManager.cs" />
     <Compile Include="EmpleadoManager.cs" />
     <Compile Include="EstadoEnvioManager.cs" />
     <Compile Include="EstadoPagoManager.cs" />

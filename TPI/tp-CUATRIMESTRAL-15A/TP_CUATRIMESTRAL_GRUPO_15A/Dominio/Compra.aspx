@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Compra.aspx.cs" Inherits="Dominio.Compra" %>
+﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="Compra.aspx.cs" Inherits="Dominio.Compra" %>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -14,10 +15,8 @@
             div.style.display = ddl.value === "2" ? "block" : "none";
         }
 
-        // Vista previa de la imagen
         function previewComprobante(input) {
             const imagen = document.getElementById("imgPreviewComprobante");
-
             if (input.files && input.files[0]) {
                 imagen.style.display = "block";
                 imagen.src = URL.createObjectURL(input.files[0]);
@@ -60,39 +59,29 @@
     <h2 class="text-white mb-4 fw-bold">Finalizar Compra</h2>
     <div class="row g-4">
 
-        <!-- IZQUIERDA -->
         <div class="col-lg-8">
             <div class="form-box">
                 <h4 class="mb-4 fw-bold">Datos de Pago</h4>
 
-                <!-- Método de Pago -->
                 <div class="mb-4">
                     <label class="form-label fw-bold">Método de Pago</label>
-                    <asp:DropDownList ID="ddlPago" runat="server" CssClass="form-select form-select-lg"
+                    <asp:DropDownList ID="ddlPago" runat="server"
+                        CssClass="form-select form-select-lg"
                         onchange="mostrarComprobante()">
                         <asp:ListItem Value="1" Text="Efectivo (pago al recibir)"></asp:ListItem>
                         <asp:ListItem Value="2" Text="Transferencia bancaria"></asp:ListItem>
                     </asp:DropDownList>
                 </div>
 
-                <!-- SUBIR COMPROBANTE -->
                 <div id="divComprobante" class="mb-4 p-3 bg-dark rounded" style="display:none;">
-                    <label class="form-label fw-bold text-warning">
-                        Subir comprobante de transferencia
-                    </label>
-
+                    <label class="form-label fw-bold text-warning">Subir comprobante de transferencia</label>
                     <asp:FileUpload ID="fuComprobante" runat="server"
-                        CssClass="form-control"
-                        accept="image/*"
+                        CssClass="form-control" accept="image/*"
                         onchange="previewComprobante(this)" />
-
                     <small class="text-muted">Acepta: JPG, PNG — Máx: 10 MB</small>
-
-                    <!-- Vista previa -->
                     <img id="imgPreviewComprobante" />
                 </div>
 
-                <!-- RESUMEN DE PRECIOS -->
                 <div class="mb-4 p-4 bg-dark rounded">
                     <div class="d-flex justify-content-between mb-2">
                         <span>Subtotal:</span>
@@ -109,22 +98,14 @@
                     </div>
                 </div>
 
-                <!-- Comentarios -->
-                <div class="mb-3">
-                    <label class="form-label">Comentarios (opcional)</label>
-                    <asp:TextBox ID="txtComentario" runat="server"
-                        TextMode="MultiLine" Rows="3" CssClass="form-control"
-                        placeholder="Ej: Dejar en portería, llamar al timbre..."></asp:TextBox>
-                </div>
-
                 <asp:Button ID="btnConfirmar" runat="server"
                     Text="Confirmar Compra"
                     CssClass="btn btn-finalizar w-100 py-3 fs-5"
                     OnClick="btnConfirmar_Click" />
+
             </div>
         </div>
 
-        <!-- DERECHA - RESUMEN -->
         <div class="col-lg-4">
             <div class="resumen-box">
                 <h4 class="fw-bold mb-3">Resumen del Pedido</h4>
@@ -142,6 +123,7 @@
                     <span>Envío</span>
                     <span class="text-success fw-bold">$ <asp:Label ID="lblEnvioResumen" runat="server" /></span>
                 </div>
+
             </div>
         </div>
 
@@ -150,4 +132,3 @@
 </form>
 </body>
 </html>
-

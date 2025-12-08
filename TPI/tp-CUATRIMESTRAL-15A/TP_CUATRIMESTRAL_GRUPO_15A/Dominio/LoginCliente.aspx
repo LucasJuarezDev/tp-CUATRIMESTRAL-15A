@@ -35,7 +35,7 @@
                                          placeholder="••••••••" />
                         </div>
 
-                        <!-- Botón Iniciar Sesión -->
+                        <!-- Boton Iniciar Sesion -->
                         <asp:Button ID="btnLogin" runat="server" 
                                     Text="INICIAR SESIÓN" 
                                     CssClass="btn btn-success w-100 fw-bold py-2" 

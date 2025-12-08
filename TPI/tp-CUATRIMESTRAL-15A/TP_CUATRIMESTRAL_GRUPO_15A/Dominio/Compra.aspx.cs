@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 
 namespace Dominio
 {
-    public partial class Compra : System.Web.UI.Page
+    public partial class Compra : Page
     {
         private decimal costoEnvio = 0;
         private string whatsappAdmin = "";
@@ -39,7 +38,6 @@ namespace Dominio
             ddlPago.Items.Clear();
             ddlPago.Items.Add(new System.Web.UI.WebControls.ListItem("Efectivo", "1"));
             ddlPago.Items.Add(new System.Web.UI.WebControls.ListItem("Transferencia", "2"));
-            ddlPago.Attributes.Add("onchange", "mostrarComprobante()");
         }
 
         private void CargarResumenCarrito()
@@ -68,7 +66,7 @@ namespace Dominio
             lblTotalFinal.Text = totalFinal.ToString("N0");
         }
 
-        protected void btnConfirmar_Click(object sender, EventArgs e)
+        protected async void btnConfirmar_Click(object sender, EventArgs e)
         {
             var carrito = Session["Carrito"] as List<ProductoCarrito>;
             if (carrito == null || carrito.Count == 0) return;
@@ -83,7 +81,6 @@ namespace Dominio
             byte idPago = byte.Parse(ddlPago.SelectedValue);
             string rutaComprobante = null;
 
-            // ================== SI ES TRANSFERENCIA ==================
             if (idPago == 2 && fuComprobante.HasFile)
             {
                 try
@@ -101,35 +98,36 @@ namespace Dominio
                         rutaComprobante = "/comprobante/" + nombreArchivo;
                     }
                 }
-                catch (Exception ex)
-                {
-                    ScriptManager.RegisterStartupScript(this, GetType(), "error",
-                        $"alert('Error al subir comprobante: {ex.Message}');", true);
-                }
+                catch { }
             }
 
-            // ================== REGISTRAR VENTA ==================
             VentaManager manager = new VentaManager();
             long idVenta = manager.RegistrarVenta(carrito, idPago, cliente.Id, costoEnvio);
 
-            // Guardar ruta comprobante + Cambiar estado a "Pendiente comprobante"
             if (idPago == 2)
             {
                 manager.GuardarComprobante(idVenta, rutaComprobante);
                 manager.CambiarEstadoPago(idVenta, 4);
             }
 
-            // Limpiar carrito
+            try
+            {
+                decimal total = carrito.Sum(x => x.Precio * x.Cantidad) + costoEnvio;
+                EmailManager emailManager = new EmailManager();
+
+                await emailManager.EnviarMailVenta(
+                    cliente.Usuario.Email,
+                    cliente.Nombre,
+                    idVenta,
+                    total
+                );
+            }
+            catch { }
+
             Session["Carrito"] = null;
 
-            if (idPago == 2)
-            {
-                Response.Redirect("CompraExitosa.aspx?id=" + idVenta);
-            }
-            else
-            {
-                Response.Redirect("CompraExitosa.aspx?id=" + idVenta);
-            }
+            Response.Redirect("CompraExitosa.aspx?id=" + idVenta, false);
+            Context.ApplicationInstance.CompleteRequest();
         }
     }
 }

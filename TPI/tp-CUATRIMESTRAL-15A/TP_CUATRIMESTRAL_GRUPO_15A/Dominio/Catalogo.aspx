@@ -25,7 +25,7 @@
         </div>
 
         <div class="row g-4">
-            <asp:Repeater ID="rptProductos" runat="server">
+            <asp:Repeater ID="rptProductos" runat="server"> 
                 <ItemTemplate>
                     <div class="col-lg-4 col-md-6">
                         <div class="card h-100 border-0 shadow-sm position-relative overflow-hidden">
