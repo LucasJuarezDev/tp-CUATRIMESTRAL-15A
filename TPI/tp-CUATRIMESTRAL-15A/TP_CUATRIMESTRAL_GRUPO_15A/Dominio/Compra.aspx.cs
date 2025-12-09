@@ -81,6 +81,14 @@ namespace Dominio
             byte idPago = byte.Parse(ddlPago.SelectedValue);
             string rutaComprobante = null;
 
+            // Validacion si es transferencia y NO subio comprobante
+            if (idPago == 2 && !fuComprobante.HasFile)
+            {
+                ScriptManager.RegisterStartupScript(this, GetType(),
+                    "modalComprobante", "mostrarModalComprobante();", true);
+                return;
+            }
+
             if (idPago == 2 && fuComprobante.HasFile)
             {
                 try

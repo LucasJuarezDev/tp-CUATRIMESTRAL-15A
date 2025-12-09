@@ -7,6 +7,8 @@
     <title>Finalizar Compra</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
     <script>
         function mostrarComprobante() {
@@ -24,6 +26,11 @@
                 imagen.style.display = "none";
                 imagen.src = "";
             }
+        }
+
+        function mostrarModalComprobante() {
+            var modal = new bootstrap.Modal(document.getElementById('modalComprobante'));
+            modal.show();
         }
     </script>
 
@@ -102,7 +109,6 @@
                     Text="Confirmar Compra"
                     CssClass="btn btn-finalizar w-100 py-3 fs-5"
                     OnClick="btnConfirmar_Click" />
-
             </div>
         </div>
 
@@ -129,6 +135,25 @@
 
     </div>
 </div>
+
+<!-- MODAL Validacion comprobante -->
+<div class="modal fade" id="modalComprobante" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Comprobante requerido</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Debes subir el comprobante para continuar con la compra.
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </form>
 </body>
 </html>
