@@ -13,6 +13,61 @@ namespace Dominio
                 CargarCompras();
         }
 
+        protected void btnCargarDetalle_Click(object sender, EventArgs e)
+        {
+            long idVenta = long.Parse(hfIdVentaDetalle.Value);
+            CargarDetalleEnModal(idVenta); // tu lógica
+
+            // Mostrar modal después del postback
+            ScriptManager.RegisterStartupScript(this, GetType(), "ShowModal", "$('#modalDetalleCompra').modal('show');", true);
+        }
+
+
+        private void CargarDetalleEnModal(long idVenta)
+        {
+            var ventaManager = new VentaManager();
+            var venta = ventaManager.ObtenerVentaPorIdConDetalles(idVenta);
+
+            if (venta == null)
+            {
+                // Mensaje error
+                ScriptManager.RegisterStartupScript(this, GetType(), "error",
+                    "Swal.fire('Error', 'No se encontró la compra', 'error');", true);
+                return;
+            }
+
+            // Llenar labels
+            lblIdCompraModal.Text = venta.Id.ToString();
+            lblFechaModal.Text = venta.FechaVenta.ToString("dd/MM/yyyy HH:mm");
+            lblTipoPagoModal.Text = venta.TipoPago.Nombre;
+            lblEstadoPagoModal.Text = venta.EstadoPago.Nombre;
+            lblEstadoPreparacionModal.Text = venta.EstadoPreparacion.Nombre;
+            lblEstadoEnvioModal.Text = venta.EstadoEnvio.Nombre;
+            lblNombreModal.Text = venta.Cliente.Nombre + " " + venta.Cliente.Apellido;
+            lblEmailModal.Text = venta.Cliente.Usuario.Email;
+            lblTelefonoModal.Text = venta.Cliente.Telefono ?? "No registrado";
+            lblRazonSocialModal.Text = venta.Cliente.RazonSocial ?? "No registrada";
+            lblTotalModal.Text = venta.MontoTotal.ToString("N0");
+
+            // Productos
+            gvProductosModal.DataSource = venta.Detalles;
+            gvProductosModal.DataBind();
+
+            // Comprobante
+            if (!string.IsNullOrEmpty(venta.Comprobante))
+            {
+                imgComprobanteModal.ImageUrl = venta.Comprobante;
+                lnkComprobanteModal.NavigateUrl = venta.Comprobante;
+                phComprobanteModal.Visible = true;
+                phSinComprobanteModal.Visible = false;
+            }
+            else
+            {
+                phComprobanteModal.Visible = false;
+                phSinComprobanteModal.Visible = true;
+            }
+        }
+
         private void CargarCompras()
         {
             if (Session["cliente"] == null)

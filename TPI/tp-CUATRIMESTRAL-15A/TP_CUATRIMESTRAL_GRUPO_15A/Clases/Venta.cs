@@ -18,6 +18,6 @@ namespace Clases
         public EstadoPreparacion EstadoPreparacion { get; set; }
         public EstadoEnvio EstadoEnvio { get; set; }
         public string Comprobante { get; set; }
-
+        public List<DetalleVenta> Detalles { get; set; } = new List<DetalleVenta>();
     }
 }

@@ -33,6 +33,7 @@ namespace Manager
 
         public void SetearConsulta(string Consulta)
         {
+            comando.Parameters.Clear();
             comando.CommandType = System.Data.CommandType.Text;
             comando.CommandText = Consulta;
         }

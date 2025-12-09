@@ -521,6 +521,101 @@ namespace Manager
             }
         }
 
+        public Venta ObtenerVentaPorIdConDetalles(long idVenta)
+        {
+            Venta venta = null;
+            List<DetalleVenta> detalles = new List<DetalleVenta>();
+
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // PRIMERO LA VENTA GENERAL
+                datos.SetearConsulta(@"
+            SELECT v.ID, v.FECHAVENTA, v.MONTOTOTAL, v.ID_TIPO_PAGO, tp.NOMBRE AS TipoPagoNombre,
+                   v.ID_ESTADO_PAGO, ep.NOMBRE AS EstadoPagoNombre,
+                   v.ID_ESTADO_PREPARACION, eprep.NOMBRE AS EstadoPreparacionNombre,
+                   v.ID_ESTADO_ENVIO, ee.NOMBRE AS EstadoEnvioNombre,
+                   v.COMPROBANTE,
+                   c.NOMBRE AS ClienteNombre, c.APELLIDO AS ClienteApellido, c.TELEFONO AS ClienteTelefono, c.RAZON_SOCIAL AS ClienteRazonSocial,
+                   u.EMAIL AS ClienteEmail
+            FROM VENTA v
+            INNER JOIN TIPO_PAGO tp ON v.ID_TIPO_PAGO = tp.ID
+            INNER JOIN ESTADO_PAGO ep ON v.ID_ESTADO_PAGO = ep.ID
+            INNER JOIN ESTADO_PREPARACION eprep ON v.ID_ESTADO_PREPARACION = eprep.ID
+            INNER JOIN ESTADO_ENVIO ee ON v.ID_ESTADO_ENVIO = ee.ID
+            INNER JOIN CLIENTE c ON v.ID_CLIENTE = c.ID
+            INNER JOIN USUARIO u ON c.ID_USUARIO = u.ID
+            WHERE v.ID = @id");
+
+                datos.SetearParametro("@id", idVenta);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    venta = new Venta
+                    {
+                        Id = idVenta,
+                        FechaVenta = (DateTime)datos.Lector["FECHAVENTA"],
+                        MontoTotal = (decimal)datos.Lector["MONTOTOTAL"],
+                        TipoPago = new TipoPago { Nombre = datos.Lector["TipoPagoNombre"].ToString() },
+                        EstadoPago = new EstadoPago { Nombre = datos.Lector["EstadoPagoNombre"].ToString() },
+                        EstadoPreparacion = new EstadoPreparacion { Nombre = datos.Lector["EstadoPreparacionNombre"].ToString() },
+                        EstadoEnvio = new EstadoEnvio { Nombre = datos.Lector["EstadoEnvioNombre"].ToString() },
+                        Comprobante = datos.Lector["COMPROBANTE"]?.ToString() ?? "",
+                        Cliente = new Cliente
+                        {
+                            Nombre = datos.Lector["ClienteNombre"].ToString(),
+                            Apellido = datos.Lector["ClienteApellido"].ToString(),
+                            Telefono = datos.Lector["ClienteTelefono"]?.ToString() ?? "No registrado",
+                            RazonSocial = datos.Lector["ClienteRazonSocial"]?.ToString() ?? "No registrada",
+                            Usuario = new Usuario { Email = datos.Lector["ClienteEmail"]?.ToString() ?? "No registrado" }
+                        }
+                    };
+                }
+
+                // SI NO HAY VENTA, SALIR
+                if (venta == null) return null;
+
+                // SEGUNDO, LOS DETALLES
+                datos.CerrarConeccion(); // Cerrar y reabrir para nueva consulta
+                datos.SetearConsulta(@"
+            SELECT dv.ID_PRODUCTO, dv.CANTIDAD, dv.PRECIO_UNITARIO,
+                   p.NOMBRE AS ProductoNombre
+            FROM DETALLE_VENTA dv
+            INNER JOIN PRODUCTO p ON dv.ID_PRODUCTO = p.ID
+            WHERE dv.ID_VENTA = @id");
+
+                datos.SetearParametro("@id", idVenta);
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    detalles.Add(new DetalleVenta
+                    {
+                        IdVenta = idVenta,
+                        IdProducto = Convert.ToInt64(datos.Lector["ID_PRODUCTO"]),
+                        Cantidad = Convert.ToInt32(datos.Lector["CANTIDAD"]),
+                        PrecioUnitario = Convert.ToDecimal(datos.Lector["PRECIO_UNITARIO"]),
+                        Producto = new Producto
+                        {
+                            Nombre = datos.Lector["ProductoNombre"].ToString()
+                        }
+                    });
+                }
+
+                venta.Detalles = detalles; // Agregá esta propiedad a la clase Venta: public List<DetalleVenta> Detalles { get; set; } = new List<DetalleVenta>();
+
+                return venta;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener detalle de venta: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
     }
 }
 
