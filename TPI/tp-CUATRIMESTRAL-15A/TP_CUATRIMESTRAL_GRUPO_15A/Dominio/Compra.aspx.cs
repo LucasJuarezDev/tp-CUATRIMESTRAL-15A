@@ -19,6 +19,8 @@ namespace Dominio
             if (!IsPostBack)
             {
                 CargarConfiguracion();
+                lblWhatsApp.Text = whatsappAdmin;   // numero dinamico
+
                 CargarTiposPago();
                 CargarResumenCarrito();
             }
@@ -26,11 +28,9 @@ namespace Dominio
 
         private void CargarConfiguracion()
         {
-            costoEnvio = configManager.ObtenerDecimal("COSTO_ENVIO", 2500);
-            whatsappAdmin = configManager.ObtenerString("WHATSAPP_ADMIN", "5491167152188");
+            costoEnvio = 0;
 
-            lblEnvio.Text = costoEnvio.ToString("N0");
-            lblEnvioResumen.Text = costoEnvio.ToString("N0");
+            whatsappAdmin = configManager.ObtenerString("WHATSAPP_ADMIN", "5491167152188");
         }
 
         private void CargarTiposPago()
@@ -60,10 +60,9 @@ namespace Dominio
             repResumen.DataBind();
 
             decimal subtotal = resumen.Sum(x => x.Subtotal);
-            decimal totalFinal = subtotal + costoEnvio;
 
             lblSubtotal.Text = subtotal.ToString("N0");
-            lblTotalFinal.Text = totalFinal.ToString("N0");
+            lblTotalFinal.Text = subtotal.ToString("N0");
         }
 
         protected async void btnConfirmar_Click(object sender, EventArgs e)
@@ -81,7 +80,6 @@ namespace Dominio
             byte idPago = byte.Parse(ddlPago.SelectedValue);
             string rutaComprobante = null;
 
-            // Validacion si es transferencia y NO subio comprobante
             if (idPago == 2 && !fuComprobante.HasFile)
             {
                 ScriptManager.RegisterStartupScript(this, GetType(),
@@ -110,7 +108,7 @@ namespace Dominio
             }
 
             VentaManager manager = new VentaManager();
-            long idVenta = manager.RegistrarVenta(carrito, idPago, cliente.Id, costoEnvio);
+            long idVenta = manager.RegistrarVenta(carrito, idPago, cliente.Id, 0);
 
             if (idPago == 2)
             {
@@ -120,9 +118,9 @@ namespace Dominio
 
             try
             {
-                decimal total = carrito.Sum(x => x.Precio * x.Cantidad) + costoEnvio;
-                EmailManager emailManager = new EmailManager();
+                decimal total = carrito.Sum(x => x.Precio * x.Cantidad);
 
+                EmailManager emailManager = new EmailManager();
                 await emailManager.EnviarMailVenta(
                     cliente.Usuario.Email,
                     cliente.Nombre,

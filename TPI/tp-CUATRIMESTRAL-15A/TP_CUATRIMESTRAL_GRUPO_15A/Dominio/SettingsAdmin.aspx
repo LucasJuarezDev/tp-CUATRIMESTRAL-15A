@@ -19,7 +19,7 @@
                 <div class="card shadow-lg">
                     <div class="card-body p-5">
                         
-                        <!-- COSTO ENVÍO -->
+                        <!-- COSTO ENVIO -->
                         <div class="mb-4">
                             <label class="form-label fw-bold text-white">Costo de Envío ($)</label>
                             <div class="input-group">
