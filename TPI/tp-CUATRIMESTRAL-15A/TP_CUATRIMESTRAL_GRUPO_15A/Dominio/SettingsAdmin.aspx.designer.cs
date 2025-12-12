@@ -15,15 +15,6 @@ namespace Dominio
     {
 
         /// <summary>
-        /// Control txtCostoEnvio.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCostoEnvio;
-
-        /// <summary>
         /// Control txtWhatsApp.
         /// </summary>
         /// <remarks>
@@ -49,14 +40,5 @@ namespace Dominio
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGuardar;
-
-        /// <summary>
-        /// Control btnProbarWhatsApp.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnProbarWhatsApp;
     }
 }

@@ -20,13 +20,13 @@
                     <div class="card-body p-5">
                         
                         <!-- COSTO ENVIO -->
-                        <div class="mb-4">
+<%--                        <div class="mb-4">
                             <label class="form-label fw-bold text-white">Costo de Envío ($)</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-dark border-0 text-white">$</span>
                                 <asp:TextBox ID="txtCostoEnvio" runat="server" CssClass="form-control form-control-lg text-white" TextMode="Number" min="0" step="100"></asp:TextBox>
                             </div>
-                        </div>
+                        </div>--%>
 
                         <!-- WHATSAPP ADMIN -->
                         <div class="mb-4">
@@ -54,9 +54,9 @@
                             <asp:Button ID="btnGuardar" runat="server" Text="Guardar Cambios" 
                                         CssClass="btn btn-success btn-lg px-5" OnClick="btnGuardar_Click" />
                             
-                            <asp:Button ID="btnProbarWhatsApp" runat="server" Text="Probar WhatsApp" 
+<%--                            <asp:Button ID="btnProbarWhatsApp" runat="server" Text="Probar WhatsApp" 
                                         CssClass="btn btn-primary btn-lg px-5 text-white fw-bold" 
-                                        OnClick="btnProbarWhatsApp_Click" CausesValidation="false" />
+                                        OnClick="btnProbarWhatsApp_Click" CausesValidation="false" />--%>
                         </div>
                     </div>
                 </div>

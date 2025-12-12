@@ -77,7 +77,7 @@
 
                 <asp:TemplateField HeaderText="Acciones">
                     <ItemTemplate>
-                        <button type="button" class="btn-detalle" onclick="cargarDetalleCompra('<%# Eval("Id") %>')">Ver detalle</button>
+                        <button type="button" class="btn btn-success" onclick="cargarDetalleCompra('<%# Eval("Id") %>')">Ver detalle</button>
                     </ItemTemplate>
                 </asp:TemplateField>
 
@@ -88,22 +88,22 @@
         <!-- MODAL FACTURA X -->
     <div class="modal fade" id="modalDetalleCompra" tabindex="-1">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-dark text-white">
+            <div class="modal-content text-black">
                 <div class="modal-header bg-primary border-0">
-                    <h4 class="modal-title"><i class="bi bi-receipt"></i> Detalle de Compra Nº <asp:Label ID="lblIdCompraModal" runat="server" /></h4>
+                    <h4 class="modal-title text-white"><i class="bi bi-receipt"></i> Detalle de Compra Nº <asp:Label ID="lblIdCompraModal" runat="server" /></h4>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <h5 class="text-warning"><i class="bi bi-person"></i> Tus datos</h5>
+                            <h5 class="text-dark"><i class="bi bi-person"></i> Tus datos</h5>
                             <p><strong>Nombre:</strong> <asp:Label ID="lblNombreModal" runat="server" /><br>
                                <strong>Email:</strong> <asp:Label ID="lblEmailModal" runat="server" /><br>
                                <strong>Teléfono:</strong> <asp:Label ID="lblTelefonoModal" runat="server" /><br>
                                <strong>Razón Social:</strong> <asp:Label ID="lblRazonSocialModal" runat="server" /></p>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <h5 class="text-info"><i class="bi bi-calendar"></i> Información de la compra</h5>
+                            <h5 class="text-dark"><i class="bi bi-calendar"></i> Información de la compra</h5>
                             <p><strong>Fecha:</strong> <asp:Label ID="lblFechaModal" runat="server" /><br>
                                <strong>Tipo de Pago:</strong> <asp:Label ID="lblTipoPagoModal" runat="server" /><br>
                                <strong>Total:</strong> $ <asp:Label ID="lblTotalModal" runat="server" Font-Bold="true" /></p>
@@ -112,10 +112,10 @@
 
                     <hr class="border-secondary">
 
-                    <h5 class="text-success mb-3"><i class="bi bi-cart"></i> Productos</h5>
+                    <h5 class="text-dark mb-3"><i class="bi bi-cart"></i> Productos</h5>
                     <div class="table-responsive">
                         <asp:GridView ID="gvProductosModal" runat="server" AutoGenerateColumns="false"
-                            CssClass="table table-dark table-striped table-hover">
+                            CssClass="table table-responsive table-hover">
                             <Columns>
                                 <asp:BoundField DataField="Producto.Nombre" HeaderText="Producto" />
                                 <asp:BoundField DataField="Cantidad" HeaderText="Cant." ItemStyle-HorizontalAlign="Center" />
@@ -127,7 +127,7 @@
 
                     <hr class="border-secondary">
 
-                    <h5 class="text-warning"><i class="bi bi-file-earmark-image"></i> Comprobante</h5>
+                    <h5 class="text-dark"><i class="bi bi-file-earmark-image"></i> Comprobante</h5>
                     <div class="text-center">
                         <asp:PlaceHolder ID="phComprobanteModal" runat="server">
                             <asp:Image ID="imgComprobanteModal" runat="server" CssClass="img-fluid rounded shadow-lg" Style="max-height:400px;" />
@@ -144,7 +144,7 @@
 
                     <hr class="border-secondary">
 
-                    <h5 class="text-primary"><i class="bi bi-info-circle"></i> Estados</h5>
+                    <h5 class="text-dark"><i class="bi bi-info-circle"></i> Estados</h5>
                     <div class="row g-3">
                         <div class="col-md-4">
                             <div class="p-3 bg-secondary rounded text-center">

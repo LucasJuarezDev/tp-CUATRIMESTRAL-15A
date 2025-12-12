@@ -23,7 +23,6 @@ namespace Dominio
             var manager = new ConfigManager();
 
             // De CONFIGURACION
-            txtCostoEnvio.Text = manager.ObtenerDecimal("COSTO_ENVIO", 2500).ToString();
             txtWhatsApp.Text = manager.ObtenerString("WHATSAPP_ADMIN", "5491167152188");
 
             // De USUARIO (ADMIN)
@@ -39,7 +38,6 @@ namespace Dominio
                 var manager = new ConfigManager();
 
                 // GUARDAR EN CONFIGURACION
-                manager.Guardar("COSTO_ENVIO", txtCostoEnvio.Text.Trim());
                 manager.Guardar("WHATSAPP_ADMIN", txtWhatsApp.Text.Trim());
 
                 // GUARDAR EMAIL EN TABLA USUARIO (solo admin)
@@ -51,19 +49,6 @@ namespace Dominio
             {
                 MostrarError("Error al guardar: " + ex.Message);
             }
-        }
-
-        protected void btnProbarWhatsApp_Click(object sender, EventArgs e)
-        {
-            string numero = txtWhatsApp.Text.Trim();
-            if (string.IsNullOrWhiteSpace(numero))
-            {
-                MostrarError("Ingresa un número de WhatsApp primero");
-                return;
-            }
-
-            string url = $"https://api.whatsapp.com/send/?phone={numero}&text=¡Hola!%20Este%20es%20un%20mensaje%20de%20prueba%20desde%20tu%20tienda%20🛒&type=phone_number&app_absent=0";
-            ClientScript.RegisterStartupScript(this.GetType(), "probar", $"window.open('{url}','_blank');", true);
         }
 
         private void MostrarExito(string mensaje)

@@ -1,10 +1,6 @@
 ﻿using Manager;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace Dominio
 {
@@ -12,11 +8,12 @@ namespace Dominio
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid) return; // Validación del RequiredFieldValidator
+
             string nombre = txtNombre.Text.Trim();
             string descripcion = txtDescripcion.Text.Trim();
 
@@ -25,11 +22,24 @@ namespace Dominio
                 MarcaManager manager = new MarcaManager();
                 manager.Agregar(nombre, descripcion);
 
-                Response.Redirect("Marcas.aspx", false);
+                // SweetAlert de éxito + redirección
+                string script = @"
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Marca agregada!',
+                        text: 'La marca fue creada correctamente.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = 'Marcas.aspx';
+                    });";
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "exito", script, true);
             }
             catch (Exception ex)
             {
-                throw new Exception("Ocurrió un error al guardar la marca: " + ex.Message, ex);
+                string scriptError = $@"Swal.fire({{icon: 'error', title: 'Error', text: '{ex.Message.Replace("'", "\\'")}'}});";
+                ScriptManager.RegisterStartupScript(this, GetType(), "error", scriptError, true);
             }
         }
     }

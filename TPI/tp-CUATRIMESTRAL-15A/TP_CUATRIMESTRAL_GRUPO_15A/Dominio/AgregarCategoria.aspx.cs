@@ -17,23 +17,34 @@ namespace Dominio
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid) return; // Esto ya valida el RequiredFieldValidator
+
             string nombre = txtNombre.Text.Trim();
             string descripcion = txtDescripcion.Text.Trim();
 
             try
             {
                 CategoriaManager manager = new CategoriaManager();
-
-                // Insertamos la nueva categoría
                 manager.Agregar(nombre, descripcion);
-                
 
-                // Redirige al listado
-                Response.Redirect("Categorias.aspx", false);
+                // SweetAlert de éxito + redirección
+                string script = @"
+            Swal.fire({
+                icon: 'success',
+                title: '¡Categoría agregada!',
+                text: 'La categoría fue creada correctamente.',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'Categorias.aspx';
+            });";
+
+                ScriptManager.RegisterStartupScript(this, GetType(), "exito", script, true);
             }
             catch (Exception ex)
             {
-                throw new Exception("Ocurrió un error al guardar la categoría: " + ex.Message, ex);
+                string scriptError = $@"Swal.fire({{icon: 'error', title: 'Error', text: '{ex.Message.Replace("'", "\\'")}'}});";
+                ScriptManager.RegisterStartupScript(this, GetType(), "error", scriptError, true);
             }
         }
     }

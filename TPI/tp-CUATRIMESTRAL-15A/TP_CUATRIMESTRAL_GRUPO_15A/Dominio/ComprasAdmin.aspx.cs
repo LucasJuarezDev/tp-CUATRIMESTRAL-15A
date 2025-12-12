@@ -214,11 +214,7 @@ namespace Dominio
         {
             long idVenta = Convert.ToInt64(e.CommandArgument);
 
-            if (e.CommandName == "GenerarFactura")
-            {
-                Response.Redirect($"Factura.aspx?id={idVenta}");
-            }
-            else if (e.CommandName == "VerComprobante")
+            if (e.CommandName == "VerComprobante")
             {
                 MostrarComprobante(idVenta);
             }

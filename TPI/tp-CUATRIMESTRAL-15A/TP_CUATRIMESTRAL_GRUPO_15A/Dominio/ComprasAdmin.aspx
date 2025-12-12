@@ -105,13 +105,6 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    <asp:TemplateField HeaderText="Acciones">
-                        <ItemTemplate>
-                            <asp:Button ID="btnFactura" runat="server" Text="Factura" CssClass="btn btn-sm btn-success"
-                                CommandName="GenerarFactura" CommandArgument='<%# Eval("Id") %>' />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-
                 </Columns>
             </asp:GridView>
 
