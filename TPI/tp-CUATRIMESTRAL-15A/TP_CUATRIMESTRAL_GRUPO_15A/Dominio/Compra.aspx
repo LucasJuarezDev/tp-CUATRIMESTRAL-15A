@@ -1,13 +1,14 @@
-﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="Compra.aspx.cs" Inherits="Dominio.Compra" %>  
-<!DOCTYPE html> 
-<html xmlns="http://www.w3.org/1999/xhtml"> 
-<head runat="server">     
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>     
-    <title>Finalizar Compra</title>     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />     
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>     
+﻿<%@ Page Language="C#" Async="true" AutoEventWireup="true" CodeBehind="Compra.aspx.cs" Inherits="Dominio.Compra" %>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Finalizar Compra</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 
     <script>
         function mostrarComprobante() {
@@ -37,7 +38,7 @@
             var modal = new bootstrap.Modal(document.getElementById('modalComprobante'));
             modal.show();
         }
-    </script>     
+    </script>
 
     <style>
         body { background-color: #212529; }
@@ -74,7 +75,7 @@
             background-color: #1d1f21;
         }
     </style>
-</head> 
+</head>
 
 <body onload="mostrarComprobante(); mostrarEnvio();">
 <form id="form1" runat="server">
@@ -96,14 +97,11 @@
                     </asp:DropDownList>
                 </div>
 
-                <!-- INFO ENVIO (DINAMICO) -->
                 <div id="divEnvio" class="mb-4 p-3 bg-dark rounded" style="display:none;">
                     <label class="form-label fw-bold text-info">Información sobre el envío</label>
-
                     <p class="text-light mb-1">
                         El envío es a coordinar directamente con el vendedor.
                     </p>
-
                     <p class="text-warning fw-bold mb-0">
                         Por favor enviar un WhatsApp al:
                         <span class="text-success">
@@ -127,12 +125,13 @@
                     <img id="imgPreviewComprobante" />
                 </div>
 
-                <asp:Button ID="btnConfirmar" runat="server" Text="Confirmar Compra"
-                    CssClass="btn btn-finalizar w-100 py-3 fs-5" OnClick="btnConfirmar_Click" />
+                <asp:Button ID="btnConfirmar" runat="server"
+                    Text="Confirmar Compra"
+                    CssClass="btn btn-finalizar w-100 py-3 fs-5"
+                    OnClick="btnConfirmar_Click" />
             </div>
         </div>
 
-        <!-- DERECHA -->
         <div class="col-lg-4">
             <div class="resumen-box">
                 <h4 class="fw-bold mb-3">Resumen del Pedido</h4>
@@ -141,7 +140,7 @@
                     <ItemTemplate>
                         <div class="d-flex justify-content-between py-2 border-bottom border-secondary">
                             <span>
-                                <%# Eval("Nombre") %> 
+                                <%# Eval("Nombre") %>
                                 <small class="text-muted">x<%# Eval("Cantidad") %></small>
                             </span>
                             <span>$ <%# String.Format("{0:N0}", Eval("Subtotal")) %></span>
@@ -164,10 +163,29 @@
                         </span>
                     </div>
                 </div>
-
             </div>
         </div>
 
+    </div>
+</div>
+
+<!-- MODAL VALIDACION COMPROBANTE -->
+<div class="modal fade" id="modalComprobante" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Comprobante requerido</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Debes subir el comprobante para continuar con la compra.
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
+                    Entendido
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
