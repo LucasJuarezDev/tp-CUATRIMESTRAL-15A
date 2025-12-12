@@ -2,6 +2,7 @@
 using Manager;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -49,12 +50,59 @@ namespace Dominio
             CargarPedidos();
         }
 
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            gvPedidos.PageIndex = 0;
+            CargarPedidos();
+        }
+
+        protected void btnLimpiar_Click(object sender, EventArgs e)
+        {
+            txtFiltroId.Text = "";
+            txtFechaDesde.Text = "";
+            txtFechaHasta.Text = "";
+            gvPedidos.PageIndex = 0;
+            CargarPedidos();
+        }
+
         private void CargarPedidos()
         {
             var lista = ventaManager.ListarTodasConDetalleYEstados();
+
+            // FILTRO POR ID
+            if (!string.IsNullOrEmpty(txtFiltroId.Text.Trim()))
+            {
+                if (long.TryParse(txtFiltroId.Text.Trim(), out long idFiltro))
+                {
+                    lista = lista.Where(v => v.Id == idFiltro).ToList();
+                }
+            }
+
+            // FILTRO POR FECHAS
+            if (!string.IsNullOrEmpty(txtFechaDesde.Text))
+            {
+                if (DateTime.TryParseExact(txtFechaDesde.Text, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime desde))
+                {
+                    lista = lista.Where(v => v.FechaVenta.Date >= desde.Date).ToList();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(txtFechaHasta.Text))
+            {
+                if (DateTime.TryParseExact(txtFechaHasta.Text, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime hasta))
+                {
+                    lista = lista.Where(v => v.FechaVenta.Date <= hasta.Date).ToList();
+                }
+            }
+
+            // ORDEN POR ID DESCENDENTE (MÁS NUEVO ARRIBA)
+            lista = lista.OrderByDescending(v => v.Id).ToList();
+
+            // PAGINACIÓN BUILT-IN DEL GRIDVIEW
             gvPedidos.DataSource = lista;
             gvPedidos.DataBind();
 
+            // ACTUALIZAR CONTADORES
             lblTotal.Text = lista.Count.ToString();
             lblPaginaActual.Text = (gvPedidos.PageIndex + 1).ToString();
             lblTotalPaginas.Text = gvPedidos.PageCount.ToString();

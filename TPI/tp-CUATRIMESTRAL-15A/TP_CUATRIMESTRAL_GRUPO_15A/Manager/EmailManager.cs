@@ -158,7 +158,7 @@ namespace Manager
         }
 
         // MÉTODO GENÉRICO QUE USA TU CONFIGURACIÓN ACTUAL
-        private async Task EnviarMailPersonalizado(string destino, string nombreCliente, string asunto, string cuerpo)
+        public async Task EnviarMailPersonalizado(string destino, string nombreCliente, string asunto, string cuerpo)
         {
             try
             {

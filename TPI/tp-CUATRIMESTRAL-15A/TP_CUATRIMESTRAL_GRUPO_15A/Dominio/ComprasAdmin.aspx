@@ -23,6 +23,32 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <div class="container py-5">
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtros de Búsqueda</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">ID de Compra</label>
+                    <asp:TextBox ID="txtFiltroId" runat="server" CssClass="form-control" placeholder="Ej: 28" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Desde</label>
+                    <asp:TextBox ID="txtFechaDesde" runat="server" CssClass="form-control" placeholder="dd/mm/yyyy" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Hasta</label>
+                    <asp:TextBox ID="txtFechaHasta" runat="server" CssClass="form-control" placeholder="dd/mm/yyyy" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-primary me-2" OnClick="btnBuscar_Click" />
+                    <asp:Button ID="btnLimpiar" runat="server" Text="Limpiar" CssClass="btn btn-outline-secondary" OnClick="btnLimpiar_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2><i class="bi bi-truck me-2"></i>Gestión de Pedidos</h2>
         <div class="d-flex align-items-center gap-3">

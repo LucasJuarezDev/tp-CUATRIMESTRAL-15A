@@ -189,6 +189,60 @@ namespace Manager
                 datos.CerrarConeccion();
             }
         }
+
+        public Usuario ObtenerPorEmail(string email)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta(@"SELECT u.ID, u.NICKNAME, u.EMAIL FROM USUARIO u WHERE u.EMAIL = @email");
+                datos.SetearParametro("@email", email);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return new Usuario
+                    {
+                        Id = (long)datos.Lector["ID"],
+                        Nickname = datos.Lector["NICKNAME"].ToString(),
+                        Email = datos.Lector["EMAIL"].ToString(),
+                    };
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error al obtener email: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
+
+        public void ActualizarPassword(long idUsuario, string nuevaPassword)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.SetearConsulta(@"UPDATE USUARIO SET CONTRASENA = @nuevaPassword WHERE ID = @idUsuario");
+                datos.SetearParametro("@idUsuario", idUsuario);
+                datos.SetearParametro("@nuevaPassword", nuevaPassword);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error al actualizar password: " + ex.Message);
+            }
+            finally
+            {
+                datos.CerrarConeccion();
+            }
+        }
     }
 }
 
